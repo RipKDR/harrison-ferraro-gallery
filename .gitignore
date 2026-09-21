@@ -1,0 +1,14 @@
+
+.next/
+out/
+node_modules/
+dist/
+*.tsbuildinfo
+.sites-runtime/
+
+# Local credentials and editor/runtime files
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
