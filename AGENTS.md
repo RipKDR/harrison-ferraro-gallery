@@ -17,6 +17,9 @@ User prioritises a professional mobile-first portfolio that leads to original-ar
 ## Catalogue and contact — 21 September 2026
 User supplied nine additional painting photos and authorised publication of Harrisonferraro99@gmail.com and https://www.instagram.com/harrison_ferraro/. Use original photos with non-destructive in-browser canvas edge mapping; do not generate replacement artwork. Keep 3 featured works in spatial hero and all 12 in catalogue; never hard-code full-catalogue pagination to 3. Descriptive labels and artist statement are editable drafts, not confirmed titles. Enquiry composer opens addressed email and clearly requires sending in the visitor's email app. No backend submission or automatic sends are claimed.
 
+## Featured paintings — 21 September 2026
+Lead the opening gallery and collection with Over the shoulder (work-10), Figure in rose (work-11), and Figure with a skull (work-12), in that order. Preserve stable artwork IDs and catalogue reference numbers.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

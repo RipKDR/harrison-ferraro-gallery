@@ -1,6 +1,6 @@
 export type Artwork={id:string;number:string;label:string;description:string;src:string;ratio:number;corners:[number,number][]};
 // Working descriptive labels: replace with artist-confirmed catalogue data before publishing.
-export const artworks:Artwork[]=[
+const catalogue:Artwork[]=[
 {id:'work-01',number:'01',label:'Figure in red',description:'A pale figure beneath a vivid red form, against a dark ground.',src:'/art/red-smoke.png',ratio:.81,corners:[[.095,.143],[.909,.142],[.909,.805],[.117,.808]]},
 {id:'work-02',number:'02',label:'Figure in motion',description:'A figurative portrait with sweeping dark marks and warm, earthy colour.',src:'/art/portrait.jpeg',ratio:.79,corners:[[.077,.079],[.895,.083],[.827,.829],[.128,.831]]},
 {id:'work-03',number:'03',label:'Abstract in pale violet',description:'A long abstract canvas with white, violet and scattered colour.',src:'/art/abstract.jpeg',ratio:.43,corners:[[.288,.095],[.738,.129],[.733,.885],[.307,.906]]},
@@ -13,6 +13,13 @@ export const artworks:Artwork[]=[
 {"id": "work-10", "number": "10", "label": "Over the shoulder", "description": "A figure looks back through softly layered grey, black and warm neutral tones.", "src": "/art/over-the-shoulder.jpg", "ratio": 0.75, "corners": [[0.034, 0.022], [0.976, 0.022], [0.968, 0.972], [0.043, 0.975]]},
 {"id": "work-11", "number": "11", "label": "Figure in rose", "description": "A seated figure in dark fabric, set against a rose-coloured ground with deep red and pale marks.", "src": "/art/figure-in-rose.jpg", "ratio": 0.667, "corners": [[0.039, 0.097], [0.966, 0.094], [0.919, 0.839], [0.096, 0.84]]},
 {"id": "work-12", "number": "12", "label": "Figure with a skull", "description": "A figure holds a skull close, against layers of charcoal, white and pale pink.", "src": "/art/figure-with-skull.jpg", "ratio": 0.75, "corners": [[0.002, 0.004], [0.999, 0.002], [0.999, 0.998], [0.037, 0.998]]},
+];
+// Lead with Over the shoulder, Figure in rose, and Figure with a skull.
+// Keep catalogue references stable for shared artwork links and enquiries.
+const featuredIds=['work-10','work-11','work-12'];
+export const artworks:Artwork[]=[
+ ...featuredIds.map(id=>catalogue.find(work=>work.id===id)!),
+ ...catalogue.filter(work=>!featuredIds.includes(work.id)),
 ];
 export const featuredArtworks=artworks.slice(0,3);
 const cache=new Map<string,Promise<HTMLCanvasElement>>();
