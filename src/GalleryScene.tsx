@@ -5,7 +5,8 @@ import {featuredArtworks as artworks,loadArtwork} from './artworks';
 type Point=[number,number];
 const original:Point[][]=[[[204,75],[666,126],[666,713],[204,750]],[[739,143],[1114,203],[1114,684],[739,712]],[[1194,237],[1340,261],[1340,680],[1194,689]]];
 export default function GalleryScene({focus,onOpen,onReady,onError}:{focus:number|null;onOpen:(i:number)=>void;onReady:()=>void;onError:()=>void}){
- const root=useRef<HTMLDivElement>(null);const focusRef=useRef(focus);const updateRef=useRef<(()=>void)|null>(null);const openRef=useRef(onOpen);openRef.current=onOpen;
+ const root=useRef<HTMLDivElement>(null);const focusRef=useRef(focus);const updateRef=useRef<(()=>void)|null>(null);const openRef=useRef(onOpen);
+ useEffect(()=>{openRef.current=onOpen},[onOpen]);
  useEffect(()=>{focusRef.current=focus;updateRef.current?.()},[focus]);
  useEffect(()=>{
  const host=root.current!;let disposed=false,frame=0;const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;

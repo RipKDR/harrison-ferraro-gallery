@@ -19,6 +19,8 @@ export default function Home(){
  const close=useCallback(()=>{setPanel(null);setFull(false);setZoom(1);setDraft('');setCopied(false);if(window.location.hash.startsWith('#work-'))history.replaceState(null,'',window.location.pathname+window.location.search);},[]);
  const open=useCallback((type:Panel,index?:number)=>{if(!dialog.current?.open)opener.current=document.activeElement as HTMLElement;if(index!==undefined)setSelected(index);setPanel(type);setZoom(1);setFull(false);setDraft('');setCopied(false);setCopyError(false);if(type==='work'&&index!==undefined)history.replaceState(null,'','#'+artworks[index].id);},[]);
  const onOpen=useCallback((i:number)=>open('work',i),[open]);const onReady=useCallback(()=>setReady(true),[]);const onError=useCallback(()=>{setFailed(true);setReady(true)},[]);
+ // Hash and preview params exist only in the browser, so they are read once after hydration.
+ // eslint-disable-next-line react-hooks/set-state-in-effect
  useEffect(()=>{const id=window.location.hash.slice(1);const i=artworks.findIndex(a=>a.id===id);if(i>=0){setSelected(i);setPanel('work')}setPreview(new URLSearchParams(window.location.search).get('preview')==='mobile');setReferencePreview(new URLSearchParams(window.location.search).get('preview')==='reference');},[]);
  useEffect(()=>{if(panel){dialog.current?.showModal();document.body.style.overflow='hidden'}else{dialog.current?.close();document.body.style.overflow='';opener.current?.focus()}return()=>{document.body.style.overflow=''}},[panel]);
  useEffect(()=>{if(panel){dialog.current?.scrollTo(0,0);requestAnimationFrame(()=>dialog.current?.querySelector<HTMLElement>(draft?'#draft-title':'#panel-title')?.focus())}},[panel,draft]);
