@@ -12,7 +12,8 @@ export type FormState<V = Record<string, string>> = {
   submission?: number;
 };
 
-export const HONEYPOT = 'website';
+// Deliberately not a name browsers autofill (e.g. "website", "url").
+export const HONEYPOT = 'hp_reference_code';
 export const STARTED_AT = 'started_at';
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
