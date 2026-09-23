@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from '@phosphor-icons/react/dist/ssr';
 import { artworkBySlug, artworkDimensions, artworkPath, artworks, artworkTitle } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
 import { SiteHeader } from '../../../components/SiteHeader';
+import { JsonLd, visualArtworkJsonLd } from '../../../lib/jsonld';
 import { SITE_NAME } from '../../../lib/site';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -50,6 +51,7 @@ export default async function WorkPage({ params }: Props) {
   const unconfirmed = !work.facts.title || !work.facts.medium || !dimensions || !work.facts.availability || !work.facts.price;
   return (
     <div className="site work-page">
+      <JsonLd data={visualArtworkJsonLd(work)} />
       <a className="skip-link" href="#main">Skip to the artwork</a>
       <SiteHeader />
       <main id="main">
