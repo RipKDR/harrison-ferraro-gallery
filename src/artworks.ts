@@ -1,18 +1,18 @@
-export type Artwork={id:string;number:string;label:string;description:string;src:string;ratio:number;corners:[number,number][]};
+export type Artwork={id:string;number:string;label:string;description:string;src:string;/** Source photo pixel size. */width:number;height:number;ratio:number;corners:[number,number][]};
 // Working descriptive labels: replace with artist-confirmed catalogue data before publishing.
 const catalogue:Artwork[]=[
-{id:'work-01',number:'01',label:'Figure in red',description:'A pale figure beneath a vivid red form, against a dark ground.',src:'/art/red-smoke.png',ratio:.81,corners:[[.095,.143],[.909,.142],[.909,.805],[.117,.808]]},
-{id:'work-02',number:'02',label:'Figure in motion',description:'A figurative portrait with sweeping dark marks and warm, earthy colour.',src:'/art/portrait.jpeg',ratio:.79,corners:[[.077,.079],[.895,.083],[.827,.829],[.128,.831]]},
-{id:'work-03',number:'03',label:'Abstract in pale violet',description:'A long abstract canvas with white, violet and scattered colour.',src:'/art/abstract.jpeg',ratio:.43,corners:[[.288,.095],[.738,.129],[.733,.885],[.307,.906]]},
-{"id": "work-04", "number": "04", "label": "Portrait in crimson", "description": "A dark-haired figure turns towards the viewer, surrounded by layered crimson and black.", "src": "/art/portrait-in-crimson.jpeg", "ratio": 0.7, "corners": [[0.033, 0.066], [0.883, 0.057], [0.835, 0.94], [0.1, 0.946]]},
-{"id": "work-05", "number": "05", "label": "Portrait with an ember", "description": "A portrait in charcoal tones, with a warm ember and a fine trail of smoke.", "src": "/art/portrait-with-ember.jpg", "ratio": 0.77, "corners": [[0.074, 0.155], [0.959, 0.119], [0.945, 0.97], [0.133, 0.971]]},
-{"id": "work-06", "number": "06", "label": "Portrait in light", "description": "A smiling figure emerges from sweeping dark marks and a pale, textured ground.", "src": "/art/portrait-in-light.jpg", "ratio": 0.79, "corners": [[0.005, 0.102], [0.995, 0.098], [0.894, 0.94], [0.11, 0.915]]},
-{"id": "work-07", "number": "07", "label": "Figure in grey", "description": "A dark, turned figure against layered silver-grey marks and a weathered surface.", "src": "/art/figure-in-grey.jpg", "ratio": 0.67, "corners": [[0.125, 0.117], [0.847, 0.121], [0.851, 0.946], [0.103, 0.94]]},
-{"id": "work-08", "number": "08", "label": "Portrait with a rose", "description": "A figure holding a dark rose, surrounded by ochre, charcoal and broken white marks.", "src": "/art/portrait-with-rose.jpg", "ratio": 0.65, "corners": [[0.025, 0.025], [0.946, 0.014], [0.989, 0.98], [0.036, 0.986]]},
-{"id": "work-09", "number": "09", "label": "White on charcoal", "description": "Sweeping white gestures and fine scattered marks cross a deep charcoal ground.", "src": "/art/white-on-charcoal.jpg", "ratio": 0.72, "corners": [[0, 0.005], [0.999, 0.014], [0.999, 0.999], [0, 0.999]]},
-{"id": "work-10", "number": "10", "label": "Over the shoulder", "description": "A figure looks back through softly layered grey, black and warm neutral tones.", "src": "/art/over-the-shoulder.jpg", "ratio": 0.75, "corners": [[0.034, 0.022], [0.976, 0.022], [0.968, 0.972], [0.043, 0.975]]},
-{"id": "work-11", "number": "11", "label": "Figure in rose", "description": "A seated figure in dark fabric, set against a rose-coloured ground with deep red and pale marks.", "src": "/art/figure-in-rose.jpg", "ratio": 0.667, "corners": [[0.039, 0.097], [0.966, 0.094], [0.919, 0.839], [0.096, 0.84]]},
-{"id": "work-12", "number": "12", "label": "Figure with a skull", "description": "A figure holds a skull close, against layers of charcoal, white and pale pink.", "src": "/art/figure-with-skull.jpg", "ratio": 0.75, "corners": [[0.002, 0.004], [0.999, 0.002], [0.999, 0.998], [0.037, 0.998]]},
+{id:'work-01',number:'01',label:'Figure in red',description:'A pale figure beneath a vivid red form, against a dark ground.',src:'/art/red-smoke.png', width: 1365, height: 2048,ratio:.81,corners:[[.095,.143],[.909,.142],[.909,.805],[.117,.808]]},
+{id:'work-02',number:'02',label:'Figure in motion',description:'A figurative portrait with sweeping dark marks and warm, earthy colour.',src:'/art/portrait.jpeg', width: 1086, height: 1448,ratio:.79,corners:[[.077,.079],[.895,.083],[.827,.829],[.128,.831]]},
+{id:'work-03',number:'03',label:'Abstract in pale violet',description:'A long abstract canvas with white, violet and scattered colour.',src:'/art/abstract.jpeg', width: 1152, height: 1536,ratio:.43,corners:[[.288,.095],[.738,.129],[.733,.885],[.307,.906]]},
+{"id": "work-04", "number": "04", "label": "Portrait in crimson", "description": "A dark-haired figure turns towards the viewer, surrounded by layered crimson and black.", "src": "/art/portrait-in-crimson.jpeg", width: 988, height: 1317, "ratio": 0.7, "corners": [[0.033, 0.066], [0.883, 0.057], [0.835, 0.94], [0.1, 0.946]]},
+{"id": "work-05", "number": "05", "label": "Portrait with an ember", "description": "A portrait in charcoal tones, with a warm ember and a fine trail of smoke.", "src": "/art/portrait-with-ember.jpg", width: 988, height: 1317, "ratio": 0.77, "corners": [[0.074, 0.155], [0.959, 0.119], [0.945, 0.97], [0.133, 0.971]]},
+{"id": "work-06", "number": "06", "label": "Portrait in light", "description": "A smiling figure emerges from sweeping dark marks and a pale, textured ground.", "src": "/art/portrait-in-light.jpg", width: 988, height: 1317, "ratio": 0.79, "corners": [[0.005, 0.102], [0.995, 0.098], [0.894, 0.94], [0.11, 0.915]]},
+{"id": "work-07", "number": "07", "label": "Figure in grey", "description": "A dark, turned figure against layered silver-grey marks and a weathered surface.", "src": "/art/figure-in-grey.jpg", width: 988, height: 1317, "ratio": 0.67, "corners": [[0.125, 0.117], [0.847, 0.121], [0.851, 0.946], [0.103, 0.94]]},
+{"id": "work-08", "number": "08", "label": "Portrait with a rose", "description": "A figure holding a dark rose, surrounded by ochre, charcoal and broken white marks.", "src": "/art/portrait-with-rose.jpg", width: 876, height: 1317, "ratio": 0.65, "corners": [[0.025, 0.025], [0.946, 0.014], [0.989, 0.98], [0.036, 0.986]]},
+{"id": "work-09", "number": "09", "label": "White on charcoal", "description": "Sweeping white gestures and fine scattered marks cross a deep charcoal ground.", "src": "/art/white-on-charcoal.jpg", width: 950, height: 1317, "ratio": 0.72, "corners": [[0, 0.005], [0.999, 0.014], [0.999, 0.999], [0, 0.999]]},
+{"id": "work-10", "number": "10", "label": "Over the shoulder", "description": "A figure looks back through softly layered grey, black and warm neutral tones.", "src": "/art/over-the-shoulder.jpg", width: 989, height: 1317, "ratio": 0.75, "corners": [[0.034, 0.022], [0.976, 0.022], [0.968, 0.972], [0.043, 0.975]]},
+{"id": "work-11", "number": "11", "label": "Figure in rose", "description": "A seated figure in dark fabric, set against a rose-coloured ground with deep red and pale marks.", "src": "/art/figure-in-rose.jpg", width: 741, height: 1317, "ratio": 0.667, "corners": [[0.039, 0.097], [0.966, 0.094], [0.919, 0.839], [0.096, 0.84]]},
+{"id": "work-12", "number": "12", "label": "Figure with a skull", "description": "A figure holds a skull close, against layers of charcoal, white and pale pink.", "src": "/art/figure-with-skull.jpg", width: 988, height: 1317, "ratio": 0.75, "corners": [[0.002, 0.004], [0.999, 0.002], [0.999, 0.998], [0.037, 0.998]]},
 ];
 // Lead with Over the shoulder, Figure in rose, and Figure with a skull.
 // Keep catalogue references stable for shared artwork links and enquiries.
@@ -22,6 +22,13 @@ export const artworks:Artwork[]=[
  ...catalogue.filter(work=>!featuredIds.includes(work.id)),
 ];
 export const featuredArtworks=artworks.slice(0,3);
+// Bounding box of the photographed canvas inside the source photo, as fractions.
+// Used where the perspective canvas is unavailable (server HTML, share images).
+export function artworkCrop(work:Artwork){
+ const [tl,tr,br,bl]=work.corners;
+ const left=Math.min(tl[0],bl[0]),right=Math.max(tr[0],br[0]),top=Math.min(tl[1],tr[1]),bottom=Math.max(bl[1],br[1]);
+ return {left,top,width:right-left,height:bottom-top};
+}
 const cache=new Map<string,Promise<HTMLCanvasElement>>();
 // Perspective-correct display of original photographs. No generated artwork or altered source files.
 export function loadArtwork(work:Artwork):Promise<HTMLCanvasElement>{
