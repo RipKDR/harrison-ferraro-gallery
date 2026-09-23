@@ -51,8 +51,8 @@ export function artworkCrop(work:Artwork){
 }
 const cache=new Map<string,Promise<HTMLCanvasElement>>();
 // Perspective-correct display of original photographs. No generated artwork or altered source files.
-export function loadArtwork(work:Artwork):Promise<HTMLCanvasElement>{
- const cached=cache.get(work.id);if(cached)return cached;
+export function loadArtwork(work:Artwork,src=work.src):Promise<HTMLCanvasElement>{
+ const key=`${work.id}|${src}`;const cached=cache.get(key);if(cached)return cached;
  const promise=new Promise<HTMLCanvasElement>((resolve,reject)=>{
  const image=new Image();image.onload=()=>{
  const canvas=document.createElement('canvas');canvas.width=Math.round(1300*work.ratio);canvas.height=1300;const ctx=canvas.getContext('2d');if(!ctx){reject(new Error('Canvas unavailable'));return;}
@@ -63,5 +63,5 @@ export function loadArtwork(work:Artwork):Promise<HTMLCanvasElement>{
  const ay=(p[1]*(b[1]-c[1])+q[1]*(c[1]-a[1])+r[1]*(a[1]-b[1]))/det;const by=(p[1]*(c[0]-b[0])+q[1]*(a[0]-c[0])+r[1]*(b[0]-a[0]))/det;const cy=p[1]-ay*a[0]-by*a[1];
  ctx.save();ctx.beginPath();const center=[(p[0]+q[0]+r[0])/3,(p[1]+q[1]+r[1])/3];const expand=(v:number[])=>{const dx=v[0]-center[0],dy=v[1]-center[1],len=Math.hypot(dx,dy);return [v[0]+dx/len*.65,v[1]+dy/len*.65]};const [P,Q,R]=[p,q,r].map(expand);ctx.moveTo(P[0],P[1]);ctx.lineTo(Q[0],Q[1]);ctx.lineTo(R[0],R[1]);ctx.closePath();ctx.clip();ctx.setTransform(ax,ay,bx,by,cx,cy);ctx.drawImage(image,0,0);ctx.restore();};
  const n=16;for(let y=0;y<n;y++)for(let x=0;x<n;x++){const u=x/n,v=y/n,U=(x+1)/n,V=(y+1)/n;triangle([[u,v],[U,v],[U,V]]);triangle([[u,v],[U,V],[u,V]]);}resolve(canvas);
- };image.onerror=()=>{cache.delete(work.id);reject(new Error('Artwork photograph could not load'));};image.src=work.src;});cache.set(work.id,promise);return promise;
+ };image.onerror=()=>{cache.delete(key);reject(new Error('Artwork photograph could not load'));};image.src=src;});cache.set(key,promise);return promise;
 }

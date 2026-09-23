@@ -55,7 +55,7 @@ export default async function WorkPage({ params }: Props) {
       <main id="main">
         <article className="work-layout">
           <div className="work-photo-area">
-            <div className="work-page-photo"><ArtworkImage work={work} /></div>
+            <div className="work-page-photo"><ArtworkImage work={work} preload sizes="(max-width: 700px) 100vw, 55vw" /></div>
           </div>
           <div className="work-info">
             <span className="eyebrow">Harrison Ferraro / {work.number}</span>

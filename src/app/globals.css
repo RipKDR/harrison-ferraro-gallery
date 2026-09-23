@@ -52,3 +52,18 @@ a.art-card{display:block}
 .work-page .work-layout{min-height:0}
 .work-page-photo{height:62svh}
 }
+
+/* ArtworkImage: cropped photograph (server HTML) under the perspective-mapped canvas */
+.artwork-image{display:block;position:relative;width:100%;height:100%;container-type:size}
+.artwork-image .artwork-frame{position:absolute;inset:0;margin:auto;display:block;overflow:hidden;width:min(100cqw,calc(100cqh * var(--ratio)));height:min(100cqh,calc(100cqw / var(--ratio)))}
+.artwork-image .artwork-photo{position:absolute;display:block;max-width:none;max-height:none;object-fit:fill;transition:none;transform:none}
+.artwork-image .artwork-canvas{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;max-height:none;margin:0;opacity:0;transition:opacity .3s,transform .3s}
+.artwork-image .artwork-canvas.ready{opacity:1}
+.art-card .artwork-image .artwork-frame{margin-bottom:0}
+.fallback-art .artwork-image .artwork-frame{width:100%;height:100%}
+.print-choices .artwork-image,.print-choices .artwork-image .artwork-frame{border:0;margin:0;padding:0;min-height:0;gap:0}
+.print-choices .artwork-image{height:190px}
+.print-choices .artwork-image .artwork-frame{margin:auto}
+@media(max-width:700px){.print-choices .artwork-image{height:110px}}
+.work-page .work-info h1{font-family:Georgia,'Times New Roman',serif;letter-spacing:-.045em;font-size:56px;line-height:1.04;margin-bottom:28px}
+@media(max-width:700px){.work-page .work-info h1{font-size:40px}}
