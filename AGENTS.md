@@ -23,7 +23,7 @@ Lead the opening gallery and collection with Over the shoulder (work-10), Figure
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## Public launch — 23 September 2026
-User confirmed the private preview is over: the site is indexed (robots allow all, sitemap). Production is Vercel at https://www.ferraro.studio. Enquiries send from hello@ferraro.studio via Resend. Analytics: Vercel Analytics + PostHog, both env-driven and no-op without keys. Unknown artwork facts (medium, size, year, price, availability) are omitted from UI and JSON-LD, never invented; track them as `TODO(harry)`.
+User confirmed the private preview is over: the site is indexed (robots allow all, sitemap). Production is Vercel at https://www.ferraro.studio. Enquiries send from hello@ferraro.studio via Resend. This supersedes the earlier mailto composer: the enquiry form posts to a server action (honeypot + rate limit) and the authorised Gmail address appears only as a fallback when sending fails. Analytics: Vercel Analytics + PostHog, both env-driven and no-op without keys. Unknown artwork facts (medium, size, year, price, availability) are omitted from UI and JSON-LD, never invented; track them as `TODO(harry)`.
 
 # This is NOT the Next.js you know
 

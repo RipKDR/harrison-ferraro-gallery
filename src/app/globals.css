@@ -67,3 +67,17 @@ a.art-card{display:block}
 @media(max-width:700px){.print-choices .artwork-image{height:110px}}
 .work-page .work-info h1{font-family:Georgia,'Times New Roman',serif;letter-spacing:-.045em;font-size:56px;line-height:1.04;margin-bottom:28px}
 @media(max-width:700px){.work-page .work-info h1{font-size:40px}}
+
+/* Server-sent enquiry and waitlist forms */
+.hp-field{position:absolute!important;left:-10000px;width:1px;height:1px;overflow:hidden}
+.field-error{font-size:13px;color:#f0a58f}
+.form-error{font-size:14px;color:#f0c2b4;border-left:1px solid #c0705c;padding-left:16px;margin:0}
+.form-error a{color:inherit}
+.enquiry-content [aria-invalid=true]{border-color:#c0705c}
+.form-result h2{font-family:Georgia,serif;font-size:32px;font-weight:400}
+.form-result p{font-size:15px}
+.form-result:focus-visible,.form-result h2:focus-visible,.form-error:focus-visible{outline:1px solid #fff}
+.work-enquiry{max-width:760px;margin:0 auto;padding:80px 24px 96px;scroll-margin-top:24px}
+.work-enquiry h2{font-family:Georgia,'Times New Roman',serif;letter-spacing:-.03em;font-size:40px;line-height:1.1;margin-bottom:24px}
+a.solid-action:hover{color:#111}
+@media(max-width:700px){.work-enquiry{padding:56px 24px 72px}.work-enquiry h2{font-size:32px}}

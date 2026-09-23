@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react/dist/ssr';
 import { artworkBySlug, artworkDimensions, artworkPath, artworks, artworkTitle } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
+import { EnquiryForm } from '../../../components/EnquiryForm';
 import { SiteHeader } from '../../../components/SiteHeader';
 import { JsonLd, visualArtworkJsonLd } from '../../../lib/jsonld';
 import { SITE_NAME } from '../../../lib/site';
@@ -65,7 +66,7 @@ export default async function WorkPage({ params }: Props) {
             <p>{work.description}</p>
             <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
             {unconfirmed && <p className="small-note">{work.facts.title ? '' : 'Descriptive working title. '}Please enquire for the confirmed details, price and availability.</p>}
-            <Link className="solid-action" href={`/#${work.id}`}>Enquire about the original <ArrowRight size={22} /></Link>
+            <a className="solid-action" href="#enquire">Enquire about the original <ArrowRight size={22} /></a>
             <nav className="work-pagination" aria-label="More works">
               <Link href={artworkPath(previous)} aria-label={`Previous work: ${artworkTitle(previous)}`}><ArrowLeft size={18} /> Previous</Link>
               <Link href="/#collection">All works</Link>
@@ -73,6 +74,12 @@ export default async function WorkPage({ params }: Props) {
             </nav>
           </div>
         </article>
+        <section className="enquiry-content work-enquiry" id="enquire" aria-labelledby="enquire-title">
+          <span className="eyebrow">A conversation about art</span>
+          <h2 id="enquire-title">Enquire about {artworkTitle(work)}</h2>
+          <p className="enquiry-notice">Send your enquiry below and Harrison will reply to you by email.</p>
+          <EnquiryForm artworkId={work.id} />
+        </section>
       </main>
       <footer className="site-footer"><span>HARRISON FERRARO</span><Link href="/#collection">Works</Link><Link href="/#prints">Prints</Link><Link href="/#about">About</Link><p>© {new Date().getFullYear()} Harrison Ferraro · Original artwork enquiries welcome. Prints in preparation.</p></footer>
     </div>

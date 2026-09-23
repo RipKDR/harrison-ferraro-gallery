@@ -4,3 +4,5 @@ export const SITE_TITLE = 'Harrison Ferraro — Selected works';
 export const SITE_DESCRIPTION = 'Figurative and abstract paintings by Melbourne artist Harrison Ferraro.';
 export const INSTAGRAM_URL = 'https://www.instagram.com/harrison_ferraro/';
 export const absoluteUrl = (path: string) => new URL(path, SITE_URL).toString();
+/** Authorised public address; shown only as a fallback when the website cannot send. */
+export const FALLBACK_CONTACT_EMAIL = 'Harrisonferraro99@gmail.com';
