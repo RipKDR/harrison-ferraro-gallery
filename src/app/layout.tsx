@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '@fontsource/bodoni-moda/900.css';
 import './globals.css';
+import { Analytics } from '@vercel/analytics/next';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '../lib/site';
 
 export const metadata: Metadata = {
@@ -27,5 +28,7 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <html lang="en-AU"><body>{children}</body></html>;
+  // Vercel Analytics only exists on Vercel deployments; elsewhere its script would 404.
+  const vercelAnalytics = Boolean(process.env.VERCEL) && process.env.NEXT_PUBLIC_VERCEL_ANALYTICS !== 'off';
+  return <html lang="en-AU"><body>{children}{vercelAnalytics && <Analytics />}</body></html>;
 }

@@ -3,6 +3,7 @@ import { useActionState, useEffect, useRef } from 'react';
 import { ArrowRight } from '@phosphor-icons/react';
 import { submitEnquiry } from '../app/actions';
 import { artworks, artworkTitle } from '../artworks';
+import { artworkProperties, trackEvent } from '../lib/analytics';
 import { type EnquiryValues, type FormState, GENERAL, HONEYPOT, INTERESTS, type Interest, STARTED_AT } from '../lib/forms';
 import { FALLBACK_CONTACT_EMAIL } from '../lib/site';
 
@@ -25,6 +26,11 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
   // Stamped in the browser (not during SSR) so the server can reject instant bot submissions.
   useEffect(() => { if (started.current) started.current.value = String(Date.now()); }, [state.submission]);
   useEffect(() => { (state.status === 'success' ? thanks : status).current?.focus(); }, [state]);
+  useEffect(() => {
+    if (state.status !== 'success') return;
+    const work = artworks.find(item => item.id === state.values?.artwork);
+    trackEvent('enquiry_submit', { interest: state.values?.interest ?? null, ...(work ? artworkProperties(work) : { artwork_id: 'general' }) });
+  }, [state]);
 
   if (state.status === 'success') {
     return <div className="form-result" role="status">

@@ -69,7 +69,7 @@ export async function submitEnquiry(_previous: FormState<EnquiryValues>, data: F
     console.error('Enquiry email failed', error.name, error.message);
     return { status: 'error', message: 'Your enquiry could not be sent. Please try again in a moment.', values, submission };
   }
-  return { status: 'success', values: { email: values.email }, submission };
+  return { status: 'success', values: { email: values.email, interest: values.interest, artwork: values.artwork }, submission };
 }
 
 /**

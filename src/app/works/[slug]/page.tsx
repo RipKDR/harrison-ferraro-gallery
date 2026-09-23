@@ -6,6 +6,7 @@ import { artworkBySlug, artworkDimensions, artworkPath, artworks, artworkTitle }
 import { ArtworkImage } from '../../../ArtworkImage';
 import { EnquiryForm } from '../../../components/EnquiryForm';
 import { PrintWaitlistForm } from '../../../components/PrintWaitlistForm';
+import { TrackArtworkView } from '../../../components/TrackArtworkView';
 import { SiteHeader } from '../../../components/SiteHeader';
 import { JsonLd, visualArtworkJsonLd } from '../../../lib/jsonld';
 import { SITE_NAME } from '../../../lib/site';
@@ -54,6 +55,7 @@ export default async function WorkPage({ params }: Props) {
   return (
     <div className="site work-page">
       <JsonLd data={visualArtworkJsonLd(work)} />
+      <TrackArtworkView slug={work.slug} source="page" />
       <a className="skip-link" href="#main">Skip to the artwork</a>
       <SiteHeader />
       <main id="main">

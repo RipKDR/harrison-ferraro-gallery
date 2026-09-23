@@ -2,6 +2,7 @@
 import { useActionState, useEffect, useId, useRef } from 'react';
 import { joinPrintWaitlist } from '../app/actions';
 import { type Artwork, artworkTitle } from '../artworks';
+import { artworkProperties, trackEvent } from '../lib/analytics';
 import { type FormState, HONEYPOT, STARTED_AT, type WaitlistValues } from '../lib/forms';
 
 const initialState: FormState<WaitlistValues> = { status: 'idle' };
@@ -13,6 +14,7 @@ export function PrintWaitlistForm({ work }: { work: Artwork }) {
   const status = useRef<HTMLParagraphElement>(null);
   useEffect(() => { if (started.current) started.current.value = String(Date.now()); }, [state.submission]);
   useEffect(() => { if (state.status !== 'idle') status.current?.focus(); }, [state]);
+  useEffect(() => { if (state.status === 'success') trackEvent('print_waitlist_join', artworkProperties(work)); }, [state, work]);
 
   if (state.status === 'success') {
     return <div className="waitlist-form"><p className="waitlist-title" role="status" ref={status} tabIndex={-1}>You’re on the list for {artworkTitle(work)} prints.</p><p className="small-note">Harrison will email you when prints of this work are released.</p></div>;
