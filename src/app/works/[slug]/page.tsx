@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from '@phosphor-icons/react/dist/ssr';
 import { artworkBySlug, artworkDimensions, artworkPath, artworks, artworkTitle } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
 import { EnquiryForm } from '../../../components/EnquiryForm';
+import { PrintWaitlistForm } from '../../../components/PrintWaitlistForm';
 import { SiteHeader } from '../../../components/SiteHeader';
 import { JsonLd, visualArtworkJsonLd } from '../../../lib/jsonld';
 import { SITE_NAME } from '../../../lib/site';
@@ -67,6 +68,7 @@ export default async function WorkPage({ params }: Props) {
             <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
             {unconfirmed && <p className="small-note">{work.facts.title ? '' : 'Descriptive working title. '}Please enquire for the confirmed details, price and availability.</p>}
             <a className="solid-action" href="#enquire">Enquire about the original <ArrowRight size={22} /></a>
+            <PrintWaitlistForm work={work} />
             <nav className="work-pagination" aria-label="More works">
               <Link href={artworkPath(previous)} aria-label={`Previous work: ${artworkTitle(previous)}`}><ArrowLeft size={18} /> Previous</Link>
               <Link href="/#collection">All works</Link>

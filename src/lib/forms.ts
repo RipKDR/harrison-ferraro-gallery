@@ -15,3 +15,5 @@ export type FormState<V = Record<string, string>> = {
 export const HONEYPOT = 'website';
 export const STARTED_AT = 'started_at';
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+export type WaitlistValues = { email: string; artwork: string };

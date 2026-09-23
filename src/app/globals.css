@@ -81,3 +81,15 @@ a.art-card{display:block}
 .work-enquiry h2{font-family:Georgia,'Times New Roman',serif;letter-spacing:-.03em;font-size:40px;line-height:1.1;margin-bottom:24px}
 a.solid-action:hover{color:#111}
 @media(max-width:700px){.work-enquiry{padding:56px 24px 72px}.work-enquiry h2{font-size:32px}}
+
+/* Print release waitlist */
+.visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.waitlist-form{margin-top:32px;padding-top:24px;border-top:1px solid #3b3935;display:grid;gap:12px}
+.waitlist-title{margin:0;font-size:15px;color:var(--ink)}
+.waitlist-row{display:flex;gap:0}
+.waitlist-row input{flex:1;min-width:0;background:#111110;color:#f1ebe1;border:1px solid #504b43;border-right:0;border-radius:0;padding:13px;font-size:16px}
+.waitlist-row input[aria-invalid=true]{border-color:#c0705c}
+.waitlist-row button{border:1px solid #817970;padding:0 20px;min-height:48px;font-size:14px;letter-spacing:.04em;white-space:nowrap}
+.waitlist-row button:hover{border-color:#e7dfd3}
+.waitlist-form .small-note{margin:0;font-size:12px;color:#a69f94}
+.waitlist-form .form-error{font-size:13px}
