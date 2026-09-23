@@ -20,4 +20,4 @@ Three.js loads client-side and renders on demand with bounded pixel density. Bro
 
 ## Preview and deployment
 
-The prototype is private and noindex. `?preview=mobile` supplies a 390×844 development comparison surface; normal routes adapt to device width. Sites source history provides rollback. No payment, email service, tracking or authentication backend is added.
+The site is public and indexable (`src/app/robots.ts`, `src/app/sitemap.ts`). `?preview=mobile` supplies a 390×844 development comparison surface; normal routes adapt to device width. Sites source history provides rollback. No payment, email service, tracking or authentication backend is added.
