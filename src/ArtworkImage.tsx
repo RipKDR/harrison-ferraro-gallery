@@ -38,7 +38,7 @@ export function ArtworkImage({work,className='',sizes=DEFAULT_SIZES,preload=fals
  },[map]);
  useEffect(()=>()=>watcher.current?.disconnect(),[]);
  return <span className={`artwork-image ${className}`} style={{'--ratio':work.ratio} as React.CSSProperties}><span className="artwork-frame">
-  <Image ref={photo} className="artwork-photo" src={work.src} alt={artworkAlt(work)} width={work.width} height={work.height} sizes={sizes} preload={preload} loading={preload?undefined:'lazy'} onLoad={e=>map(e.currentTarget.currentSrc)}
+  <Image ref={photo} className="artwork-photo" src={work.src} alt={artworkAlt(work)} width={work.width} height={work.height} sizes={sizes} loading={preload?'eager':'lazy'} fetchPriority={preload?'high':undefined} onLoad={e=>map(e.currentTarget.currentSrc)}
    style={{left:`${-crop.left/crop.width*100}%`,top:`${-crop.top/crop.width*(work.height/work.width)*work.ratio*100}%`,width:`${100/crop.width}%`,height:'auto'}}/>
   <canvas ref={canvas} className={`artwork-canvas ${mapped===work.id?'ready':''}`} aria-hidden="true"/>
  </span></span>;
