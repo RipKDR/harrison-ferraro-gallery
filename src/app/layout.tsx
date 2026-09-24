@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import '@fontsource/bodoni-moda/900.css';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
@@ -26,6 +26,8 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
   },
 };
+
+export const viewport: Viewport = { themeColor: '#101010', colorScheme: 'dark' };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   // Vercel Analytics only exists on Vercel deployments; elsewhere its script would 404.
