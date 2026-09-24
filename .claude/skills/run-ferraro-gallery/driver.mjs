@@ -106,7 +106,8 @@ async function forms(browser) {
   const emailMode = await page.locator('button:has-text("Send enquiry")').count() > 0;
   console.log(`form mode: ${emailMode ? 'email service (server action)' : 'mailto fallback (no RESEND_API_KEY/ENQUIRY_TO_EMAIL at server start)'}`);
   if (!emailMode) {
-    check(await page.locator('a.waitlist-mailto').count() === 1, 'waitlist falls back to a mailto link');
+    check(await page.locator('.waitlist-form a.waitlist-mailto').count() === 1, 'waitlist falls back to a mailto link');
+    check(await page.locator('.studio-list a.waitlist-mailto').count() === 1, 'studio list falls back to a mailto link');
     await context.close();
     return;
   }
@@ -133,8 +134,17 @@ async function forms(browser) {
   check(/Thank you/.test(resultText), `enquiry result: ${resultText.split('\n')[0]}`);
   await page.locator('#enquire').screenshot({ path: join(SHOTS, 'enquiry-result-mobile.png') });
 
+  // Studio list (footer band on every page).
+  const studio = page.locator('.studio-list');
+  await studio.locator('input[type=email]').fill('fan@example.com');
+  await studio.locator('button[type=submit]').click();
+  const studioResult = studio.locator('[role=status], [role=alert]');
+  await studioResult.first().waitFor({ timeout: 10000 });
+  const studioText = (await studioResult.first().innerText()).trim();
+  check(/studio list/.test(studioText), `studio list result: ${studioText}`);
+
   const sent = captured().slice(before).filter(entry => entry.path === '/emails');
-  check(sent.length === 2, `mock Resend received ${sent.length} email(s) (expect waitlist + enquiry)`);
+  check(sent.length === 3, `mock Resend received ${sent.length} email(s) (expect waitlist + enquiry + studio list)`);
   for (const entry of sent) console.log(`  -> ${entry.body.subject}  [replyTo ${entry.body.replyTo ?? entry.body.reply_to}]`);
   check(errors.length === 0, `forms console clean${errors.length ? `: ${errors.join(' | ')}` : ''}`);
   await context.close();

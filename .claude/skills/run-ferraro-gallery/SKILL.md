@@ -1,6 +1,6 @@
 ---
 name: run-ferraro-gallery
-description: Build, run, and drive the ferraro.studio Next.js gallery site. Use when asked to start or run the site, take screenshots (desktop or mobile) of the home page, a work page, or the modal, test the enquiry or print-waitlist forms end-to-end, verify a PR in a real browser, or run the pre-PR checks (typecheck, lint, build, test).
+description: Build, run, and drive the ferraro.studio Next.js gallery site. Use when asked to start or run the site, take screenshots (desktop or mobile) of the home page, a work page, or the modal, test the enquiry, print-waitlist or studio-list forms end-to-end, verify a PR in a real browser, or run the pre-PR checks (typecheck, lint, build, test).
 ---
 
 # Run ferraro.studio
@@ -24,7 +24,7 @@ You need Node 22 and a globally installed `playwright` package with Chromium at 
 npm ci
 ```
 
-`.env.local` is not needed locally. Without Resend env vars, both forms fall back to a `mailto:` link.
+`.env.local` is not needed locally. Without Resend env vars, all three forms (enquiry, print waitlist, studio list) fall back to a `mailto:` link.
 
 ## Pre-PR checks (CLAUDE.md requires all of them)
 
@@ -51,7 +51,7 @@ To exercise the **real server-action path** (Resend stubbed locally):
 
 ```bash
 $S/serve.sh prod-email            # mock Resend on :4199 + build/start with email env
-node $S/driver.mjs forms          # waitlist + enquiry on a work page; asserts 2 captured emails
+node $S/driver.mjs forms          # waitlist + enquiry + studio list on a work page; asserts 3 captured emails
 cat /tmp/ferraro-resend.jsonl     # exact payloads the server sent (from, reply_to, subject, text)
 MOCK_FAIL=1 $S/serve.sh prod-email && node $S/driver.mjs forms   # error UI; the result checks are EXPECTED to FAIL
 ```
@@ -69,7 +69,7 @@ printf '%s\n' 'nav /works/figure-in-rose' \
 | command | what it does |
 |---|---|
 | `smoke` | status, console errors, and screenshots for key routes; checks modal hash and Escape; exits 1 on any FAIL |
-| `forms` | detects email or mailto mode; submits both forms after the 3 s human delay; checks the captured emails |
+| `forms` | detects email or mailto mode; submits the print waitlist, enquiry and studio list after the 3 s human delay; checks the 3 captured emails |
 | `shot <path> [--mobile] [--full]` | one screenshot, plus any console errors |
 | `repl [--mobile]` | `nav click fill select press wait text eval shot errors quit` |
 
