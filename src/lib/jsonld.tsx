@@ -1,4 +1,5 @@
 import { type Artwork, artworkAlt, artworkPath, artworkTitle } from '../artworks';
+import { artworks } from '../artworks';
 import { INSTAGRAM_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
 
 const ARTIST_ID = `${SITE_URL}/#artist`;
@@ -9,7 +10,7 @@ export const personJsonLd = {
   '@id': ARTIST_ID,
   name: SITE_NAME,
   url: SITE_URL,
-  description: SITE_DESCRIPTION,
+  description: 'Figurative and abstract painter based in Melbourne, Australia.',
   jobTitle: 'Painter',
   homeLocation: { '@type': 'Place', name: 'Melbourne, Australia' },
   sameAs: [INSTAGRAM_URL],
@@ -49,4 +50,47 @@ export function visualArtworkJsonLd(work: Artwork) {
 
 export function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, '\\u003c') }} />;
+}
+
+export const profilePageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  url: absoluteUrl('/about'),
+  name: `About ${SITE_NAME}`,
+  inLanguage: 'en-AU',
+  mainEntity: { '@id': ARTIST_ID },
+};
+
+// The home page lists the full collection; this mirrors that list for search engines.
+export const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  url: SITE_URL,
+  name: `${SITE_NAME} — Selected works`,
+  description: SITE_DESCRIPTION,
+  inLanguage: 'en-AU',
+  author: { '@id': ARTIST_ID },
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: artworks.length,
+    itemListElement: artworks.map((work, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: absoluteUrl(artworkPath(work)),
+      name: artworkTitle(work),
+      image: absoluteUrl(work.src),
+    })),
+  },
+};
+
+export function breadcrumbJsonLd(work: Artwork) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: SITE_NAME, item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Works', item: absoluteUrl('/#collection') },
+      { '@type': 'ListItem', position: 3, name: artworkTitle(work), item: absoluteUrl(artworkPath(work)) },
+    ],
+  };
 }
