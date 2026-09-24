@@ -132,3 +132,26 @@ a.line-action{color:inherit;text-decoration:none}
 .studio-list-form .small-note{margin:0;font-size:12px;color:#a69f94}
 .studio-list-form .form-error{font-size:13px}
 @media(max-width:700px){.studio-list{grid-template-columns:1fr;padding:56px 22px;gap:24px}.studio-list h2{font-size:36px}}
+
+/* Zoomable artwork: double-click zooms at the pointer; drag pans once zoomed. */
+@media(hover:hover){.zoom-surface{cursor:zoom-in}.zoom-surface.is-zoomed{cursor:grab}.zoom-surface.is-zoomed:active{cursor:grabbing}}
+.zoom-surface{user-select:none;-webkit-user-select:none}
+
+/* Painting-shaped placeholder tone while the photograph loads; fully covered once it has. */
+.artwork-image .artwork-frame{background:#1b1b19}
+/* 2-column phone grids: centre a lone final card instead of leaving it flush left. */
+@container(max-width:700px){.collection-grid>.collection-item:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc(50% - 7px)}}
+/* Cards settle in as they scroll into view (browsers with scroll-driven animations only). */
+@supports(animation-timeline:view()){.collection-item,.art-card{animation:card-in linear both;animation-timeline:view();animation-range:entry 0% entry 35%}}
+@keyframes card-in{from{opacity:.4;transform:translateY(28px)}}
+
+/* Compact navigation: slides in on scroll-up once past the first screen. */
+.compact-header{position:fixed;top:0;left:0;right:0;z-index:15;height:56px;padding:0 3.8%;display:flex;align-items:center;justify-content:space-between;gap:20px;background:rgba(16,16,16,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);transform:translateY(-101%);visibility:hidden;transition:transform .3s ease,visibility .3s}
+.compact-header.is-visible{transform:none;visibility:visible}
+.compact-wordmark{padding:0;font-size:13px;letter-spacing:.22em;color:var(--ink);text-decoration:none;white-space:nowrap}
+.compact-header nav{display:flex;gap:28px}
+.compact-header nav a,.compact-header nav button{padding:0;font-size:13px;letter-spacing:.1em;color:var(--ink);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.compact-header nav a:hover,.compact-header nav button:hover{color:#fff}
+@media(max-width:700px){.compact-header{padding:0 16px}.compact-wordmark{font-size:12px;letter-spacing:.14em}.compact-header nav{gap:16px}.compact-header nav a,.compact-header nav button{letter-spacing:.02em}}
+/* Keeps anchor jumps and keyboard focus clear of the compact bar. */
+html{scroll-padding-top:64px}

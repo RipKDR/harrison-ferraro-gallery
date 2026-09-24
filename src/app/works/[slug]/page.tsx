@@ -9,6 +9,8 @@ import { EnquiryForm } from '../../../components/EnquiryForm';
 import { isEmailConfigured } from '../../../lib/email-status';
 import { PrintWaitlistForm } from '../../../components/PrintWaitlistForm';
 import { TrackArtworkView } from '../../../components/TrackArtworkView';
+import { ShareArtwork } from '../../../components/ShareArtwork';
+import { WorkKeyboardNav } from '../../../components/WorkKeyboardNav';
 import { SiteHeader } from '../../../components/SiteHeader';
 import { breadcrumbJsonLd, JsonLd, visualArtworkJsonLd } from '../../../lib/jsonld';
 import { SiteFooter } from '../../../components/SiteFooter';
@@ -53,6 +55,7 @@ export default async function WorkPage({ params }: Props) {
       <JsonLd data={visualArtworkJsonLd(work)} />
       <JsonLd data={breadcrumbJsonLd(work)} />
       <TrackArtworkView slug={work.slug} source="page" />
+      <WorkKeyboardNav previous={artworkPath(previous)} next={artworkPath(next)} />
       <a className="skip-link" href="#main">Skip to the artwork</a>
       <SiteHeader />
       <main id="main">
@@ -68,6 +71,7 @@ export default async function WorkPage({ params }: Props) {
             {unconfirmed && <p className="small-note">{work.facts.title ? '' : 'Descriptive working title. '}Please enquire for the confirmed details, price and availability.</p>}
             <a className="solid-action" href="#enquire">Enquire about the original <ArrowRight size={22} /></a>
             <PrintWaitlistForm work={work} emailEnabled={emailEnabled} />
+            <ShareArtwork work={work} />
             <nav className="work-pagination" aria-label="More works">
               <Link href={artworkPath(previous)} aria-label={`Previous work: ${artworkTitle(previous)}`}><ArrowLeft size={18} /> Previous</Link>
               <Link href="/#collection">All works</Link>
