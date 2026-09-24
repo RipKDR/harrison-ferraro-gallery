@@ -132,3 +132,7 @@ a.line-action{color:inherit;text-decoration:none}
 .studio-list-form .small-note{margin:0;font-size:12px;color:#a69f94}
 .studio-list-form .form-error{font-size:13px}
 @media(max-width:700px){.studio-list{grid-template-columns:1fr;padding:56px 22px;gap:24px}.studio-list h2{font-size:36px}}
+
+/* Zoomable artwork: double-click zooms at the pointer; drag pans once zoomed. */
+@media(hover:hover){.zoom-surface{cursor:zoom-in}.zoom-surface.is-zoomed{cursor:grab}.zoom-surface.is-zoomed:active{cursor:grabbing}}
+.zoom-surface{user-select:none;-webkit-user-select:none}

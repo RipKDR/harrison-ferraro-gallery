@@ -1,10 +1,9 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { CornersOut, Minus, Plus, X } from '@phosphor-icons/react';
+import { CornersOut, X } from '@phosphor-icons/react';
 import { type Artwork, artworkTitle } from '../artworks';
 import { ArtworkImage } from '../ArtworkImage';
-
-const MAX_ZOOM = 3;
+import { ZoomableArtwork } from './ZoomableArtwork';
 
 /**
  * Work-page photograph that opens a full-screen, zoomable view (same controls as the home-page
@@ -14,7 +13,6 @@ export function ArtworkViewer({ work }: { work: Artwork }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
-  const [zoom, setZoom] = useState(1);
   const title = artworkTitle(work);
 
   useEffect(() => {
@@ -32,7 +30,6 @@ export function ArtworkViewer({ work }: { work: Artwork }) {
 
   function close() {
     setOpen(false);
-    setZoom(1);
     opener.current?.focus();
   }
 
@@ -45,16 +42,7 @@ export function ArtworkViewer({ work }: { work: Artwork }) {
       <button className="close-button icon-button" aria-label="Close full screen view" onClick={close}><X size={26} weight="light" /></button>
       {open && <div className="work-layout">
         <div className="work-photo-area">
-          <div className={`zoom-surface ${zoom > 1 ? 'is-zoomed' : ''}`}>
-            <div className="zoom-inner" style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }}>
-              <ArtworkImage work={work} sizes="100vw" detail />
-            </div>
-          </div>
-          <div className="zoom-controls">
-            <button className="icon-button" aria-label="Zoom out" disabled={zoom <= 1} onClick={() => setZoom(z => Math.max(1, z - 0.5))}><Minus size={20} /></button>
-            <span aria-live="polite">{Math.round(zoom * 100)}%</span>
-            <button className="icon-button" aria-label="Zoom in" disabled={zoom >= MAX_ZOOM} onClick={() => setZoom(z => Math.min(MAX_ZOOM, z + 0.5))}><Plus size={20} /></button>
-          </div>
+          <ZoomableArtwork work={work} sizes="100vw" />
         </div>
       </div>}
     </dialog>
