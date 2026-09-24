@@ -14,7 +14,8 @@ export type FormState<V = Record<string, string>> = {
 
 // Deliberately not a name browsers autofill (e.g. "website", "url").
 export const HONEYPOT = 'hp_reference_code';
-export const STARTED_AT = 'started_at';
+/** Milliseconds since page load at submit (performance.now), so no clock comparison is needed. */
+export const ELAPSED = 'elapsed_ms';
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export type WaitlistValues = { email: string; artwork: string };

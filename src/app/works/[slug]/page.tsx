@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from '@phosphor-icons/react/dist/ssr';
 import { artworkBySlug, artworkDimensions, artworkPath, artworks, artworkTitle } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
 import { EnquiryForm } from '../../../components/EnquiryForm';
+import { isEmailConfigured } from '../../../lib/email-status';
 import { PrintWaitlistForm } from '../../../components/PrintWaitlistForm';
 import { TrackArtworkView } from '../../../components/TrackArtworkView';
 import { SiteHeader } from '../../../components/SiteHeader';
@@ -42,6 +43,7 @@ export default async function WorkPage({ params }: Props) {
   const index = artworks.indexOf(work);
   const previous = artworks[(index - 1 + artworks.length) % artworks.length];
   const next = artworks[(index + 1) % artworks.length];
+  const emailEnabled = isEmailConfigured();
   const dimensions = artworkDimensions(work);
   const facts: [string, string][] = [
     ['Artist', SITE_NAME],
@@ -70,7 +72,7 @@ export default async function WorkPage({ params }: Props) {
             <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
             {unconfirmed && <p className="small-note">{work.facts.title ? '' : 'Descriptive working title. '}Please enquire for the confirmed details, price and availability.</p>}
             <a className="solid-action" href="#enquire">Enquire about the original <ArrowRight size={22} /></a>
-            <PrintWaitlistForm work={work} />
+            <PrintWaitlistForm work={work} emailEnabled={emailEnabled} />
             <nav className="work-pagination" aria-label="More works">
               <Link href={artworkPath(previous)} aria-label={`Previous work: ${artworkTitle(previous)}`}><ArrowLeft size={18} /> Previous</Link>
               <Link href="/#collection">All works</Link>
@@ -81,8 +83,8 @@ export default async function WorkPage({ params }: Props) {
         <section className="enquiry-content work-enquiry" id="enquire" aria-labelledby="enquire-title">
           <span className="eyebrow">A conversation about art</span>
           <h2 id="enquire-title">Enquire about {artworkTitle(work)}</h2>
-          <p className="enquiry-notice">Send your enquiry below and Harrison will reply to you by email.</p>
-          <EnquiryForm artworkId={work.id} />
+          <p className="enquiry-notice">{emailEnabled ? 'Send your enquiry below and Harrison will reply to you by email.' : 'Write your enquiry below and it opens, ready to send, in your email app.'}</p>
+          <EnquiryForm artworkId={work.id} emailEnabled={emailEnabled} />
         </section>
       </main>
       <footer className="site-footer"><span>HARRISON FERRARO</span><Link href="/#collection">Works</Link><Link href="/#prints">Prints</Link><Link href="/#about">About</Link><p>© {new Date().getFullYear()} Harrison Ferraro · Original artwork enquiries welcome. Prints in preparation.</p></footer>

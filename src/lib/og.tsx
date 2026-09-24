@@ -1,16 +1,18 @@
 import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import sharp from 'sharp';
 import { type Artwork, artworkCrop } from '../artworks';
 
 export const OG_SIZE = { width: 1200, height: 630 };
 
 const fontData = readFile(join(process.cwd(), 'node_modules/@fontsource/bodoni-moda/files/bodoni-moda-latin-900-normal.woff'));
 
+// Downscale before embedding: the card shows the photo ~550 px tall, and some sources are several MB.
 async function photoDataUrl(work: Artwork) {
   const file = await readFile(join(process.cwd(), 'public', work.src));
-  const type = work.src.endsWith('.png') ? 'image/png' : 'image/jpeg';
-  return `data:${type};base64,${file.toString('base64')}`;
+  const resized = await sharp(file).resize({ height: 1100, withoutEnlargement: true }).jpeg({ quality: 82 }).toBuffer();
+  return `data:image/jpeg;base64,${resized.toString('base64')}`;
 }
 
 // Share card: the original photograph (cropped to the canvas edges, never repainted) beside the wordmark.
