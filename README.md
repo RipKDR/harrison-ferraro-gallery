@@ -12,7 +12,7 @@ Responsive Next.js App Router portfolio using Three.js 0.186.0. Next.js 16.3.5 w
 
 ## Interaction
 
-Click a work, use the arrow controls or keyboard arrows, switch to Index, zoom or use Full view, and send an enquiry. Every work has its own page at `/works/[slug]`; artwork hash links still reopen the gallery modal. Native dialogs support keyboard focus and Escape. Enquiries are sent by a server action through Resend (see `.env.example`); nothing is stored by the website.
+Click a work, use the arrow controls or keyboard arrows, switch to Index, zoom or use Full view, and send an enquiry. In any artwork viewer, double-click zooms at the pointer and dragging pans; on phones, swipe the modal artwork to step through works. On work pages, ← / → move between works and Share uses the phone's share sheet (copy-link on desktop). A compact navigation bar slides in on scroll-up. Every work has its own page at `/works/[slug]`; artwork hash links still reopen the gallery modal. Native dialogs support keyboard focus and Escape. Enquiries are sent by a server action through Resend (see `.env.example`); nothing is stored by the website.
 
 ## Rendering and limits
 
