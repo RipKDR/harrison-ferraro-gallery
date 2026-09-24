@@ -136,3 +136,11 @@ a.line-action{color:inherit;text-decoration:none}
 /* Zoomable artwork: double-click zooms at the pointer; drag pans once zoomed. */
 @media(hover:hover){.zoom-surface{cursor:zoom-in}.zoom-surface.is-zoomed{cursor:grab}.zoom-surface.is-zoomed:active{cursor:grabbing}}
 .zoom-surface{user-select:none;-webkit-user-select:none}
+
+/* Painting-shaped placeholder tone while the photograph loads; fully covered once it has. */
+.artwork-image .artwork-frame{background:#1b1b19}
+/* 2-column phone grids: centre a lone final card instead of leaving it flush left. */
+@container(max-width:700px){.collection-grid>.collection-item:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc(50% - 7px)}}
+/* Cards settle in as they scroll into view (browsers with scroll-driven animations only). */
+@supports(animation-timeline:view()){.collection-item,.art-card{animation:card-in linear both;animation-timeline:view();animation-range:entry 0% entry 35%}}
+@keyframes card-in{from{opacity:.4;transform:translateY(28px)}}
