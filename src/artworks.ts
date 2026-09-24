@@ -37,6 +37,20 @@ export function artworkDimensions({facts}:Artwork){
  if(!facts.widthCm||!facts.heightCm)return undefined;
  return `${facts.heightCm} × ${facts.widthCm}${facts.depthCm?` × ${facts.depthCm}`:''} cm`;
 }
+const availabilityLabel={available:'Available',reserved:'Reserved',sold:'Sold'} as const;
+/** Label/value rows for every confirmed fact, in display order. Unconfirmed fields are simply absent. */
+export function artworkFactRows(work:Artwork):[string,string][]{
+ const {facts}=work;const dimensions=artworkDimensions(work);
+ return [
+  ...(facts.medium?[['Medium',facts.medium] as [string,string]]:[]),
+  ...(dimensions?[['Dimensions',dimensions] as [string,string]]:[]),
+  ...(facts.year?[['Year',facts.year] as [string,string]]:[]),
+  ...(facts.availability?[['Availability',availabilityLabel[facts.availability]] as [string,string]]:[]),
+  ...(facts.price?[['Price',facts.price] as [string,string]]:[]),
+ ];
+}
+/** True while any fact a collector needs to decide is still awaiting Harry's confirmation. */
+export const artworkUnconfirmed=({facts}:Artwork)=>!facts.title||!facts.medium||!facts.widthCm||!facts.heightCm||!facts.availability||!facts.price;
 // Descriptive alt text: only confirmed facts (medium) are added to the working description.
 export function artworkAlt(work:Artwork){
  const kind=work.facts.medium?work.facts.medium.toLowerCase():'painting';

@@ -116,3 +116,19 @@ a.line-action{color:inherit;text-decoration:none}
 .masthead nav a:focus-visible{outline:1px solid #fff}
 .waitlist-mailto{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:1px solid #817970;color:var(--ink);text-decoration:none;font-size:14px;letter-spacing:.04em;justify-self:start}
 .waitlist-mailto:hover{border-color:#e7dfd3}
+/* Design pass, 24 Sep 2026 -------------------------------------------------------------------------- */
+/* Phones: two-column collection (halves the scroll), no overlay bar covering the paintings. */
+@container(max-width:700px){.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;row-gap:34px}.collection-image,.collection-item:last-child .collection-image{height:auto;aspect-ratio:3/4;padding:10px}.collection-image .view-art{display:none}.collection-caption{gap:8px;margin-top:10px}.collection-caption h3{font-size:18px;line-height:1.15}.collection-caption h3 a{min-height:44px}.collection-enquire{font-size:13px;padding:8px 0;margin-top:4px;min-height:44px}.enquire-extra{display:none}}
+/* Work page: the photograph opens a full-screen zoomable viewer. */
+.artwork-open{position:relative;padding:0;border:0;background:none;cursor:zoom-in;color:inherit}
+.artwork-open-hint{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;padding:9px 13px;background:rgba(17,17,16,.82);font-size:13px;letter-spacing:.03em;opacity:0;transition:opacity .2s}
+.artwork-open:hover .artwork-open-hint,.artwork-open:focus-visible .artwork-open-hint{opacity:1}
+@media(hover:none){.artwork-open-hint{opacity:1}}
+/* Studio list band above every footer. */
+.studio-list{border-top:1px solid var(--rule);padding:72px 5%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:48px;align-items:end}
+.studio-list h2{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.04em;font-size:44px;line-height:1.05;margin:14px 0 12px}
+.studio-list-copy p{margin:0;color:#c6c1b8;max-width:440px}
+.studio-list-form{display:grid;gap:12px}
+.studio-list-form .small-note{margin:0;font-size:12px;color:#a69f94}
+.studio-list-form .form-error{font-size:13px}
+@media(max-width:700px){.studio-list{grid-template-columns:1fr;padding:56px 22px;gap:24px}.studio-list h2{font-size:36px}}

@@ -19,3 +19,5 @@ export const ELAPSED = 'elapsed_ms';
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export type WaitlistValues = { email: string; artwork: string };
+
+export type StudioListValues = { email: string };

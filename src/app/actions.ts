@@ -2,7 +2,7 @@
 import { headers } from 'next/headers';
 import { artworks, artworkTitle } from '../artworks';
 import { emailConfig, headerSafe } from '../lib/email';
-import { EMAIL_PATTERN, type EnquiryValues, type FormState, GENERAL, ELAPSED, HONEYPOT, INTERESTS, type WaitlistValues } from '../lib/forms';
+import { EMAIL_PATTERN, type EnquiryValues, type FormState, GENERAL, ELAPSED, HONEYPOT, INTERESTS, type StudioListValues, type WaitlistValues } from '../lib/forms';
 import { rateLimit } from '../lib/rate-limit';
 import { absoluteUrl } from '../lib/site';
 
@@ -116,4 +116,43 @@ export async function joinPrintWaitlist(_previous: FormState<WaitlistValues>, da
     return { status: 'error', message: 'Your sign-up could not be saved. Please try again in a moment.', values, submission };
   }
   return { status: 'success', values: { email: values.email, artwork: work.id }, submission };
+}
+
+/**
+ * General studio list (new work, exhibitions, print releases) for visitors not yet asking about a
+ * specific painting. Same delivery as the print waitlist: Harry is notified of each sign-up, and the
+ * address joins RESEND_STUDIO_LIST_SEGMENT_ID when set so a broadcast (with unsubscribe) can be sent.
+ */
+export async function joinStudioList(_previous: FormState<StudioListValues>, data: FormData): Promise<FormState<StudioListValues>> {
+  const values: StudioListValues = { email: text(data, 'email', 254) };
+  const submission = Date.now();
+  if (looksAutomated(data)) return { status: 'success', submission };
+  if (!EMAIL_PATTERN.test(values.email)) return { status: 'error', message: 'Enter a valid email address.', fieldErrors: { email: 'Enter a valid email address.' }, values, submission };
+  if (!rateLimit(await clientKey('studio-list'), 10, 10 * 60_000)) {
+    return { status: 'error', message: 'Too many sign-ups from this connection. Please wait a few minutes and try again.', values, submission };
+  }
+  const config = emailConfig();
+  if (!config) {
+    console.error('Studio list sign-up not recorded: RESEND_API_KEY or ENQUIRY_TO_EMAIL is not configured.');
+    return { status: 'error', message: 'Sign-ups are unavailable right now. Please try again later.', values, submission };
+  }
+
+  let segmentNote = 'No Resend segment configured (RESEND_STUDIO_LIST_SEGMENT_ID).';
+  if (config.studioListSegmentId) {
+    const { error } = await config.resend.contacts.create({ email: values.email, segments: [{ id: config.studioListSegmentId }] });
+    segmentNote = error ? `Not added to the segment (${error.name}: ${error.message}).` : 'Added to the studio list segment.';
+    if (error) console.warn('Studio list contact not created', error.name, error.message);
+  }
+  const { error } = await config.resend.emails.send({
+    from: config.from,
+    to: config.to,
+    replyTo: values.email,
+    subject: headerSafe(`Studio list: ${values.email}`),
+    text: `New studio list sign-up on ferraro.studio\n\nEmail: ${values.email}\n\n${segmentNote}`,
+  });
+  if (error) {
+    console.error('Studio list notification failed', error.name, error.message);
+    return { status: 'error', message: 'Your sign-up could not be saved. Please try again in a moment.', values, submission };
+  }
+  return { status: 'success', values: { email: values.email }, submission };
 }
