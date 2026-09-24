@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
-import { artworkBySlug, artworkDimensions, artworkPath, artworks, artworkTitle } from '../../../artworks';
+import { artworkBySlug, artworkFactRows, artworkPath, artworks, artworkTitle, artworkUnconfirmed } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
+import { ArtworkViewer } from '../../../components/ArtworkViewer';
 import { EnquiryForm } from '../../../components/EnquiryForm';
 import { isEmailConfigured } from '../../../lib/email-status';
 import { PrintWaitlistForm } from '../../../components/PrintWaitlistForm';
@@ -36,8 +37,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const availabilityLabel = { available: 'Available', reserved: 'Reserved', sold: 'Sold' } as const;
-
 export default async function WorkPage({ params }: Props) {
   const work = artworkBySlug((await params).slug);
   if (!work) notFound();
@@ -47,16 +46,8 @@ export default async function WorkPage({ params }: Props) {
   // Next three works in catalogue order, wrapping around: stable internal links between every page.
   const related = [1, 2, 3].map(offset => artworks[(index + offset) % artworks.length]);
   const emailEnabled = isEmailConfigured();
-  const dimensions = artworkDimensions(work);
-  const facts: [string, string][] = [
-    ['Artist', SITE_NAME],
-    ...(work.facts.medium ? [['Medium', work.facts.medium] as [string, string]] : []),
-    ...(dimensions ? [['Dimensions', dimensions] as [string, string]] : []),
-    ...(work.facts.year ? [['Year', work.facts.year] as [string, string]] : []),
-    ...(work.facts.availability ? [['Availability', availabilityLabel[work.facts.availability]] as [string, string]] : []),
-    ...(work.facts.price ? [['Price', work.facts.price] as [string, string]] : []),
-  ];
-  const unconfirmed = !work.facts.title || !work.facts.medium || !dimensions || !work.facts.availability || !work.facts.price;
+  const facts: [string, string][] = [['Artist', SITE_NAME], ...artworkFactRows(work)];
+  const unconfirmed = artworkUnconfirmed(work);
   return (
     <div className="site work-page">
       <JsonLd data={visualArtworkJsonLd(work)} />
@@ -67,7 +58,7 @@ export default async function WorkPage({ params }: Props) {
       <main id="main">
         <article className="work-layout">
           <div className="work-photo-area">
-            <div className="work-page-photo"><ArtworkImage work={work} preload sizes="(max-width: 700px) 100vw, 55vw" /></div>
+            <ArtworkViewer work={work} />
           </div>
           <div className="work-info">
             <nav className="eyebrow breadcrumb" aria-label="Breadcrumb"><Link href="/">Harrison Ferraro</Link> / <Link href="/#collection">Works</Link> / <span aria-current="page">{work.number}</span></nav>
