@@ -11,6 +11,7 @@ import {TrackArtworkView} from './components/TrackArtworkView';
 import {StudioListForm} from './components/StudioListForm';
 import {ZoomableArtwork} from './components/ZoomableArtwork';
 import {ShareArtwork} from './components/ShareArtwork';
+import {CompactHeader} from './components/CompactHeader';
 import type {Interest} from './lib/forms';
 import {ArtworkImage} from './ArtworkImage';
 import GalleryFallback from './GalleryFallback';
@@ -45,6 +46,7 @@ export default function Home({emailEnabled}:{emailEnabled:boolean}){
  useEffect(()=>{function key(e:KeyboardEvent){if(panel==='work'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')&&!e.altKey&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey&&!dialog.current?.querySelector('.is-zoomed')&&!(e.target as HTMLElement).closest('input,textarea,select')){e.preventDefault();step(e.key==='ArrowLeft'?-1:1);return}if(panel||['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement).tagName))return;if(e.key==='ArrowRight'){e.preventDefault();navigate(1)}if(e.key==='ArrowLeft'){e.preventDefault();navigate(-1)}if(e.key==='Escape')setFocus(null)}window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[panel,step]);
  return <div className={`site ${preview?'mobile-preview':''} ${referencePreview?'reference-preview':''}`}>
  <a className="skip-link" href="#collection">Skip to the collection</a><header className="masthead"><h1 className="wordmark-heading"><button className="wordmark" onClick={()=>{setView('gallery');setFocus(null);close()}}>HARRISON<br/>FERRARO</button></h1><nav aria-label="Main navigation"><button onClick={browse}>Works</button><button onClick={()=>open('prints')}>Prints</button><Link href="/about">About</Link></nav></header>
+ <CompactHeader><button className="compact-wordmark" onClick={()=>window.scrollTo({top:0})}>HARRISON FERRARO</button><nav aria-label="Quick navigation"><button onClick={browse}>Works</button><button onClick={()=>open('prints')}>Prints</button><Link href="/about">About</Link></nav></CompactHeader>
  <main id="main">
  {view==='gallery'?<section className="gallery" aria-label="Selected works spatial gallery" onTouchStart={e=>touch.current=e.touches[0].clientX} onTouchEnd={e=>{const d=e.changedTouches[0].clientX-touch.current;if(Math.abs(d)>55)navigate(d<0?1:-1)}}>
  <div className="gallery-backdrop"/><div className="floor-word" aria-hidden="true">FERRARO</div>

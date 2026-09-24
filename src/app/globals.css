@@ -144,3 +144,12 @@ a.line-action{color:inherit;text-decoration:none}
 /* Cards settle in as they scroll into view (browsers with scroll-driven animations only). */
 @supports(animation-timeline:view()){.collection-item,.art-card{animation:card-in linear both;animation-timeline:view();animation-range:entry 0% entry 35%}}
 @keyframes card-in{from{opacity:.4;transform:translateY(28px)}}
+
+/* Compact navigation: slides in on scroll-up once past the first screen. */
+.compact-header{position:fixed;top:0;left:0;right:0;z-index:15;height:56px;padding:0 3.8%;display:flex;align-items:center;justify-content:space-between;gap:20px;background:rgba(16,16,16,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);transform:translateY(-101%);visibility:hidden;transition:transform .3s ease,visibility .3s}
+.compact-header.is-visible{transform:none;visibility:visible}
+.compact-wordmark{padding:0;font-size:13px;letter-spacing:.22em;color:var(--ink);text-decoration:none;white-space:nowrap}
+.compact-header nav{display:flex;gap:28px}
+.compact-header nav a,.compact-header nav button{padding:0;font-size:13px;letter-spacing:.1em;color:var(--ink);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.compact-header nav a:hover,.compact-header nav button:hover{color:#fff}
+@media(max-width:700px){.compact-header{padding:0 16px}.compact-wordmark{font-size:12px;letter-spacing:.14em}.compact-header nav{gap:16px}.compact-header nav a,.compact-header nav button{letter-spacing:.02em}}
