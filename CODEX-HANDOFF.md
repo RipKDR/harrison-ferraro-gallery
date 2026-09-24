@@ -13,7 +13,7 @@ Continue this existing project. Do not restart, regenerate the paintings, or rep
 - The remote needs a fresh Sites source credential. No credential is included. Reuse the same Site and preserve private access. Do not create a replacement or deploy to another provider without user direction.
 
 ## Stack and local use
-Next.js 16.3.5 App Router static export, React 19.2, Three.js 0.186, TypeScript, custom CSS, Phosphor icons. Preserve package-lock.json. Older Vite dependencies remain but Next is the active application.
+Next.js 16.3.5 App Router static export, React 19.2, Three.js 0.186, TypeScript, custom CSS, Phosphor icons. Preserve package-lock.json. The unused Vite dependencies were removed on 24 September 2026.
 
 ```sh
 npm ci
