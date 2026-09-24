@@ -15,8 +15,11 @@ export function ShareArtwork({ work }: { work: Artwork }) {
       try {
         await navigator.share({ title: `${artworkTitle(work)} — ${SITE_NAME}`, url });
         trackEvent('artwork_share', { ...artworkProperties(work), method: 'native' });
-      } catch { /* dismissed */ }
-      return;
+        return;
+      } catch (error) {
+        // Dismissing the sheet is fine; anything else (e.g. an in-app browser refusing) falls back to copying.
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+      }
     }
     try {
       await navigator.clipboard.writeText(url);

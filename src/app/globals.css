@@ -153,3 +153,5 @@ a.line-action{color:inherit;text-decoration:none}
 .compact-header nav a,.compact-header nav button{padding:0;font-size:13px;letter-spacing:.1em;color:var(--ink);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
 .compact-header nav a:hover,.compact-header nav button:hover{color:#fff}
 @media(max-width:700px){.compact-header{padding:0 16px}.compact-wordmark{font-size:12px;letter-spacing:.14em}.compact-header nav{gap:16px}.compact-header nav a,.compact-header nav button{letter-spacing:.02em}}
+/* Keeps anchor jumps and keyboard focus clear of the compact bar. */
+html{scroll-padding-top:64px}
