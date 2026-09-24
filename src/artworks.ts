@@ -49,11 +49,15 @@ export function artworkCrop(work:Artwork){
  const left=Math.min(tl[0],bl[0]),right=Math.max(tr[0],br[0]),top=Math.min(tl[1],tr[1]),bottom=Math.max(bl[1],br[1]);
  return {left,top,width:right-left,height:bottom-top};
 }
+// Small LRU: each ArtworkImage copies the result into its own canvas, so only recent maps are worth keeping.
+// Unbounded caching of full-size canvases can exhaust iOS Safari's canvas memory.
+const CACHE_LIMIT=6;
 const cache=new Map<string,Promise<HTMLCanvasElement>>();
+const remember=(key:string,promise:Promise<HTMLCanvasElement>)=>{cache.delete(key);cache.set(key,promise);while(cache.size>CACHE_LIMIT)cache.delete(cache.keys().next().value!);};
 // Perspective-correct display of original photographs. No generated artwork or altered source files.
 // `height` is the output canvas height: size it to the display so small cards stay cheap to map.
 export function loadArtwork(work:Artwork,src=work.src,height=1300):Promise<HTMLCanvasElement>{
- const key=`${work.id}|${src}|${height}`;const cached=cache.get(key);if(cached)return cached;
+ const key=`${work.id}|${src}|${height}`;const cached=cache.get(key);if(cached){remember(key,cached);return cached;}
  const promise=new Promise<HTMLCanvasElement>((resolve,reject)=>{
  const image=new Image();image.onload=()=>{
  const canvas=document.createElement('canvas');canvas.width=Math.round(height*work.ratio);canvas.height=height;const ctx=canvas.getContext('2d');if(!ctx){reject(new Error('Canvas unavailable'));return;}
@@ -67,5 +71,5 @@ export function loadArtwork(work:Artwork,src=work.src,height=1300):Promise<HTMLC
  // Draw a row of the mesh per slice and yield in between, so mapping never blocks input for long.
  const step=()=>{const end=performance.now()+12;while(row<n&&performance.now()<end){const y=row++;for(let x=0;x<n;x++){const u=x/n,v=y/n,U=(x+1)/n,V=(y+1)/n;triangle([[u,v],[U,v],[U,V]]);triangle([[u,v],[U,V],[u,V]]);}}if(row<n)setTimeout(step,0);else resolve(canvas);};
  step();
- };image.onerror=()=>{cache.delete(key);reject(new Error('Artwork photograph could not load'));};image.src=src;});cache.set(key,promise);return promise;
+ };image.onerror=()=>{cache.delete(key);reject(new Error('Artwork photograph could not load'));};image.src=src;});remember(key,promise);return promise;
 }
