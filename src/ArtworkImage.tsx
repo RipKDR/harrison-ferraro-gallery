@@ -8,19 +8,33 @@ const DEFAULT_SIZES='(max-width: 700px) 100vw, 40vw';
 // Server-rendered <img> (crawlable, descriptive alt) cropped to the canvas bounding box.
 // Once visible, the same optimised file is perspective-mapped onto a canvas layered on top.
 export function ArtworkImage({work,className='',sizes=DEFAULT_SIZES,preload=false}:{work:Artwork;className?:string;sizes?:string;preload?:boolean}){
- const canvas=useRef<HTMLCanvasElement>(null);const photo=useRef<HTMLImageElement>(null);const [mapped,setMapped]=useState<string|null>(null);
+ const canvas=useRef<HTMLCanvasElement>(null);const photo=useRef<HTMLImageElement>(null);const [mapped,setMapped]=useState<string|null>(null);const watcher=useRef<IntersectionObserver|null>(null);
  const crop=artworkCrop(work);
  const map=useCallback((src:string)=>{
-  loadArtwork(work,src||work.src).then(source=>{const el=canvas.current;if(!el)return;el.width=source.width;el.height=source.height;el.getContext('2d')?.drawImage(source,0,0);setMapped(work.id)}).catch(()=>{/* the cropped photograph stays visible */});
+  // Mapping is CPU-heavy: wait for an idle moment and render only as many pixels as are displayed.
+  const run=()=>{
+   const el=canvas.current;if(!el)return;
+   const displayed=el.parentElement?.clientHeight||600;
+   const height=Math.min(1300,Math.max(300,Math.ceil(displayed*Math.min(window.devicePixelRatio||1,2)/100)*100));
+   loadArtwork(work,src||work.src,height).then(source=>{const target=canvas.current;if(!target)return;target.width=source.width;target.height=source.height;target.getContext('2d')?.drawImage(source,0,0);setMapped(work.id)}).catch(()=>{/* the cropped photograph stays visible */});
+  };
+  const schedule=()=>{if(typeof window.requestIdleCallback==='function')window.requestIdleCallback(run,{timeout:2500});else window.setTimeout(run,200);};
+  // Lazy images load well outside the viewport; only map once the artwork is actually on screen.
+  const el=canvas.current?.parentElement;
+  if(!el||typeof IntersectionObserver==='undefined'){schedule();return;}
+  watcher.current?.disconnect();
+  const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();schedule();}},{rootMargin:'100px'});
+  watcher.current=observer;observer.observe(el);
  },[work]);
  useEffect(()=>{
   const el=photo.current;if(!el)return;
   // Images that finished loading before hydration never fire onLoad.
   if(el.complete&&el.naturalWidth)map(el.currentSrc);
  },[map]);
+ useEffect(()=>()=>watcher.current?.disconnect(),[]);
  return <span className={`artwork-image ${className}`} style={{'--ratio':work.ratio} as React.CSSProperties}><span className="artwork-frame">
   <Image ref={photo} className="artwork-photo" src={work.src} alt={artworkAlt(work)} width={work.width} height={work.height} sizes={sizes} preload={preload} loading={preload?undefined:'lazy'} onLoad={e=>map(e.currentTarget.currentSrc)}
-   style={{left:`${-crop.left/crop.width*100}%`,top:`${-crop.top/crop.height*100}%`,width:`${100/crop.width}%`,height:`${100/crop.height}%`}}/>
+   style={{left:`${-crop.left/crop.width*100}%`,top:`${-crop.top/crop.width*(work.height/work.width)*work.ratio*100}%`,width:`${100/crop.width}%`,height:'auto'}}/>
   <canvas ref={canvas} className={`artwork-canvas ${mapped===work.id?'ready':''}`} aria-hidden="true"/>
  </span></span>;
 }
