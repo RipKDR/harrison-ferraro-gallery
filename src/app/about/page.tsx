@@ -6,6 +6,7 @@ import { ArtworkImage } from '../../ArtworkImage';
 import { EnquiryForm } from '../../components/EnquiryForm';
 import { SiteFooter } from '../../components/SiteFooter';
 import { SiteHeader } from '../../components/SiteHeader';
+import { isEmailConfigured } from '../../lib/email-status';
 import { JsonLd, personJsonLd, profilePageJsonLd } from '../../lib/jsonld';
 import { INSTAGRAM_URL, SITE_NAME } from '../../lib/site';
 
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 
 // Copy is the existing artist statement (an editable draft); add confirmed biography facts here only.
 export default function AboutPage() {
+  const emailEnabled = isEmailConfigured();
   return (
     <div className="site about-page">
       <JsonLd data={personJsonLd} />
@@ -50,8 +52,8 @@ export default function AboutPage() {
         <section className="enquiry-content work-enquiry" id="enquire" aria-labelledby="enquire-title">
           <span className="eyebrow">A conversation about art</span>
           <h2 id="enquire-title">Start a conversation</h2>
-          <p className="enquiry-notice">Send your enquiry below and Harrison will reply to you by email.</p>
-          <EnquiryForm interest="General enquiry" />
+          <p className="enquiry-notice">{emailEnabled ? 'Send your enquiry below and Harrison will reply to you by email.' : 'Write your enquiry below and it opens, ready to send, in your email app.'}</p>
+          <EnquiryForm interest="General enquiry" emailEnabled={emailEnabled} />
         </section>
       </main>
       <SiteFooter />

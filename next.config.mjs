@@ -20,4 +20,6 @@ export default {
       { source: '/gallery-background.:ext', headers: [{ key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' }] },
     ];
   },
+  // Vercel runs the image optimiser; elsewhere (e.g. the static Sites mirror) serve source files directly.
+  images: { unoptimized: !process.env.VERCEL },
 };

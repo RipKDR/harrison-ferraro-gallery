@@ -2,7 +2,7 @@
 import { headers } from 'next/headers';
 import { artworks, artworkTitle } from '../artworks';
 import { emailConfig, headerSafe } from '../lib/email';
-import { EMAIL_PATTERN, type EnquiryValues, type FormState, GENERAL, HONEYPOT, INTERESTS, STARTED_AT, type WaitlistValues } from '../lib/forms';
+import { EMAIL_PATTERN, type EnquiryValues, type FormState, GENERAL, ELAPSED, HONEYPOT, INTERESTS, type WaitlistValues } from '../lib/forms';
 import { rateLimit } from '../lib/rate-limit';
 import { absoluteUrl } from '../lib/site';
 
@@ -18,8 +18,11 @@ async function clientKey(scope: string) {
 // Bots fill hidden fields or submit instantly; they get a quiet success and nothing is sent.
 function looksAutomated(data: FormData) {
   if (text(data, HONEYPOT, 200)) return true;
-  const started = Number(data.get(STARTED_AT));
-  return Number.isFinite(started) && started > 0 && Date.now() - started < MIN_FILL_MS;
+  // Time since the page loaded, measured on the visitor's own clock: no clock skew, and a retry after
+  // an error still counts the time already spent on the page. Absent (no JS) means no timing check.
+  const raw = String(data.get(ELAPSED) ?? '');
+  const elapsed = raw === '' ? NaN : Number(raw);
+  return Number.isFinite(elapsed) && elapsed >= 0 && elapsed < MIN_FILL_MS;
 }
 
 const findArtwork = (id: string) => artworks.find(work => work.id === id);

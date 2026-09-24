@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
-  alternates: { canonical: '/' },
   // Search Console / Bing Webmaster ownership tags, set in Vercel env when DNS verification isn't used.
   verification: {
     ...(process.env.GOOGLE_SITE_VERIFICATION && { google: process.env.GOOGLE_SITE_VERIFICATION }),

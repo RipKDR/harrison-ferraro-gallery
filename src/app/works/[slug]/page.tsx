@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight } from '@phosphor-icons/react/dist/
 import { artworkBySlug, artworkDimensions, artworkPath, artworks, artworkTitle } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
 import { EnquiryForm } from '../../../components/EnquiryForm';
+import { isEmailConfigured } from '../../../lib/email-status';
 import { PrintWaitlistForm } from '../../../components/PrintWaitlistForm';
 import { TrackArtworkView } from '../../../components/TrackArtworkView';
 import { SiteHeader } from '../../../components/SiteHeader';
@@ -45,6 +46,7 @@ export default async function WorkPage({ params }: Props) {
   const next = artworks[(index + 1) % artworks.length];
   // Next three works in catalogue order, wrapping around: stable internal links between every page.
   const related = [1, 2, 3].map(offset => artworks[(index + offset) % artworks.length]);
+  const emailEnabled = isEmailConfigured();
   const dimensions = artworkDimensions(work);
   const facts: [string, string][] = [
     ['Artist', SITE_NAME],
@@ -74,7 +76,7 @@ export default async function WorkPage({ params }: Props) {
             <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
             {unconfirmed && <p className="small-note">{work.facts.title ? '' : 'Descriptive working title. '}Please enquire for the confirmed details, price and availability.</p>}
             <a className="solid-action" href="#enquire">Enquire about the original <ArrowRight size={22} /></a>
-            <PrintWaitlistForm work={work} />
+            <PrintWaitlistForm work={work} emailEnabled={emailEnabled} />
             <nav className="work-pagination" aria-label="More works">
               <Link href={artworkPath(previous)} aria-label={`Previous work: ${artworkTitle(previous)}`}><ArrowLeft size={18} /> Previous</Link>
               <Link href="/#collection">All works</Link>
@@ -85,8 +87,8 @@ export default async function WorkPage({ params }: Props) {
         <section className="enquiry-content work-enquiry" id="enquire" aria-labelledby="enquire-title">
           <span className="eyebrow">A conversation about art</span>
           <h2 id="enquire-title">Enquire about {artworkTitle(work)}</h2>
-          <p className="enquiry-notice">Send your enquiry below and Harrison will reply to you by email.</p>
-          <EnquiryForm artworkId={work.id} />
+          <p className="enquiry-notice">{emailEnabled ? 'Send your enquiry below and Harrison will reply to you by email.' : 'Write your enquiry below and it opens, ready to send, in your email app.'}</p>
+          <EnquiryForm artworkId={work.id} emailEnabled={emailEnabled} />
         </section>
         <section className="collection-section more-works" aria-labelledby="more-works-title">
           <div className="section-heading"><div><span className="eyebrow">The collection</span><h2 id="more-works-title">More works.</h2></div><p><Link href="/#collection">See all {artworks.length} works</Link></p></div>
