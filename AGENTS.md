@@ -20,10 +20,10 @@ User supplied nine additional painting photos and authorised publication of Harr
 ## Featured paintings — 21 September 2026
 Lead the opening gallery and collection with Over the shoulder (work-10), Figure in rose (work-11), and Figure with a skull (work-12), in that order. Preserve stable artwork IDs and catalogue reference numbers.
 
-<!-- BEGIN:nextjs-agent-rules -->
-
 ## Public launch — 23 September 2026
 User confirmed the private preview is over: the site is indexed (robots allow all, sitemap). Production is Vercel at https://www.ferraro.studio. Enquiries send from hello@ferraro.studio via Resend. This supersedes the earlier mailto composer: the enquiry form posts to a server action (honeypot + rate limit) and the authorised Gmail address appears only as a fallback when sending fails. Analytics: Vercel Analytics + PostHog, both env-driven and no-op without keys. Unknown artwork facts (medium, size, year, price, availability) are omitted from UI and JSON-LD, never invented; track them as `TODO(harry)`.
+
+<!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
 
