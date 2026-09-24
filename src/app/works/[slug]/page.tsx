@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight } from '@phosphor-icons/react/dist/ssr';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
 import { artworkBySlug, artworkDimensions, artworkPath, artworks, artworkTitle } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
 import { EnquiryForm } from '../../../components/EnquiryForm';
@@ -9,7 +9,8 @@ import { isEmailConfigured } from '../../../lib/email-status';
 import { PrintWaitlistForm } from '../../../components/PrintWaitlistForm';
 import { TrackArtworkView } from '../../../components/TrackArtworkView';
 import { SiteHeader } from '../../../components/SiteHeader';
-import { JsonLd, visualArtworkJsonLd } from '../../../lib/jsonld';
+import { breadcrumbJsonLd, JsonLd, visualArtworkJsonLd } from '../../../lib/jsonld';
+import { SiteFooter } from '../../../components/SiteFooter';
 import { SITE_NAME } from '../../../lib/site';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -43,6 +44,8 @@ export default async function WorkPage({ params }: Props) {
   const index = artworks.indexOf(work);
   const previous = artworks[(index - 1 + artworks.length) % artworks.length];
   const next = artworks[(index + 1) % artworks.length];
+  // Next three works in catalogue order, wrapping around: stable internal links between every page.
+  const related = [1, 2, 3].map(offset => artworks[(index + offset) % artworks.length]);
   const emailEnabled = isEmailConfigured();
   const dimensions = artworkDimensions(work);
   const facts: [string, string][] = [
@@ -57,6 +60,7 @@ export default async function WorkPage({ params }: Props) {
   return (
     <div className="site work-page">
       <JsonLd data={visualArtworkJsonLd(work)} />
+      <JsonLd data={breadcrumbJsonLd(work)} />
       <TrackArtworkView slug={work.slug} source="page" />
       <a className="skip-link" href="#main">Skip to the artwork</a>
       <SiteHeader />
@@ -66,7 +70,7 @@ export default async function WorkPage({ params }: Props) {
             <div className="work-page-photo"><ArtworkImage work={work} preload sizes="(max-width: 700px) 100vw, 55vw" /></div>
           </div>
           <div className="work-info">
-            <span className="eyebrow">Harrison Ferraro / {work.number}</span>
+            <nav className="eyebrow breadcrumb" aria-label="Breadcrumb"><Link href="/">Harrison Ferraro</Link> / <Link href="/#collection">Works</Link> / <span aria-current="page">{work.number}</span></nav>
             <h1>{artworkTitle(work)}</h1>
             <p>{work.description}</p>
             <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
@@ -86,8 +90,19 @@ export default async function WorkPage({ params }: Props) {
           <p className="enquiry-notice">{emailEnabled ? 'Send your enquiry below and Harrison will reply to you by email.' : 'Write your enquiry below and it opens, ready to send, in your email app.'}</p>
           <EnquiryForm artworkId={work.id} emailEnabled={emailEnabled} />
         </section>
+        <section className="collection-section more-works" aria-labelledby="more-works-title">
+          <div className="section-heading"><div><span className="eyebrow">The collection</span><h2 id="more-works-title">More works.</h2></div><p><Link href="/#collection">See all {artworks.length} works</Link></p></div>
+          <div className="collection-grid">
+            {related.map(other => (
+              <article className="collection-item" key={other.id}>
+                <Link className="collection-image" href={artworkPath(other)} aria-label={`View artwork: ${artworkTitle(other)}`}><ArtworkImage work={other} sizes="(max-width: 700px) 90vw, 30vw" /><span className="view-art">View artwork <ArrowUpRight size={20} /></span></Link>
+                <div className="collection-caption"><span>{other.number}</span><h3><Link href={artworkPath(other)}>{artworkTitle(other)}</Link></h3></div>
+              </article>
+            ))}
+          </div>
+        </section>
       </main>
-      <footer className="site-footer"><span>HARRISON FERRARO</span><Link href="/#collection">Works</Link><Link href="/#prints">Prints</Link><Link href="/#about">About</Link><p>© {new Date().getFullYear()} Harrison Ferraro · Original artwork enquiries welcome. Prints in preparation.</p></footer>
+      <SiteFooter />
     </div>
   );
 }

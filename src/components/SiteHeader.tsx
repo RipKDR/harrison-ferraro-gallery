@@ -8,7 +8,7 @@ export function SiteHeader() {
       <nav aria-label="Main navigation">
         <Link href="/#collection">Works</Link>
         <Link href="/#prints">Prints</Link>
-        <Link href="/#about">About</Link>
+        <Link href="/about">About</Link>
       </nav>
     </header>
   );
