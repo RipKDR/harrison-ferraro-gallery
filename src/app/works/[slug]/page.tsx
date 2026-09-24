@@ -86,7 +86,7 @@ export default async function WorkPage({ params }: Props) {
           <div className="collection-grid">
             {related.map(other => (
               <article className="collection-item" key={other.id}>
-                <Link className="collection-image" href={artworkPath(other)} aria-label={`View artwork: ${artworkTitle(other)}`}><ArtworkImage work={other} sizes="(max-width: 700px) 90vw, 30vw" /><span className="view-art">View artwork <ArrowUpRight size={20} /></span></Link>
+                <Link className="collection-image" href={artworkPath(other)} aria-label={`View artwork: ${artworkTitle(other)}`}><ArtworkImage work={other} sizes="(max-width: 700px) 45vw, 30vw" /><span className="view-art">View artwork <ArrowUpRight size={20} /></span></Link>
                 <div className="collection-caption"><span>{other.number}</span><h3><Link href={artworkPath(other)}>{artworkTitle(other)}</Link></h3></div>
               </article>
             ))}
