@@ -12,7 +12,7 @@ Responsive Next.js App Router portfolio using Three.js 0.186.0. Next.js 16.3.5 w
 
 ## Interaction
 
-Click a work, use the arrow controls or keyboard arrows, switch to Index, zoom or use Full view, and prepare/copy an enquiry. Artwork hash links reopen a selected work. Native dialogs support keyboard focus and Escape. Nothing in the enquiry form is transmitted or persisted.
+Click a work, use the arrow controls or keyboard arrows, switch to Index, zoom or use Full view, and send an enquiry. Every work has its own page at `/works/[slug]`; artwork hash links still reopen the gallery modal. Native dialogs support keyboard focus and Escape. Enquiries are sent by a server action through Resend (see `.env.example`); nothing is stored by the website.
 
 ## Rendering and limits
 
@@ -20,4 +20,4 @@ Three.js loads client-side and renders on demand with bounded pixel density. Bro
 
 ## Preview and deployment
 
-The prototype is private and noindex. `?preview=mobile` supplies a 390×844 development comparison surface; normal routes adapt to device width. Sites source history provides rollback. No payment, email service, tracking or authentication backend is added.
+The site is public and indexable (`src/app/robots.ts`, `src/app/sitemap.ts`). `?preview=mobile` supplies a 390×844 development comparison surface; normal routes adapt to device width. Sites source history provides rollback. Production runs on Vercel (Next.js runtime). `npm run build` also stages a static mirror in `dist/` for the Sites handoff; forms need the Next.js runtime and do not work in that mirror. No payment or authentication backend is added. Analytics: Vercel Web Analytics (on Vercel only) and PostHog (when `NEXT_PUBLIC_POSTHOG_KEY` is set), with custom events `artwork_view`, `enquiry_submit` and `print_waitlist_join`.

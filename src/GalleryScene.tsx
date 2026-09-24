@@ -1,11 +1,13 @@
 'use client';
 import {useEffect,useRef} from 'react';
 import * as THREE from 'three';
+import {getImageProps} from 'next/image';
 import {featuredArtworks as artworks,loadArtwork} from './artworks';
 type Point=[number,number];
 const original:Point[][]=[[[204,75],[666,126],[666,713],[204,750]],[[739,143],[1114,203],[1114,684],[739,712]],[[1194,237],[1340,261],[1340,680],[1194,689]]];
 export default function GalleryScene({focus,onOpen,onReady,onError}:{focus:number|null;onOpen:(i:number)=>void;onReady:()=>void;onError:()=>void}){
- const root=useRef<HTMLDivElement>(null);const focusRef=useRef(focus);const updateRef=useRef<(()=>void)|null>(null);const openRef=useRef(onOpen);openRef.current=onOpen;
+ const root=useRef<HTMLDivElement>(null);const focusRef=useRef(focus);const updateRef=useRef<(()=>void)|null>(null);const openRef=useRef(onOpen);
+ useEffect(()=>{openRef.current=onOpen},[onOpen]);
  useEffect(()=>{focusRef.current=focus;updateRef.current?.()},[focus]);
  useEffect(()=>{
  const host=root.current!;let disposed=false,frame=0;const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -22,7 +24,7 @@ export default function GalleryScene({focus,onOpen,onReady,onError}:{focus:numbe
  function draw(){if(disposed)return;let moving=false;current=current.map((p,i)=>p.map(([x,y],j)=>{const target=targets[i][j];const ty=target[1]-(i===hover?4:0);const dx=target[0]-x,dy=ty-y;if(Math.abs(dx)+Math.abs(dy)>.1)moving=true;return [x+dx*(reduce?1:.16),y+dy*(reduce?1:.16)] as Point}));objects.forEach((mesh,i)=>{writeGeometry(mesh.geometry as THREE.PlaneGeometry,current[i]);writeGeometry(sides[i].geometry as THREE.PlaneGeometry,current[i],true)});renderer.render(scene,camera);frame=moving?requestAnimationFrame(draw):0;}
  function kick(){if(!frame&&!disposed)frame=requestAnimationFrame(draw);}updateRef.current=layout;
  const resize=new ResizeObserver(layout);resize.observe(host);
- Promise.all(artworks.map(loadArtwork)).then(canvases=>{if(disposed)return;layout();canvases.forEach((canvas,i)=>{const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),8);const mesh=new THREE.Mesh(geometry(current[i]),new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide}));mesh.userData.index=i;objects.push(mesh);scene.add(mesh);const side=new THREE.Mesh(geometry(current[i],true),new THREE.MeshBasicMaterial({color:0x8b8070,side:THREE.DoubleSide}));sides.push(side);scene.add(side);});kick();onReady();}).catch(()=>{if(!disposed)onError()});
+ Promise.all(artworks.map(work=>loadArtwork(work,getImageProps({src:work.src,width:540,height:Math.round(540*work.height/work.width),alt:''}).props.src))).then(canvases=>{if(disposed)return;layout();canvases.forEach((canvas,i)=>{const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),8);const mesh=new THREE.Mesh(geometry(current[i]),new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide}));mesh.userData.index=i;objects.push(mesh);scene.add(mesh);const side=new THREE.Mesh(geometry(current[i],true),new THREE.MeshBasicMaterial({color:0x8b8070,side:THREE.DoubleSide}));sides.push(side);scene.add(side);});kick();onReady();}).catch(()=>{if(!disposed)onError()});
  const ray=new THREE.Raycaster();const pointer=new THREE.Vector2();let downX=0;
  function hit(e:PointerEvent){const rect=host.getBoundingClientRect();pointer.set((e.clientX-rect.left)/width*2-1,-(e.clientY-rect.top)/height*2+1);ray.setFromCamera(pointer,camera);return ray.intersectObjects(objects)[0]?.object.userData.index??-1;}
  function move(e:PointerEvent){const next=hit(e);if(next!==hover){hover=next;renderer.domElement.style.cursor=hover>=0?'pointer':'default';kick()}}

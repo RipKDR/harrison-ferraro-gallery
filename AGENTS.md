@@ -9,7 +9,7 @@ When implementing from a selected generated mock, treat that image as the source
 Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts/prepare-sites-build.mjs`, and `tests/sites-worker.test.mjs` intact so the same local prototype can be handed to Sites. Before a Sites handoff, run `npm run build` and `npm run test:sites`; the build must leave `dist/client/index.html`, `dist/server/index.js`, and `dist/.openai/hosting.json`.
 
 ## Confirmed design
-The selected visual is upload/01-Generated-image-5.png: dark spatial three-artwork gallery with large FERRARO floor lettering. Preserve it. User explicitly requests a responsive website using Next.js and Three.js; use Next App Router static export, not a mobile app shell. Original artwork photos are rendered without AI repainting. Enquiries are drafts until real contact details are supplied.
+The selected visual is upload/01-Generated-image-5.png: dark spatial three-artwork gallery with large FERRARO floor lettering. Preserve it. User explicitly requests a responsive website using Next.js and Three.js; use Next App Router (Next.js runtime on Vercel since 23 Sep 2026; `scripts/stage-next.mjs` stages a static mirror for Sites), not a mobile app shell. Original artwork photos are rendered without AI repainting. Enquiries are drafts until real contact details are supplied.
 
 ## Commercial direction — 21 September 2026
 User prioritises a professional mobile-first portfolio that leads to original-art enquiries and print sales, and delegates business defaults. Retain selected dark gallery identity; stop generating variants unless requested. Originals start enquiry-led, with destination collected for bespoke packing/shipping quotes. Prints start unframed and proof-approved before checkout, with prices/edition/fulfilment not fabricated. Keep private preview clearly labelled until catalogue, public contact and commerce are connected. Never treat account contact details as a public artist contact without authorisation.
@@ -21,6 +21,9 @@ User supplied nine additional painting photos and authorised publication of Harr
 Lead the opening gallery and collection with Over the shoulder (work-10), Figure in rose (work-11), and Figure with a skull (work-12), in that order. Preserve stable artwork IDs and catalogue reference numbers.
 
 <!-- BEGIN:nextjs-agent-rules -->
+
+## Public launch — 23 September 2026
+User confirmed the private preview is over: the site is indexed (robots allow all, sitemap). Production is Vercel at https://www.ferraro.studio. Enquiries send from hello@ferraro.studio via Resend. This supersedes the earlier mailto composer: the enquiry form posts to a server action (honeypot + rate limit) and the authorised Gmail address appears only as a fallback when sending fails. Analytics: Vercel Analytics + PostHog, both env-driven and no-op without keys. Unknown artwork facts (medium, size, year, price, availability) are omitted from UI and JSON-LD, never invented; track them as `TODO(harry)`.
 
 # This is NOT the Next.js you know
 
