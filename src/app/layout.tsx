@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import '@fontsource/bodoni-moda/900.css';
+import '@fontsource/bodoni-moda/400.css';
+import '@fontsource/bodoni-moda/400-italic.css';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '../lib/site';

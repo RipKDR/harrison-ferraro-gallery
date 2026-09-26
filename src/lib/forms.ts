@@ -1,4 +1,4 @@
-export const INTERESTS = ['Original artwork', 'Print interest', 'General enquiry'] as const;
+export const INTERESTS = ['Original artwork', 'General enquiry'] as const;
 export type Interest = (typeof INTERESTS)[number];
 export const GENERAL = 'general';
 
@@ -17,7 +17,5 @@ export const HONEYPOT = 'hp_reference_code';
 /** Milliseconds since page load at submit (performance.now), so no clock comparison is needed. */
 export const ELAPSED = 'elapsed_ms';
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-export type WaitlistValues = { email: string; artwork: string };
 
 export type StudioListValues = { email: string };

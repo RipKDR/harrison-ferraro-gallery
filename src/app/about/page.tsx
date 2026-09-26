@@ -1,14 +1,15 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
 import { artworkPath, featuredArtworks, artworkTitle } from '../../artworks';
 import { ArtworkImage } from '../../ArtworkImage';
 import { EnquiryForm } from '../../components/EnquiryForm';
+import { InstagramLink } from '../../components/InstagramLink';
 import { SiteFooter } from '../../components/SiteFooter';
 import { SiteHeader } from '../../components/SiteHeader';
 import { isEmailConfigured } from '../../lib/email-status';
 import { JsonLd, personJsonLd, profilePageJsonLd } from '../../lib/jsonld';
-import { INSTAGRAM_URL, SITE_NAME } from '../../lib/site';
+import { SITE_NAME } from '../../lib/site';
 
 const description = 'Harrison Ferraro is a Melbourne painter working between dark figurative painting and abstraction. Artist statement, selected works and enquiries.';
 
@@ -30,14 +31,25 @@ export default function AboutPage() {
       <a className="skip-link" href="#main">Skip to the content</a>
       <SiteHeader />
       <main id="main">
-        <article className="about-content about-page-content">
-          <span className="eyebrow">The artist</span>
-          <h1>Harrison<br /><em>Ferraro</em></h1>
-          <p className="large-copy">Figurative and abstract painting.<br />Melbourne, Australia.</p>
-          <p>My work moves between dark figurative painting and abstraction. I am drawn to the tension between a recognisable face and the marks that surround it: layered surfaces, shifting light and gestures that carry a feeling beyond the figure.</p>
-          <p>For original paintings, print enquiries or a conversation about the work, get in touch directly.</p>
-          <a className="contact-link" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer me">Follow the studio on Instagram <ArrowUpRight size={18} /></a>
-        </article>
+        <section className="about-hero" aria-labelledby="about-title">
+          <figure className="about-hero-art">
+            <Link href={artworkPath(featuredArtworks[0])} aria-label={`View artwork: ${artworkTitle(featuredArtworks[0])}`}>
+              <ArtworkImage work={featuredArtworks[0]} preload sizes="(max-width: 700px) 85vw, 40vw" />
+            </Link>
+            <figcaption><span>No. {featuredArtworks[0].number}</span><span>{artworkTitle(featuredArtworks[0])}</span></figcaption>
+          </figure>
+          <article className="about-content about-page-content">
+            <span className="eyebrow">The artist · Melbourne, Australia</span>
+            <h1 id="about-title">Harrison<br /><em>Ferraro</em></h1>
+            <p className="large-copy">Between the figure<br />and the feeling.</p>
+            <p>My work moves between dark figurative painting and abstraction. I am drawn to the tension between a recognisable face and the marks that surround it: layered surfaces, shifting light and gestures that carry a feeling beyond the figure.</p>
+            <p>For original paintings or a conversation about the work, get in touch directly.</p>
+            <div className="about-actions">
+              <a className="line-action" href="#enquire">Start a conversation <ArrowRight size={22} /></a>
+              <InstagramLink className="contact-link" placement="about">Follow the studio <ArrowUpRight size={18} /></InstagramLink>
+            </div>
+          </article>
+        </section>
         <section className="collection-section about-works" aria-labelledby="about-works-title">
           <div className="section-heading"><div><span className="eyebrow">Selected works</span><h2 id="about-works-title">From the studio.</h2></div><p><Link href="/#collection">See all works</Link></p></div>
           <div className="collection-grid">
@@ -56,7 +68,7 @@ export default function AboutPage() {
           <EnquiryForm interest="General enquiry" emailEnabled={emailEnabled} />
         </section>
       </main>
-      <SiteFooter />
+      <SiteFooter emailEnabled={emailEnabled} />
     </div>
   );
 }

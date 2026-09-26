@@ -2,7 +2,7 @@
 import { headers } from 'next/headers';
 import { artworks, artworkTitle } from '../artworks';
 import { emailConfig, headerSafe } from '../lib/email';
-import { EMAIL_PATTERN, type EnquiryValues, type FormState, GENERAL, ELAPSED, HONEYPOT, INTERESTS, type StudioListValues, type WaitlistValues } from '../lib/forms';
+import { EMAIL_PATTERN, type EnquiryValues, type FormState, GENERAL, ELAPSED, HONEYPOT, INTERESTS, type StudioListValues } from '../lib/forms';
 import { rateLimit } from '../lib/rate-limit';
 import { absoluteUrl } from '../lib/site';
 
@@ -76,51 +76,8 @@ export async function submitEnquiry(_previous: FormState<EnquiryValues>, data: F
 }
 
 /**
- * Print release waitlist. Harry gets one notification per sign-up (artwork + email), which is
- * the per-image demand signal; when RESEND_PRINT_WAITLIST_SEGMENT_ID is set the address is also
- * added to that Resend segment so a release broadcast can be sent (with unsubscribe) later.
- */
-export async function joinPrintWaitlist(_previous: FormState<WaitlistValues>, data: FormData): Promise<FormState<WaitlistValues>> {
-  const values: WaitlistValues = { email: text(data, 'email', 254), artwork: text(data, 'artwork', 20) };
-  const submission = Date.now();
-  if (looksAutomated(data)) return { status: 'success', submission };
-  const work = findArtwork(values.artwork);
-  if (!work) return { status: 'error', message: 'This artwork could not be found.', values, submission };
-  if (!EMAIL_PATTERN.test(values.email)) return { status: 'error', message: 'Enter a valid email address.', fieldErrors: { email: 'Enter a valid email address.' }, values, submission };
-  if (!rateLimit(await clientKey('waitlist'), 10, 10 * 60_000)) {
-    return { status: 'error', message: 'Too many sign-ups from this connection. Please wait a few minutes and try again.', values, submission };
-  }
-  const config = emailConfig();
-  if (!config) {
-    console.error('Waitlist sign-up not recorded: RESEND_API_KEY or ENQUIRY_TO_EMAIL is not configured.');
-    return { status: 'error', message: 'Sign-ups are unavailable right now. Please try again later.', values, submission };
-  }
-
-  const title = artworkTitle(work);
-  let segmentNote = 'No Resend segment configured (RESEND_PRINT_WAITLIST_SEGMENT_ID).';
-  if (config.printWaitlistSegmentId) {
-    const { error } = await config.resend.contacts.create({ email: values.email, segments: [{ id: config.printWaitlistSegmentId }] });
-    // An existing contact is expected when someone joins for a second artwork.
-    segmentNote = error ? `Not added to the segment (${error.name}: ${error.message}).` : 'Added to the print waitlist segment.';
-    if (error) console.warn('Waitlist contact not created', error.name, error.message);
-  }
-  const { error } = await config.resend.emails.send({
-    from: config.from,
-    to: config.to,
-    replyTo: values.email,
-    subject: headerSafe(`Print waitlist: ${title} (${work.number})`),
-    text: `New print waitlist sign-up on ferraro.studio\n\nWork: ${title} (ref. ${work.number})\n${absoluteUrl(`/works/${work.slug}`)}\nEmail: ${values.email}\n\n${segmentNote}`,
-  });
-  if (error) {
-    console.error('Waitlist notification failed', error.name, error.message);
-    return { status: 'error', message: 'Your sign-up could not be saved. Please try again in a moment.', values, submission };
-  }
-  return { status: 'success', values: { email: values.email, artwork: work.id }, submission };
-}
-
-/**
- * General studio list (new work, exhibitions, print releases) for visitors not yet asking about a
- * specific painting. Same delivery as the print waitlist: Harry is notified of each sign-up, and the
+ * General studio list (new work and studio news) for visitors not yet asking about a
+ * specific painting. Harry is notified of each sign-up, and the
  * address joins RESEND_STUDIO_LIST_SEGMENT_ID when set so a broadcast (with unsubscribe) can be sent.
  */
 export async function joinStudioList(_previous: FormState<StudioListValues>, data: FormData): Promise<FormState<StudioListValues>> {

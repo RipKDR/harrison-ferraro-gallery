@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr';
 import { SiteFooter } from '../components/SiteFooter';
 import { SiteHeader } from '../components/SiteHeader';
+import { isEmailConfigured } from '../lib/email-status';
 
 export default function NotFound() {
   return (
@@ -14,7 +15,7 @@ export default function NotFound() {
         <Link className="solid-action" href="/#collection">Browse all works <ArrowRight size={22} /></Link>
         <Link className="line-action" href="/about">About the artist <ArrowRight size={22} /></Link>
       </main>
-      <SiteFooter />
+      <SiteFooter emailEnabled={isEmailConfigured()} />
     </div>
   );
 }

@@ -1,3 +1,13 @@
+# Current continuation — 26 September 2026
+
+This section supersedes the historical ZIP handoff below. Production: https://www.ferraro.studio on Vercel's Next.js runtime. GitHub: https://github.com/RipKDR/harrison-ferraro-gallery. Production and local HEAD were verified at `77f4521` before these uncommitted changes.
+
+Public indexing, 12 individual artwork pages, Resend enquiry server actions, the studio list and environment-driven analytics remain. The user removed prints from the current direction: `/prints`, artwork-specific print-interest forms and print-only backend code are removed. Instagram links emit `instagram_click` with placement only. The approved spatial gallery and original photographs remain the visual foundation. The current design work focuses on an impressive artist portfolio and qualified original enquiries; historical print plans below are superseded.
+
+Read AGENTS.md and COMMERCIAL-PLAN.md for current boundaries. Use the existing `.claude/skills/ferraro-seo-audit/audit.mjs` against a running production build. Local email fallback checks do not prove live email delivery. Nothing in the historical private-preview/static-export instructions below should override current code or AGENTS.md.
+
+---
+
 # Harrison Ferraro portfolio — Codex handover
 
 ## Start here

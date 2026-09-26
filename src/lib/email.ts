@@ -11,7 +11,6 @@ export function emailConfig() {
     resend: new Resend(apiKey),
     from: process.env.ENQUIRY_FROM_EMAIL || DEFAULT_FROM,
     to: to.split(',').map(address => address.trim()).filter(Boolean),
-    printWaitlistSegmentId: process.env.RESEND_PRINT_WAITLIST_SEGMENT_ID || null,
     studioListSegmentId: process.env.RESEND_STUDIO_LIST_SEGMENT_ID || null,
   };
 }

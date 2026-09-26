@@ -7,7 +7,6 @@ import { ArtworkImage } from '../../../ArtworkImage';
 import { ArtworkViewer } from '../../../components/ArtworkViewer';
 import { EnquiryForm } from '../../../components/EnquiryForm';
 import { isEmailConfigured } from '../../../lib/email-status';
-import { PrintWaitlistForm } from '../../../components/PrintWaitlistForm';
 import { TrackArtworkView } from '../../../components/TrackArtworkView';
 import { ShareArtwork } from '../../../components/ShareArtwork';
 import { WorkKeyboardNav } from '../../../components/WorkKeyboardNav';
@@ -48,7 +47,7 @@ export default async function WorkPage({ params }: Props) {
   // Next three works in catalogue order, wrapping around: stable internal links between every page.
   const related = [1, 2, 3].map(offset => artworks[(index + offset) % artworks.length]);
   const emailEnabled = isEmailConfigured();
-  const facts: [string, string][] = [['Artist', SITE_NAME], ...artworkFactRows(work)];
+  const facts: [string, string][] = [['Artist', SITE_NAME], ['Reference', `No. ${work.number}`], ...artworkFactRows(work)];
   const unconfirmed = artworkUnconfirmed(work);
   return (
     <div className="site work-page">
@@ -70,7 +69,7 @@ export default async function WorkPage({ params }: Props) {
             <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
             {unconfirmed && <p className="small-note">{work.facts.title ? '' : 'Descriptive working title. '}Please enquire for the confirmed details, price and availability.</p>}
             <a className="solid-action" href="#enquire">Enquire about the original <ArrowRight size={22} /></a>
-            <PrintWaitlistForm work={work} emailEnabled={emailEnabled} />
+            <p className="collector-note">A direct conversation with Harrison. Ask about the painting, request further details, or include your destination for a delivery quote.</p>
             <ShareArtwork work={work} />
             <nav className="work-pagination" aria-label="More works">
               <Link href={artworkPath(previous)} aria-label={`Previous work: ${artworkTitle(previous)}`}><ArrowLeft size={18} /> Previous</Link>
@@ -97,7 +96,7 @@ export default async function WorkPage({ params }: Props) {
           </div>
         </section>
       </main>
-      <SiteFooter />
+      <SiteFooter emailEnabled={emailEnabled} />
     </div>
   );
 }

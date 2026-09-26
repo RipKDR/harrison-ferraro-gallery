@@ -3,6 +3,7 @@ import { useActionState, useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
 import { submitEnquiry } from '../app/actions';
 import { artworks, artworkTitle } from '../artworks';
+import { ArtworkImage } from '../ArtworkImage';
 import { artworkProperties, trackEvent } from '../lib/analytics';
 import { ELAPSED, type EnquiryValues, type FormState, GENERAL, HONEYPOT, INTERESTS, type Interest } from '../lib/forms';
 import { FALLBACK_CONTACT_EMAIL } from '../lib/site';
@@ -11,8 +12,7 @@ const initialState: FormState<EnquiryValues> = { status: 'idle' };
 
 const defaultMessage = (interest: Interest) =>
   interest === 'General enquiry' ? "Hello Harrison, I'd like to get in touch about your work."
-    : interest === 'Print interest' ? "I'd like to hear about print options for this work."
-      : "I'd like to know more about this work, including its availability, price and dimensions.";
+    : "I'd like to know more about this work, including its availability, price and dimensions.";
 
 const trackEnquiry = (interest: string | null, artworkId: string | undefined, method: 'email_service' | 'mailto') => {
   const work = artworks.find(item => item.id === artworkId);
@@ -34,12 +34,15 @@ function mailtoFromForm(data: FormData) {
 export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL, emailEnabled, headingId }: { interest?: Interest; artworkId?: string; emailEnabled: boolean; headingId?: string }) {
   const [state, action, pending] = useActionState(submitEnquiry, initialState);
   const [mailto, setMailto] = useState<string | null>(null);
+  const [selection, setSelection] = useState({ interest, artwork: interest === 'General enquiry' ? GENERAL : artworkId });
   const elapsed = useRef<HTMLInputElement>(null);
   const status = useRef<HTMLParagraphElement>(null);
   const thanks = useRef<HTMLHeadingElement>(null);
   const values = state.values ?? {};
   const errors = state.fieldErrors ?? {};
   const fieldError = (key: keyof EnquiryValues) => errors[key] ? { 'aria-invalid': true, 'aria-describedby': `enquiry-${key}-error` } : {};
+  const specificArtwork = interest === 'Original artwork' && artworks.some(work => work.id === artworkId);
+  const selectedWork = selection.interest === 'Original artwork' ? artworks.find(work => work.id === selection.artwork) : undefined;
 
   useEffect(() => { (state.status === 'success' || mailto ? thanks : status).current?.focus(); }, [state, mailto]);
   useEffect(() => { if (state.status === 'success') trackEnquiry(state.values?.interest ?? null, state.values?.artwork, 'email_service'); }, [state]);
@@ -75,14 +78,19 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
     </div>;
   }
 
+  const options = <>
+    <label>I’m interested in<select name="interest" value={selection.interest} onChange={event => setSelection(current => ({ ...current, interest: event.target.value as Interest }))} {...fieldError('interest')}>{INTERESTS.map(option => <option key={option}>{option}</option>)}</select>{errors.interest && <span className="field-error" id="enquiry-interest-error">{errors.interest}</span>}</label>
+    <label>Artwork<select name="artwork" value={selection.artwork} onChange={event => setSelection(current => ({ ...current, artwork: event.target.value }))} {...fieldError('artwork')}>{artworks.map(work => <option key={work.id} value={work.id}>{artworkTitle(work)} ({work.number})</option>)}<option value={GENERAL}>General enquiry</option></select>{errors.artwork && <span className="field-error" id="enquiry-artwork-error">{errors.artwork}</span>}</label>
+  </>;
+
   return <form action={action} onSubmit={onSubmit} key={state.submission ?? 'initial'} aria-describedby="enquiry-privacy">
-    <label>I’m interested in<select name="interest" defaultValue={values.interest ?? interest} {...fieldError('interest')}>{INTERESTS.map(option => <option key={option}>{option}</option>)}</select></label>
-    <label>Artwork<select name="artwork" defaultValue={values.artwork ?? (interest === 'General enquiry' ? GENERAL : artworkId)} {...fieldError('artwork')}>{artworks.map(work => <option key={work.id} value={work.id}>{artworkTitle(work)} ({work.number})</option>)}<option value={GENERAL}>General enquiry</option></select></label>
+    {specificArtwork && selectedWork && <div className="enquiry-selection"><div className="enquiry-selection-image"><ArtworkImage work={selectedWork} sizes="64px" /></div><div><span className="eyebrow">Original artwork / {selectedWork.number}</span><h3>{artworkTitle(selectedWork)}</h3></div></div>}
+    {specificArtwork ? <details className="enquiry-options" open={Boolean(errors.interest || errors.artwork)}><summary>Change artwork or enquiry type</summary><div>{options}</div></details> : options}
     <div className="form-row">
       <label>Your name<input name="name" required autoComplete="name" maxLength={100} defaultValue={values.name} {...fieldError('name')} />{errors.name && <span className="field-error" id="enquiry-name-error">{errors.name}</span>}</label>
       {emailEnabled && <label>Email address<input name="email" type="email" required autoComplete="email" maxLength={254} defaultValue={values.email} {...fieldError('email')} />{errors.email && <span className="field-error" id="enquiry-email-error">{errors.email}</span>}</label>}
     </div>
-    <fieldset className="delivery-fields"><legend>Delivery destination (optional)</legend><p className="small-note">Helps Harrison prepare packing and delivery options with your quote.</p><div className="form-row"><label>Country<input name="country" autoComplete="country-name" maxLength={100} placeholder="e.g. Australia" defaultValue={values.country} /></label><label>Postcode<input name="postcode" autoComplete="postal-code" maxLength={20} placeholder="e.g. 3000" defaultValue={values.postcode} /></label></div></fieldset>
+    <details className="delivery-options" open={Boolean(values.country || values.postcode)}><summary>Add a delivery destination (optional)</summary><fieldset className="delivery-fields"><legend>Delivery destination</legend><p className="small-note">Helps Harrison prepare packing and delivery options with your quote.</p><div className="form-row"><label>Country<input name="country" autoComplete="country-name" maxLength={100} placeholder="e.g. Australia" defaultValue={values.country} /></label><label>Postcode<input name="postcode" autoComplete="postal-code" maxLength={20} placeholder="e.g. 3000" defaultValue={values.postcode} /></label></div></fieldset></details>
     <label>Your message<textarea name="message" required rows={4} maxLength={3000} defaultValue={values.message ?? defaultMessage(interest)} {...fieldError('message')} />{errors.message && <span className="field-error" id="enquiry-message-error">{errors.message}</span>}</label>
     <div className="hp-field" aria-hidden="true"><label>Leave this empty<input name={HONEYPOT} tabIndex={-1} autoComplete="off" /></label></div>
     <input type="hidden" name={ELAPSED} defaultValue="" ref={elapsed} />

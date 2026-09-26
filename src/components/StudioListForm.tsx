@@ -23,11 +23,11 @@ export function StudioListForm({ emailEnabled }: { emailEnabled: boolean }) {
   const heading = <div className="studio-list-copy">
     <span className="eyebrow">From the studio</span>
     <h2 id={`${id}-title`}>New work, first.</h2>
-    <p>Occasional emails when new paintings are finished and when prints are released.</p>
+    <p>Occasional notes on new paintings and news from the studio.</p>
   </div>;
 
   if (!emailEnabled) {
-    const href = `mailto:${FALLBACK_CONTACT_EMAIL}?subject=${encodeURIComponent('Studio list')}&body=${encodeURIComponent('Please add me to your studio list for new work and print releases.')}`;
+    const href = `mailto:${FALLBACK_CONTACT_EMAIL}?subject=${encodeURIComponent('Studio list')}&body=${encodeURIComponent('Please add me to your studio list for new paintings and studio news.')}`;
     return <section className="studio-list" aria-labelledby={`${id}-title`}>
       {heading}
       <div className="studio-list-form">
@@ -40,7 +40,7 @@ export function StudioListForm({ emailEnabled }: { emailEnabled: boolean }) {
   return <section className="studio-list" aria-labelledby={`${id}-title`}>
     {heading}
     {state.status === 'success'
-      ? <div className="studio-list-form"><p className="waitlist-title" role="status" ref={status} tabIndex={-1}>You’re on the studio list.</p><p className="small-note">Harrison will email you about new work and print releases.</p></div>
+      ? <div className="studio-list-form"><p className="waitlist-title" role="status" ref={status} tabIndex={-1}>You’re on the studio list.</p><p className="small-note">Harrison will email you about new paintings and studio news.</p></div>
       : <form className="studio-list-form" action={action} onSubmit={() => { if (elapsed.current) elapsed.current.value = String(Math.round(performance.now())); }} key={state.submission ?? 'initial'}>
         <div className="waitlist-row">
           <label className="visually-hidden" htmlFor={`${id}-email`}>Email address</label>

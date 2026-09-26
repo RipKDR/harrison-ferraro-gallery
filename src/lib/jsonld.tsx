@@ -28,7 +28,7 @@ export const websiteJsonLd = {
 const centimetres = (value: number) => ({ '@type': 'QuantitativeValue', value, unitCode: 'CMT' });
 
 // Only confirmed facts are emitted; unknown medium, size and year are left out rather than guessed.
-// Product/Offer markup is deliberately absent until prints are purchasable.
+// Product/Offer markup is absent while acquisition remains enquiry-led.
 export function visualArtworkJsonLd(work: Artwork) {
   const { facts } = work;
   return {

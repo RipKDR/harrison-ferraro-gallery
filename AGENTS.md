@@ -23,6 +23,15 @@ Lead the opening gallery and collection with Over the shoulder (work-10), Figure
 ## Public launch — 23 September 2026
 User confirmed the private preview is over: the site is indexed (robots allow all, sitemap). Production is Vercel at https://www.ferraro.studio. Enquiries send from hello@ferraro.studio via Resend. This supersedes the earlier mailto composer: the enquiry form posts to a server action (honeypot + rate limit) and the authorised Gmail address appears only as a fallback when sending fails. Analytics: Vercel Analytics + PostHog, both env-driven and no-op without keys. Unknown artwork facts (medium, size, year, price, availability) are omitted from UI and JSON-LD, never invented; track them as `TODO(harry)`.
 
+## Growth direction — 24 September 2026
+Preserve the approved spatial gallery and original artwork imagery. User prioritises search discovery, qualified original enquiries, future print sales and Instagram followers. Improve those paths without redesigning the site. Never promise rankings, followers or sales. The dedicated `/prints` page is for interest until physical proofs, specifications, pricing and fulfilment are confirmed.
+
+## Print-page review — 24 September 2026
+User explicitly dislikes the first `/prints` implementation and requested a Product Design audit. Treat its visual design as rejected, not approved for publication. Preserve the approved home gallery; a replacement print-page direction has not yet been selected.
+
+## Portfolio direction — 26 September 2026
+User removes prints from the website and delegates design improvements to create an impressive artist portfolio, attract qualified visitors and support original-artwork enquiries. Remove print pages, links, forms and print-only backend code. Retain the dark spatial gallery, featured artwork order and original photographs. The studio list covers new paintings and studio news. Use editable descriptive copy where useful; do not invent artist biography, exhibitions, awards, prices, availability or other factual claims. This direction supersedes earlier print-sales plans.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

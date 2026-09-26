@@ -12,3 +12,6 @@ dist/
 !.env.example
 *.log
 .DS_Store
+.cursor
+.agents
+.claude

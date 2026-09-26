@@ -8,16 +8,16 @@ export function SiteHeader() {
       <Link className="wordmark" href="/" aria-label="Harrison Ferraro home">HARRISON<br />FERRARO</Link>
       <nav aria-label="Main navigation">
         <Link href="/#collection">Works</Link>
-        <Link href="/#prints">Prints</Link>
         <Link href="/about">About</Link>
+        <Link className="nav-enquire" href="/about#enquire">Enquire</Link>
       </nav>
     </header>
     <CompactHeader>
       <Link className="compact-wordmark" href="/">HARRISON FERRARO</Link>
       <nav aria-label="Quick navigation">
         <Link href="/#collection">Works</Link>
-        <Link href="/#prints">Prints</Link>
         <Link href="/about">About</Link>
+        <Link className="nav-enquire" href="/about#enquire">Enquire</Link>
       </nav>
     </CompactHeader>
   </>);

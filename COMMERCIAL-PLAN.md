@@ -1,25 +1,29 @@
-# Launch decisions
+# Growth and original-enquiry plan — 26 September 2026
 
-The primary goal is qualified original-art enquiries and completed print orders. The private prototype now supports collection browsing, artwork inspection, original vs print interest, destination entry, and an addressed email composer using Harrisonferraro99@gmail.com. Visitors review and send in their email app; a copy fallback is provided. It does not send enquiries automatically, take payment, reserve inventory, subscribe visitors, or claim that prints exist.
+## Current position
 
-## Recommended offer
+Public portfolio at https://www.ferraro.studio, deployed from RipKDR/harrison-ferraro-gallery to Vercel. The Next.js runtime supports Resend enquiries and the studio list; without email configuration, visitors use an explicitly labelled email-app fallback. Analytics and individual artwork SEO already exist. The user removed prints from the current scope on 26 September 2026. There is no checkout.
 
-- Originals: enquire first. Confirm catalogue details, availability, price and a destination-specific packing/shipping quote before arranging payment. Move suitably standardised originals to direct purchase later.
-- Prints: launch with one image and two proportional unframed sizes after a physical proof. Proposed image: the red figurative painting, subject to artist approval and a print-quality capture. Do not commit to a numbered edition until the edition policy is agreed.
-- Fulfilment: initially use an inspected small batch from a fine-art printer, dispatched by the artist. Avoid automatic uninspected fulfilment and framed international products at launch. A provider has not been selected or contracted.
-- Pricing: use real production, packaging, payment and delivery costs plus the artist's target margin; no invented price on the site. Quote international original delivery individually.
-- Commerce: integrate hosted checkout after approved products and the user's merchant account are available. Use server-verified payments, idempotent fulfilment and stock reservation before enabling purchases.
+## Priority 1: turn attention into qualified interest
 
-## Required before public launch
+Lead visitors from the spatial gallery into all 12 paintings, detailed artwork pages and original-artwork enquiries. Each work remains individually shareable. Instagram links appear beside the artist introduction and in shared footers; `instagram_click` records placement without personal information. Keep the spatial hero, artwork order and original photographs intact.
 
-1. Artist confirms titles, medium, dimensions, availability, original prices and publication rights for each work.
-2. Public contact supplied: Harrisonferraro99@gmail.com and https://www.instagram.com/harrison_ferraro/. Both are connected.
-3. Email-app enquiries are connected. A future server-delivered contact form needs a configured email provider and verified delivery/failure handling.
-4. Approve print proof, supplier, sizes, paper, edition policy, pricing and dispatch times.
-5. Connect merchant account and verify successful, failed and cancelled checkout, stock limits, fulfilment and refunds.
-6. Provide accurate delivery/returns/privacy information, then enable public access and search indexing.
-7. Verify actual iOS/Android browsers and hardware-accelerated Three.js, plus reduced-motion and low-bandwidth behaviour.
+## Priority 2: make search progress measurable
 
-## Success measures after launch
+Verify ownership in Google Search Console and Bing Webmaster Tools, submit `/sitemap.xml`, and inspect the homepage, `/about` and featured artwork URLs. Existing environment variables support verification tags. Ownership and indexing status still require account access; robots permission does not prove indexing. Run the repository SEO audit after route changes. Measure search impressions, clicks and qualified enquiries before choosing further content. No ranking guarantees or keyword-stuffed pages.
 
-Use consent-aware, minimal analytics to count collection views, artwork views, original enquiry completion and paid print orders. Attribute Instagram visits with campaign parameters. Establish a baseline first; do not fabricate conversion benchmarks or promise sales. No visitor tracking is installed in this prototype.
+Reference: https://developers.google.com/search/docs/fundamentals/seo-starter-guide
+
+## Priority 3: complete the original catalogue
+
+TODO(harry): confirm each painting's title, medium, dimensions, year, price and availability. Confirm packing, destination-specific delivery arrangements and accurate terms before an acquisition is agreed. Keep originals enquiry-led. Unknown facts remain omitted rather than invented.
+
+## Priority 4: a repeatable audience routine
+
+Use the artist's real photos and footage: one finished work, one detail/process post, and one studio update per week as a starting experiment, not a promised growth formula. Link each work to its artwork page. Suggested bio destination: `https://www.ferraro.studio/?utm_source=instagram&utm_medium=social&utm_campaign=artist_bio`.
+
+Prepare genuine captions, background and exhibition/news updates with artist-supplied facts. Outreach to suitable galleries, curators and publications needs real work context and explicit authorisation before sending. Avoid fabricated press, awards, testimonials, scarcity, followers or engagement.
+
+## Weekly review
+
+Record search impressions/clicks, artwork views, successful website enquiries, studio-list requests, Instagram outbound clicks and actual sales separately. Email-app clicks are intent, not delivered enquiries or confirmed subscribers. Outbound Instagram clicks do not prove follows. Compare trends against the first measured baseline; change one weak step at a time. No recurring automation has been created.
