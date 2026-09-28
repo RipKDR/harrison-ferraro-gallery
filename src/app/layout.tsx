@@ -7,6 +7,8 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '../lib/site';
 
+import Script from 'next/script';
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: SITE_TITLE, template: `%s — ${SITE_NAME}` },
@@ -39,5 +41,5 @@ export const viewport: Viewport = { themeColor: '#101010', colorScheme: 'dark' }
 export default function Layout({ children }: { children: React.ReactNode }) {
   // Vercel Analytics only exists on Vercel deployments; elsewhere its script would 404.
   const vercelAnalytics = Boolean(process.env.VERCEL) && process.env.NEXT_PUBLIC_VERCEL_ANALYTICS !== 'off';
-  return <html lang="en-AU" data-scroll-behavior="smooth"><body>{children}{vercelAnalytics && <><Analytics /><SpeedInsights /></>}</body></html>;
+  return <html lang="en-AU" data-scroll-behavior="smooth"><body>{children}{vercelAnalytics && <><Analytics /><SpeedInsights /></>}<Script id="microsoft-clarity" strategy="afterInteractive">{`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "ypc3nxsht5");`}</Script></body></html>;
 }
