@@ -30,5 +30,7 @@ export default {
     ];
   },
   // Vercel runs the image optimiser; elsewhere (e.g. the static Sites mirror) serve source files directly.
-  images: { unoptimized: !process.env.VERCEL, formats: ['image/avif', 'image/webp'] },
+  // WebP only: these painterly textures are 40% *larger* in AVIF at q=75 (measured, 8 of 12 works),
+  // and AVIF costs Vercel's optimiser ~5x the encode time. formats: ['image/avif', 'image/webp']
+  images: { unoptimized: !process.env.VERCEL },
 };
