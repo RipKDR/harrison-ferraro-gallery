@@ -32,6 +32,9 @@ User explicitly dislikes the first `/prints` implementation and requested a Prod
 ## Portfolio direction — 26 September 2026
 User removes prints from the website and delegates design improvements to create an impressive artist portfolio, attract qualified visitors and support original-artwork enquiries. Remove print pages, links, forms and print-only backend code. Retain the dark spatial gallery, featured artwork order and original photographs. The studio list covers new paintings and studio news. Use editable descriptive copy where useful; do not invent artist biography, exhibitions, awards, prices, availability or other factual claims. This direction supersedes earlier print-sales plans.
 
+## Audit pass — 28 September 2026
+One enquiry invitation per page: the footer "A painting starts a conversation" band was removed; the collecting section's "Talk to Harrison" is the home page's solid CTA. Catalogue numbers show on the work page (Reference No.) only, not on grid captions or hero markers. Phones get no "+" quick-view button (the image already opens the work). Keep copy plain and factual; no poster-style taglines.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

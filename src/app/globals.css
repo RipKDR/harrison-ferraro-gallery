@@ -308,3 +308,15 @@ button:focus-visible,a:focus-visible{outline:2px solid currentColor;outline-offs
 a.solid-action{text-decoration:none}
 a.collection-enquire{display:flex;color:inherit;text-decoration:none;align-items:center;justify-content:space-between}
 @media(max-width:700px){}
+
+/* Audit pass, 28 Sep 2026 ------------------------------------------------------------------------- */
+/* Hero: tagline reads on two lines, not three; a floor shade keeps the controls legible over the lettering. */
+.gallery-intro{width:210px}
+.gallery-controls:before{content:'';position:absolute;left:-6%;right:-6%;top:-40px;bottom:-60px;z-index:-1;background:linear-gradient(transparent,rgba(12,12,12,.72) 55%);pointer-events:none}
+/* Collection: one tap target per painting on phones; larger secondary type on paper. */
+.collection-enquire{font-size:13px}
+.artist-art-caption{font-size:12px;letter-spacing:.04em}
+.collecting-intro .solid-action{width:auto;display:inline-flex;margin-top:28px;font-size:13px;min-height:52px;padding:14px 20px}
+@container(max-width:700px){.quick-view{display:none}.collection-enquire{font-size:12px}.artist-art-caption{font-size:11px}}
+/* About on phones: a painting leads, at a height that leaves the name in view. */
+@container(max-width:700px){.about-page-content{grid-row:auto}.about-hero{gap:28px;padding-top:18px}.about-hero-art>a{height:min(62svh,470px);padding:16px}.about-page-content h1{font-size:clamp(52px,15vw,64px);margin-bottom:24px}}

@@ -5,13 +5,6 @@ import { StudioListForm } from './StudioListForm';
 
 export function SiteFooter({ emailEnabled }: { emailEnabled: boolean }) {
   return (<>
-    <section className="footer-invitation" aria-labelledby="footer-invitation-title">
-      <div>
-        <span className="eyebrow">Original paintings. Direct conversation.</span>
-        <h2 id="footer-invitation-title">A painting starts<br /><em>a conversation.</em></h2>
-      </div>
-      <Link className="solid-action" href="/about#enquire">Get in touch <ArrowUpRight size={22} /></Link>
-    </section>
     <StudioListForm emailEnabled={emailEnabled} />
     <footer className="site-footer">
       <div className="footer-meta"><span>Harrison Ferraro</span><span>Melbourne, Australia</span></div>

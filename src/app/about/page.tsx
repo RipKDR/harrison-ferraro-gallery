@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
-import { artworkPath, featuredArtworks, artworkTitle } from '../../artworks';
+import { artworkPath, artworks, featuredArtworks, artworkTitle } from '../../artworks';
 import { ArtworkImage } from '../../ArtworkImage';
 import { EnquiryForm } from '../../components/EnquiryForm';
 import { InstagramLink } from '../../components/InstagramLink';
@@ -46,17 +46,17 @@ export default function AboutPage() {
             <p>For original paintings or a conversation about the work, get in touch directly.</p>
             <div className="about-actions">
               <a className="line-action" href="#enquire">Start a conversation <ArrowRight size={22} /></a>
-              <InstagramLink className="contact-link" placement="about">Follow the studio <ArrowUpRight size={18} /></InstagramLink>
+              <InstagramLink className="contact-link" placement="about">Follow on Instagram <ArrowUpRight size={18} /></InstagramLink>
             </div>
           </article>
         </section>
         <section className="collection-section about-works" aria-labelledby="about-works-title">
           <div className="section-heading"><div><span className="eyebrow">Selected works</span><h2 id="about-works-title">From the studio.</h2></div><p><Link href="/#collection">See all works</Link></p></div>
           <div className="collection-grid">
-            {featuredArtworks.map(work => (
+            {artworks.slice(3, 6).map(work => (
               <article className="collection-item" key={work.id}>
                 <Link className="collection-image" href={artworkPath(work)} aria-label={`View artwork: ${artworkTitle(work)}`}><ArtworkImage work={work} sizes="(max-width: 700px) 90vw, 30vw" /><span className="view-art">View artwork <ArrowUpRight size={20} /></span></Link>
-                <div className="collection-caption"><span>{work.number}</span><h3><Link href={artworkPath(work)}>{artworkTitle(work)}</Link></h3></div>
+                <div className="collection-caption"><h3><Link href={artworkPath(work)}>{artworkTitle(work)}</Link></h3></div>
               </article>
             ))}
           </div>
