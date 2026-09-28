@@ -15,7 +15,7 @@ html{scroll-behavior:smooth}.skip-link{position:fixed;top:12px;left:12px;z-index
 @container(max-width:700px){.collection-grid{grid-template-columns:1fr;row-gap:40px}.site-footer a{font-size:14px}.collection-caption h3{font-size:25px}}
 
 /* Keep the enquiry recoverable and controls reachable on narrow screens. */
-.enquiry-content form[hidden]{display:none}
+.enquiry-content form[hidden]{display:none!important}
 .mobile-enquire{display:none}
 dialog.panel::backdrop{background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);cursor:pointer}
 dialog.panel{cursor:default}
@@ -246,7 +246,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ink);outline-offset
 .footer-meta span:last-child{font-size:10px;color:#b6afa4}
 .footer-links{display:flex;gap:30px;flex-wrap:wrap}
 .footer-links a{font-size:12px;text-decoration:none}
-.footer-wordmark{font-family:var(--display);font-size:clamp(90px,18.6vw,390px);letter-spacing:-.06em;line-height:.85;flex-basis:100%;text-align:center;color:#d8d0c3;margin:28px 0 16px}
+
 .site-footer p{font-size:10px;letter-spacing:.05em}
 .about-hero{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:8%;padding:65px 8% 100px}
 .about-hero-art{margin:0;min-width:0}
@@ -292,7 +292,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ink);outline-offset
  .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:35px 16px}.collection-image,.collection-item:last-child .collection-image{height:240px;aspect-ratio:auto;padding:14px}.home-collection .featured-item:nth-child(1){grid-column:1/-1}.home-collection .featured-item:nth-child(1) .collection-image{height:470px}.home-collection .featured-item:nth-child(2),.home-collection .featured-item:nth-child(3){padding-top:0}.home-collection .featured-item:nth-child(2) .collection-image,.home-collection .featured-item:nth-child(3) .collection-image{height:250px}.collection-grid>.collection-item:last-child:nth-child(odd){width:100%;justify-self:stretch}
  .collection-caption{gap:7px;margin-top:9px}.collection-caption>span{padding-top:12px;font-size:9px}.collection-caption h3{font-size:17px;line-height:1.25}.collection-caption h3 a{padding:7px 0}.quick-view{right:6px;top:6px;min-width:44px;min-height:44px}.collection-enquire{font-size:11px;padding:12px 0;min-height:44px;display:flex;align-items:center;justify-content:space-between}.catalogue-note{font-size:10px;margin-top:40px}
  .artist-section{grid-template-columns:1fr}.artist-art{height:470px}.artist-art>.artwork-image{width:130%;height:160%;left:-15%;top:-30%}.artist-art-caption{left:22px;bottom:20px;font-size:9px}.artist-copy{padding:60px 28px}.artist-copy .eyebrow{margin-bottom:32px}.artist-section h2{font-size:59px;margin-bottom:28px}.artist-copy .artist-lead{font-size:21px}.artist-copy p{font-size:14px}.artist-links{margin-top:28px}
- .collecting-section{grid-template-columns:1fr;padding:65px 24px;gap:30px}.collecting-intro h2{font-size:60px}.collecting-intro p{max-width:320px}.collecting-intro .subtle-action{margin-top:12px}.collecting-section summary{font-size:13px;gap:14px;padding:22px 0}.collecting-section details p{padding-left:28px;font-size:13px}.studio-list{padding:55px 24px;gap:26px}.studio-list h2{font-size:39px}.site-footer{padding:35px 24px 22px;gap:24px}.footer-meta{width:100%;font-size:12px}.footer-links{gap:25px}.footer-links a{font-size:12px}.footer-wordmark{font-size:20.1cqw;margin:24px 0 10px}.site-footer p{font-size:9px}
+ .collecting-section{grid-template-columns:1fr;padding:65px 24px;gap:30px}.collecting-intro h2{font-size:60px}.collecting-intro p{max-width:320px}.collecting-intro .subtle-action{margin-top:12px}.collecting-section summary{font-size:13px;gap:14px;padding:22px 0}.collecting-section details p{padding-left:28px;font-size:13px}.studio-list{padding:55px 24px;gap:26px}.studio-list h2{font-size:39px}.site-footer{padding:35px 24px 22px;gap:24px}.footer-meta{width:100%;font-size:12px}.footer-links{gap:25px}.footer-links a{font-size:12px}.site-footer p{font-size:9px}
 }
 @media(max-width:700px){
  .compact-wordmark{font-size:10px;letter-spacing:.1em}.compact-header nav{gap:14px}.compact-header nav a,.compact-header nav button{font-size:11px}.compact-header{gap:14px}
@@ -319,3 +319,100 @@ a.collection-enquire{display:flex;color:inherit;text-decoration:none;align-items
 @container(max-width:700px){.quick-view{display:none}.collection-enquire{font-size:12px}.artist-art-caption{font-size:11px}}
 /* About on phones: a painting leads, at a height that leaves the name in view. */
 @container(max-width:700px){.about-page-content{grid-row:auto}.about-hero{gap:28px;padding-top:18px}.about-hero-art>a{height:min(62svh,470px);padding:16px}.about-page-content h1{font-size:clamp(52px,15vw,64px);margin-bottom:24px}}
+
+/* Exhibition catalogue: the paintings lead, with one quiet caption per work. */
+:root{--gutter:clamp(22px,6vw,96px)}
+a.index-link,a.collection-cue{color:inherit;text-decoration:none}
+a.collection-cue{color:var(--muted)}
+.gallery-intro,.gallery-action,.gallery-position,.collection-cue{font-size:12px}
+.explore-label{min-height:48px}
+.collection-section{padding:80px var(--gutter)}
+.section-heading{gap:40px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--rule)}
+.collection-section .eyebrow{font-size:12px;margin-bottom:18px}
+.section-heading h2{font-size:clamp(52px,6vw,84px);line-height:1.08;letter-spacing:-.045em;text-wrap:balance}
+.section-intro{padding:0;max-width:300px}
+.collection-count{font-size:12px;margin-bottom:10px;letter-spacing:.08em}
+.section-intro p{font-size:15px;margin:0}
+.collection-grid{gap:48px 32px}
+.collection-image,.collection-item:last-child .collection-image,.collection-image:hover{height:380px;padding:0;background:none}
+.collection-image .artwork-image .artwork-frame{margin:auto auto 0 0;background:#d9d3c7;box-shadow:0 0 0 1px rgba(36,35,31,.1),0 24px 36px -28px rgba(36,35,31,.7);transition:transform .35s,box-shadow .35s}
+.collection-image:hover .artwork-image .artwork-frame{transform:translateY(-4px);box-shadow:0 0 0 1px rgba(36,35,31,.1),0 30px 40px -28px rgba(36,35,31,.8)}
+.collection-image:hover canvas{transform:none}
+.home-collection .featured-item:nth-child(n){padding-top:0}
+.home-collection .featured-item:nth-child(n) .collection-image{height:460px}
+.collection-image .view-art{display:none}
+.collection-caption{margin-top:18px}
+.collection-caption h3{font-size:19px;line-height:1.35}
+.collection-caption h3 a{display:inline-block;padding:4px 0;min-height:0}
+.collection-count{margin-bottom:6px}
+.catalogue-note{font-size:13px;max-width:600px;margin-top:40px}
+.artist-art{height:680px;display:block;color:inherit}
+.artist-art-caption{display:flex;gap:16px;align-items:center;font-size:12px}
+.artist-copy{padding:64px 12%}
+.artist-copy .eyebrow{font-size:12px;margin-bottom:28px}
+.artist-section h2{font-size:clamp(32px,2.9vw,44px);line-height:1.18;letter-spacing:-.025em;margin-bottom:24px;text-wrap:balance}
+.artist-copy p,.collecting-intro p{font-size:16px;line-height:1.75}
+.artist-links .line-action,.artist-links .contact-link{font-size:14px}
+.collecting-section{padding:88px var(--gutter);gap:10%;--ink:var(--paper-ink);--muted:var(--paper-muted);--rule:#c7c0b4;background:var(--paper);color:var(--ink)}
+.collecting-section .eyebrow{color:var(--accent)}
+.collecting-intro p,.collecting-section details p{color:var(--muted)}
+.collecting-section .solid-action{background:var(--paper-ink);color:var(--paper)}
+.collecting-section .solid-action:hover{background:#000;color:#fff}
+.collecting-intro .eyebrow{font-size:12px;margin-bottom:24px}
+.collecting-intro h2{font-size:clamp(52px,5vw,72px)}
+.collecting-intro p{max-width:360px}
+.collecting-section summary{font-size:16px;padding:24px 0}
+.collecting-section details p{font-size:15px;padding:0 28px 24px 0;margin:0;line-height:1.75}
+summary:focus-visible{outline:2px solid var(--ink);outline-offset:5px}
+.studio-list{padding:56px var(--gutter);border-top:1px solid var(--rule);background:#101010}
+.more-works .section-heading h2,.about-works .section-heading h2{font-size:clamp(36px,3.4vw,48px)}
+.more-works .section-heading,.about-works .section-heading{margin-bottom:32px;padding-bottom:20px}
+.form-row{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+@media(max-width:700px){.more-works .collection-item:nth-child(n+3),.about-works .collection-item:nth-child(n+3){display:none}}
+.studio-list .eyebrow,.studio-list-form .small-note{font-size:12px}
+.studio-list h2{font-size:40px}
+.studio-list-copy p{font-size:15px}
+.site-footer{padding:40px var(--gutter) 24px}
+.footer-links a{font-size:14px}
+.footer-meta span:last-child,.site-footer p{font-size:12px}
+.about-hero{padding:48px var(--gutter) 80px;gap:8%}
+.about-hero-art>a{height:600px}
+.about-hero-art figcaption{font-size:12px;line-height:1.5;align-items:center}
+.about-hero-art figcaption span:last-child{display:flex;gap:8px;align-items:center}
+.about-page-content h1{font-size:clamp(64px,6.6vw,96px)}
+.about-page-content .eyebrow{font-size:12px}
+.about-page-content p{font-size:16px;line-height:1.8}
+.about-actions .line-action,.about-actions .contact-link{font-size:14px}
+.work-page>main>.work-layout{max-width:1500px;margin:0 auto;padding:24px var(--gutter) 72px;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:6%}
+.work-page .work-info{padding:24px 0}
+.work-page .work-info .breadcrumb{font-size:12px;letter-spacing:.08em;line-height:1.8}
+.work-info>.solid-action{margin:24px 0}
+.work-info>p{font-size:16px;line-height:1.75}
+.work-info .small-note{font-size:13px}
+.work-page-photo{height:clamp(460px,68svh,760px)}
+.artwork-open-hint{opacity:1;font-size:12px}
+.work-enquiry{max-width:1320px;margin:0 auto;padding:72px var(--gutter);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:10%;border-top:1px solid var(--rule)}
+.work-enquiry .enquiry-intro{min-width:0}
+.work-enquiry h2{font-size:clamp(40px,3.7vw,56px);text-wrap:balance}
+.work-enquiry .enquiry-intro p{font-size:16px;line-height:1.75;max-width:360px}
+.work-enquiry>form{min-width:0}
+.zoom-surface:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.enquiry-content .small-note{font-size:13px}
+@media(min-width:701px) and (max-width:1000px){
+ .collection-grid{gap:40px 20px}.collection-image,.collection-item:last-child .collection-image{height:300px;padding:0}.home-collection .featured-item:nth-child(n) .collection-image{height:360px}.collection-caption h3{font-size:20px}
+ .artist-art{height:640px}.artist-copy{padding:48px 9%}.artist-section h2{font-size:36px}.about-hero-art>a{height:510px}
+ .work-page>main>.work-layout{gap:5%;padding-left:4%;padding-right:4%}.work-enquiry{gap:6%}
+}
+@media(max-width:700px){
+ .collection-section{padding:48px var(--gutter) 52px}.section-heading{display:block;margin-bottom:28px;padding-bottom:24px}.section-heading h2{font-size:56px}.section-intro{margin-top:20px;max-width:none}.section-intro p{font-size:14px;margin:0}.collection-count{font-size:12px;margin-bottom:8px}
+ .collection-grid{gap:26px 16px}.home-collection .featured-item:nth-child(n){grid-column:auto}.collection-image,.collection-item:last-child .collection-image,.home-collection .featured-item:nth-child(n) .collection-image{height:clamp(190px,59vw,310px);padding:0}
+ .collection-caption{margin-top:8px}.collection-caption h3{font-size:18px}.collection-caption{margin-top:12px}.collection-caption h3 a{padding:4px 0}.catalogue-note{font-size:12px;line-height:1.7;margin-top:32px}
+ .artist-art{height:390px}.artist-copy{padding:44px var(--gutter)}.artist-section h2{font-size:30px}.artist-copy .eyebrow{margin-bottom:24px}.artist-links{margin-top:24px}
+ .collecting-section{grid-template-columns:1fr;padding:52px var(--gutter);gap:28px}.collecting-intro h2{font-size:54px}.collecting-section summary{font-size:15px;min-height:64px}.collecting-section details p{font-size:15px}
+ .studio-list{grid-template-columns:1fr;padding:44px var(--gutter);gap:24px}.studio-list h2{font-size:36px}.site-footer{padding:32px var(--gutter) 22px}.footer-links{gap:20px}
+ .compact-wordmark{font-size:11px;letter-spacing:.06em}.compact-header nav a,.compact-header nav button{font-size:13px}.compact-header nav{gap:12px}.compact-header{gap:12px}
+ .about-hero{padding:18px var(--gutter) 52px;gap:28px}.about-hero-art>a{height:min(55svh,430px)}.about-hero-art figcaption{gap:12px}.about-page-content h1{font-size:60px}.about-page-content .large-copy{font-size:23px}
+ .work-page>main>.work-layout{grid-template-columns:minmax(0,1fr);padding:16px var(--gutter) 40px;gap:12px}.work-page-photo{height:52svh;min-height:280px}.work-page .work-info{padding:16px 0 0}.work-page .work-info h1{font-size:42px;margin-bottom:20px}.work-page .work-info .breadcrumb{font-size:12px;margin-bottom:20px}.work-page .work-info dl div{display:block}.work-page .work-info dt{font-size:12px}
+ .work-enquiry{grid-template-columns:minmax(0,1fr);padding:48px var(--gutter);gap:28px}.work-enquiry h2{font-size:40px}.work-enquiry .enquiry-intro p{max-width:none}.work-enquiry .eyebrow{margin-bottom:18px}
+}
+@media(max-width:370px){.compact-wordmark{max-width:95px;white-space:normal;line-height:1.4}.compact-header nav{gap:12px}.collection-caption h3{font-size:16px}.gallery-controls .index-link{font-size:12px!important}.section-heading h2{font-size:48px}}

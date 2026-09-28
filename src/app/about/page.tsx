@@ -36,35 +36,37 @@ export default function AboutPage() {
             <Link href={artworkPath(featuredArtworks[0])} aria-label={`View artwork: ${artworkTitle(featuredArtworks[0])}`}>
               <ArtworkImage work={featuredArtworks[0]} preload sizes="(max-width: 700px) 85vw, 40vw" />
             </Link>
-            <figcaption><span>No. {featuredArtworks[0].number}</span><span>{artworkTitle(featuredArtworks[0])}</span></figcaption>
+            <figcaption><span>{artworkTitle(featuredArtworks[0])}</span><span>View painting <ArrowUpRight size={16} aria-hidden="true" /></span></figcaption>
           </figure>
           <article className="about-content about-page-content">
             <span className="eyebrow">The artist · Melbourne, Australia</span>
             <h1 id="about-title">Harrison<br /><em>Ferraro</em></h1>
-            <p className="large-copy">Between the figure<br />and the feeling.</p>
+            <p className="large-copy">Figurative and abstract painting.</p>
             <p>My work moves between dark figurative painting and abstraction. I am drawn to the tension between a recognisable face and the marks that surround it: layered surfaces, shifting light and gestures that carry a feeling beyond the figure.</p>
             <p>For original paintings or a conversation about the work, get in touch directly.</p>
             <div className="about-actions">
-              <a className="line-action" href="#enquire">Start a conversation <ArrowRight size={22} /></a>
+              <a className="line-action" href="#enquire">Enquire <ArrowRight size={22} /></a>
               <InstagramLink className="contact-link" placement="about">Follow on Instagram <ArrowUpRight size={18} /></InstagramLink>
             </div>
           </article>
         </section>
         <section className="collection-section about-works" aria-labelledby="about-works-title">
-          <div className="section-heading"><div><span className="eyebrow">Selected works</span><h2 id="about-works-title">From the studio.</h2></div><p><Link href="/#collection">See all works</Link></p></div>
+          <div className="section-heading"><div><span className="eyebrow">Selected works</span><h2 id="about-works-title">Other paintings</h2></div><p><Link href="/#collection">See all works</Link></p></div>
           <div className="collection-grid">
             {artworks.slice(3, 6).map(work => (
               <article className="collection-item" key={work.id}>
-                <Link className="collection-image" href={artworkPath(work)} aria-label={`View artwork: ${artworkTitle(work)}`}><ArtworkImage work={work} sizes="(max-width: 700px) 45vw, 30vw" /><span className="view-art">View artwork <ArrowUpRight size={20} /></span></Link>
+                <Link className="collection-image" href={artworkPath(work)} aria-label={`View artwork: ${artworkTitle(work)}`}><ArtworkImage work={work} sizes="(max-width: 700px) 45vw, 30vw" /></Link>
                 <div className="collection-caption"><h3><Link href={artworkPath(work)}>{artworkTitle(work)}</Link></h3></div>
               </article>
             ))}
           </div>
         </section>
         <section className="enquiry-content work-enquiry" id="enquire" aria-labelledby="enquire-title">
-          <span className="eyebrow">A conversation about art</span>
-          <h2 id="enquire-title">Start a conversation</h2>
-          <p className="enquiry-notice">{emailEnabled ? 'Send your enquiry below and Harrison will reply to you by email.' : 'Write your enquiry below and it opens, ready to send, in your email app.'}</p>
+          <div className="enquiry-intro">
+            <span className="eyebrow">Contact Harrison</span>
+            <h2 id="enquire-title">Enquiries</h2>
+            <p className="enquiry-notice">{emailEnabled ? 'Send your enquiry below and Harrison will reply to you by email.' : 'Write your enquiry below and it opens, ready to send, in your email app.'}</p>
+          </div>
           <EnquiryForm interest="General enquiry" emailEnabled={emailEnabled} />
         </section>
       </main>

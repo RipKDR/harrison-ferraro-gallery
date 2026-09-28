@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight, ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
+import { ArrowLeft, ArrowRight } from '@phosphor-icons/react/dist/ssr';
 import { artworkBySlug, artworkFactRows, artworkPath, artworks, artworkTitle, artworkUnconfirmed } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
 import { ArtworkViewer } from '../../../components/ArtworkViewer';
@@ -70,7 +70,7 @@ export default async function WorkPage({ params }: Props) {
             <p>{work.description}</p>
             <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
             {unconfirmed && <p className="small-note">{work.facts.title ? '' : 'Descriptive working title. '}Please enquire for the confirmed details, price and availability.</p>}
-            <p className="collector-note">A direct conversation with Harrison. Ask about the painting, request further details, or include your destination for a delivery quote.</p>
+
             <ShareArtwork work={work} />
             <nav className="work-pagination" aria-label="More works">
               <Link href={artworkPath(previous)} aria-label={`Previous work: ${artworkTitle(previous)}`}><ArrowLeft size={18} /> Previous</Link>
@@ -80,17 +80,20 @@ export default async function WorkPage({ params }: Props) {
           </div>
         </article>
         <section className="enquiry-content work-enquiry" id="enquire" aria-labelledby="enquire-title">
-          <span className="eyebrow">A conversation about art</span>
-          <h2 id="enquire-title">Enquire about {artworkTitle(work)}</h2>
-          <p className="enquiry-notice">{emailEnabled ? 'Send your enquiry below and Harrison will reply to you by email.' : 'Write your enquiry below and it opens, ready to send, in your email app.'}</p>
+          <div className="enquiry-intro">
+            <span className="eyebrow">Contact Harrison</span>
+            <h2 id="enquire-title">About this painting</h2>
+            <p className="enquiry-notice">{emailEnabled ? 'Send your enquiry below and Harrison will reply to you by email.' : 'Write your enquiry below and it opens, ready to send, in your email app.'}</p>
+            <p>Ask about the painting, or include your country and postcode for a delivery quote.</p>
+          </div>
           <EnquiryForm artworkId={work.id} emailEnabled={emailEnabled} />
         </section>
         <section className="collection-section more-works" aria-labelledby="more-works-title">
-          <div className="section-heading"><div><span className="eyebrow">The collection</span><h2 id="more-works-title">More works.</h2></div><p><Link href="/#collection">See all {artworks.length} works</Link></p></div>
+          <div className="section-heading"><div><span className="eyebrow">The collection</span><h2 id="more-works-title">Other paintings</h2></div><p><Link href="/#collection">See all {artworks.length} works</Link></p></div>
           <div className="collection-grid">
             {related.map(other => (
               <article className="collection-item" key={other.id}>
-                <Link className="collection-image" href={artworkPath(other)} aria-label={`View artwork: ${artworkTitle(other)}`}><ArtworkImage work={other} sizes="(max-width: 700px) 45vw, 30vw" /><span className="view-art">View artwork <ArrowUpRight size={20} /></span></Link>
+                <Link className="collection-image" href={artworkPath(other)} aria-label={`View artwork: ${artworkTitle(other)}`}><ArtworkImage work={other} sizes="(max-width: 700px) 45vw, 30vw" /></Link>
                 <div className="collection-caption"><h3><Link href={artworkPath(other)}>{artworkTitle(other)}</Link></h3></div>
               </article>
             ))}

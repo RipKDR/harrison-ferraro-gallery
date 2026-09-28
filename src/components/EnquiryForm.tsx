@@ -86,22 +86,20 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
     </div>;
   }
 
-  if (mailto) {
-    return <div className="form-result" role="status">
+  const mailtoResult = mailto && <div className="form-result" role="status">
       <h2 ref={thanks} tabIndex={-1} id={headingId}>Almost there.</h2>
       <p>Your email app should now be open with the enquiry ready. Press <strong>Send</strong> there. Nothing has been sent yet.</p>
       <a className="solid-action" href={mailto}>Open the email again <ArrowUpRight size={22} /></a>
       <p className="small-note">If no email app opens, write to <a href={`mailto:${FALLBACK_CONTACT_EMAIL}`}>{FALLBACK_CONTACT_EMAIL}</a>.</p>
-      <button className="subtle-action" type="button" onClick={() => setMailto(null)}>Edit enquiry</button>
+      <button className="subtle-action" type="button" onClick={() => { setMailto(null); requestAnimationFrame(() => form.current?.querySelector('textarea')?.focus()); }}>Edit enquiry</button>
     </div>;
-  }
 
   const options = <>
     <label>I’m interested in<select name="interest" value={selection.interest} onChange={event => setSelection(current => ({ ...current, interest: event.target.value as Interest }))} {...fieldError('interest')}>{INTERESTS.map(option => <option key={option}>{option}</option>)}</select>{errors.interest && <span className="field-error" id="enquiry-interest-error">{errors.interest}</span>}</label>
     <label>Artwork<select name="artwork" value={selection.artwork} onChange={event => setSelection(current => ({ ...current, artwork: event.target.value }))} {...fieldError('artwork')}>{artworks.map(work => <option key={work.id} value={work.id}>{artworkTitle(work)} ({work.number})</option>)}<option value={GENERAL}>General enquiry</option></select>{errors.artwork && <span className="field-error" id="enquiry-artwork-error">{errors.artwork}</span>}</label>
   </>;
 
-  return <form ref={form} action={action} onSubmit={onSubmit} key={state.submission ?? 'initial'} aria-describedby="enquiry-privacy">
+  return <>{mailtoResult}<form ref={form} action={action} onSubmit={onSubmit} key={state.submission ?? 'initial'} aria-describedby="enquiry-privacy" hidden={Boolean(mailto)}>
     {specificArtwork && selectedWork && <div className="enquiry-selection"><div className="enquiry-selection-image"><ArtworkImage work={selectedWork} sizes="64px" /></div><div><span className="eyebrow">Original artwork / {selectedWork.number}</span><h3>{artworkTitle(selectedWork)}</h3></div></div>}
     {specificArtwork ? <details className="enquiry-options" open={Boolean(errors.interest || errors.artwork)}><summary>Change artwork or enquiry type</summary><div>{options}</div></details> : options}
     <div className="form-row">
@@ -115,5 +113,5 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
     {state.status === 'error' && <p className="form-error" role="alert" ref={status} tabIndex={-1}>{state.message} {!state.fieldErrors && <>You can also email <a href={`mailto:${FALLBACK_CONTACT_EMAIL}`}>{FALLBACK_CONTACT_EMAIL}</a>.</>}</p>}
     <p className="small-note" id="enquiry-privacy">{emailEnabled ? 'Your details are sent to Harrison by email only to answer this enquiry.' : 'This opens your email app with the enquiry written out, ready to send to Harrison.'}</p>
     <button className="line-action" type="submit" disabled={pending}>{pending ? 'Sending…' : emailEnabled ? 'Send enquiry' : 'Write the email'} <ArrowRight size={22} /></button>
-  </form>;
+  </form></>;
 }

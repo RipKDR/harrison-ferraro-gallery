@@ -14,7 +14,6 @@ export function SiteFooter({ emailEnabled }: { emailEnabled: boolean }) {
         <Link href="/about#enquire">Enquire</Link>
         <InstagramLink placement="footer">Instagram <ArrowUpRight size={16} /></InstagramLink>
       </nav>
-      <div className="footer-wordmark" aria-hidden="true">FERRARO</div>
       <p>© {new Date().getFullYear()} Harrison Ferraro. All rights reserved.</p>
     </footer>
   </>);

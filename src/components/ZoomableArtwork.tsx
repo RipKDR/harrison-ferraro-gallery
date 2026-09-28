@@ -88,7 +88,7 @@ export function ZoomableArtwork({ work, sizes, children, onSwipe }: { work: Artw
   }
 
   return <>
-    <div ref={surface} className={`zoom-surface ${zoom > 1 ? 'is-zoomed' : ''}`} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={endDrag} onPointerCancel={endDrag} onDoubleClick={onDoubleClick} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+    <div ref={surface} className={`zoom-surface ${zoom > 1 ? 'is-zoomed' : ''}`} {...(zoom > 1 ? { role: 'region', 'aria-label': 'Zoomed painting. Use the arrow keys to pan.', tabIndex: 0 } : {})} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={endDrag} onPointerCancel={endDrag} onDoubleClick={onDoubleClick} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <div className="zoom-inner" style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }}>
         <ArtworkImage work={work} sizes={sizes} detail />
       </div>

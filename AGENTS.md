@@ -38,6 +38,9 @@ User removes prints from the website and delegates design improvements to create
 ## Audit pass — 28 September 2026
 One enquiry invitation per page: the footer "A painting starts a conversation" band was removed; the collecting section's "Talk to Harrison" is the home page's solid CTA. Catalogue numbers show on the work page (Reference No.) only, not on grid captions or hero markers. Phones get no "+" quick-view button (the image already opens the work). Keep copy plain and factual; no poster-style taglines.
 
+## Design autonomy — 28 September 2026
+User authorises UI/UX and layout changes on a separate branch, with the live site unchanged pending review. They prioritise authored, artwork-led design over generic template styling, and request token-efficient Helix-style work: short audit/build/review/verify loops with bounded independent agents. Use the existing paintings as the visual source; keep copy factual and avoid decorative filler.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
