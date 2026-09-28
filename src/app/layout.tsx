@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   creator: SITE_NAME,
   // Search Console / Bing Webmaster ownership tags, set in Vercel env when DNS verification isn't used.
   verification: {
-    ...(process.env.GOOGLE_SITE_VERIFICATION && { google: process.env.GOOGLE_SITE_VERIFICATION }),
+    google: process.env.GOOGLE_SITE_VERIFICATION || 'A9bsDN92kBX3xsKFXGWv-MQggRB5uglrp66YrVjuNeM',
     ...(process.env.BING_SITE_VERIFICATION && { other: { 'msvalidate.01': process.env.BING_SITE_VERIFICATION } }),
   },
   openGraph: {
