@@ -378,7 +378,6 @@ summary:focus-visible{outline:2px solid var(--ink);outline-offset:5px}
 .about-hero{padding:48px var(--gutter) 80px;gap:8%}
 .about-hero-art>a{height:600px}
 .about-hero-art figcaption{font-size:12px;line-height:1.5;align-items:center}
-.about-hero-art figcaption span:last-child{display:flex;gap:8px;align-items:center}
 .about-page-content h1{font-size:clamp(64px,6.6vw,96px)}
 .about-page-content .eyebrow{font-size:12px}
 .about-page-content p{font-size:16px;line-height:1.8}

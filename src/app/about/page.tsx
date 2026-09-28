@@ -36,7 +36,7 @@ export default function AboutPage() {
             <Link href={artworkPath(featuredArtworks[0])} aria-label={`View artwork: ${artworkTitle(featuredArtworks[0])}`}>
               <ArtworkImage work={featuredArtworks[0]} preload sizes="(max-width: 700px) 85vw, 40vw" />
             </Link>
-            <figcaption><span>{artworkTitle(featuredArtworks[0])}</span><span>View painting <ArrowUpRight size={16} aria-hidden="true" /></span></figcaption>
+            <figcaption><span>{artworkTitle(featuredArtworks[0])}</span></figcaption>
           </figure>
           <article className="about-content about-page-content">
             <span className="eyebrow">The artist · Melbourne, Australia</span>
