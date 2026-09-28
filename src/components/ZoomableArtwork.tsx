@@ -95,7 +95,7 @@ export function ZoomableArtwork({ work, sizes, children, onSwipe }: { work: Artw
     </div>
     <div className="zoom-controls">
       <button className="icon-button" aria-label="Zoom out" disabled={zoom <= 1} onClick={() => zoomTo(zoom - STEP)}><Minus size={20} /></button>
-      <span aria-live="polite">{Math.round(zoom * 100)}%</span>
+      <span aria-live="polite" aria-label={`Zoom level ${Math.round(zoom * 100)} percent`}>{Math.round(zoom * 100)}%</span>
       <button className="icon-button" aria-label="Zoom in" disabled={zoom >= MAX_ZOOM} onClick={() => zoomTo(zoom + STEP)}><Plus size={20} /></button>
       {children}
     </div>
