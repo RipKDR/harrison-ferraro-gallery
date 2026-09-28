@@ -50,7 +50,7 @@ while (queue.length) {
   if (!canonical) fail(path, 'missing canonical');
   if (/<meta[^>]+name="robots"[^>]+noindex/i.test(head)) fail(path, 'noindex');
 
-  const body = html.slice(html.indexOf('<body'));
+  const body = html.slice(Math.max(0, html.indexOf('<body')));
   const h1s = (body.match(/<h1[\s>]/gi) || []).length;
   if (h1s !== 1) fail(path, `${h1s} <h1> elements`);
   for (const img of body.match(/<img\b[^>]*>/gi) || []) if (!/\salt="/i.test(img)) fail(path, `img without alt: ${img.slice(0, 80)}`);

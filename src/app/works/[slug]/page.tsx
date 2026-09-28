@@ -63,7 +63,7 @@ export default async function WorkPage({ params }: Props) {
             <ArtworkViewer work={work} />
           </div>
           <div className="work-info">
-            <nav className="eyebrow breadcrumb" aria-label="Breadcrumb"><Link href="/">Harrison Ferraro</Link> / <Link href="/#collection">Works</Link> / <span aria-current="page">{work.number}</span></nav>
+            <nav className="eyebrow breadcrumb" aria-label="Breadcrumb"><Link href="/">Harrison Ferraro</Link> / <Link href="/#collection">Works</Link> / <span aria-current="page">{artworkTitle(work)}</span></nav>
             <h1>{artworkTitle(work)}</h1>
             <p>{work.description}</p>
             <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>

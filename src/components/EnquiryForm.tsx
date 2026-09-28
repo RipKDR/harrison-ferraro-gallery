@@ -53,11 +53,12 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
     if (state.status === 'error') trackEnquiry('enquiry_error', state.values?.interest ?? null, state.values?.artwork, 'email_service', { reason: state.fieldErrors ? 'validation' : 'send' });
   }, [state]);
   const form = useRef<HTMLFormElement>(null);
+  const viewed = useRef(false);
   const method = emailEnabled ? 'email_service' : 'mailto';
   useEffect(() => {
     const el = form.current;
-    if (!el || typeof IntersectionObserver === 'undefined') return;
-    const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) { observer.disconnect(); trackEnquiry('enquiry_view', interest, artworkId, method); } });
+    if (!el || viewed.current || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) { observer.disconnect(); viewed.current = true; trackEnquiry('enquiry_view', interest, artworkId, method); } });
     observer.observe(el);
     return () => observer.disconnect();
   }, [interest, artworkId, method]);

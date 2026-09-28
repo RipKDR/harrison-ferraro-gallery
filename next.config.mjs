@@ -12,6 +12,15 @@ export default {
   allowedDevOrigins: ['terminal.local'],
   devIndicators: false,
   poweredByHeader: false,
+  // Source photos renamed to their artwork slugs (image search reads filenames); old URLs stay reachable.
+  async redirects() {
+    return [
+      ['red-smoke.png', 'figure-in-red.png'],
+      ['portrait.jpeg', 'figure-in-motion.jpg'],
+      ['abstract.jpeg', 'abstract-in-pale-violet.jpg'],
+      ['portrait-in-crimson.jpeg', 'portrait-in-crimson.jpg'],
+    ].map(([from, to]) => ({ source: `/art/${from}`, destination: `/art/${to}`, permanent: true }));
+  },
   async headers() {
     return [
       { source: '/:path*', headers: securityHeaders },
