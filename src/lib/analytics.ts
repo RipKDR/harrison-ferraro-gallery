@@ -2,7 +2,7 @@ import posthog from 'posthog-js';
 import { track } from '@vercel/analytics';
 import { type Artwork, artworkTitle } from '../artworks';
 
-export type AnalyticsEvent = 'artwork_view' | 'enquiry_submit' | 'studio_list_join' | 'artwork_share' | 'instagram_click';
+export type AnalyticsEvent = 'artwork_view' | 'enquiry_view' | 'enquiry_submit' | 'enquiry_success' | 'enquiry_error' | 'studio_list_join' | 'artwork_share' | 'instagram_click';
 type Properties = Record<string, string | number | boolean | null>;
 
 export const artworkProperties = (work: Artwork) => ({ artwork_id: work.id, artwork_slug: work.slug, artwork_title: artworkTitle(work) });

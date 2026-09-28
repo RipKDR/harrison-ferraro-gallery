@@ -63,12 +63,13 @@ export default async function WorkPage({ params }: Props) {
             <ArtworkViewer work={work} />
           </div>
           <div className="work-info">
-            <nav className="eyebrow breadcrumb" aria-label="Breadcrumb"><Link href="/">Harrison Ferraro</Link> / <Link href="/#collection">Works</Link> / <span aria-current="page">{work.number}</span></nav>
+            <nav className="eyebrow breadcrumb" aria-label="Breadcrumb"><Link href="/">Harrison Ferraro</Link> / <Link href="/#collection">Works</Link> / <span aria-current="page">{artworkTitle(work)}</span></nav>
             <h1>{artworkTitle(work)}</h1>
+            {/* CTA directly under the title: on a 390px phone the fact list pushed it ~210px below the fold. */}
+            <a className="solid-action" href="#enquire">Enquire about the original <ArrowRight size={22} /></a>
             <p>{work.description}</p>
             <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
             {unconfirmed && <p className="small-note">{work.facts.title ? '' : 'Descriptive working title. '}Please enquire for the confirmed details, price and availability.</p>}
-            <a className="solid-action" href="#enquire">Enquire about the original <ArrowRight size={22} /></a>
             <p className="collector-note">A direct conversation with Harrison. Ask about the painting, request further details, or include your destination for a delivery quote.</p>
             <ShareArtwork work={work} />
             <nav className="work-pagination" aria-label="More works">
