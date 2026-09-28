@@ -73,7 +73,8 @@ a.art-card{display:block}
 .form-error{font-size:14px;color:#f0c2b4;border-left:1px solid #c0705c;padding-left:16px;margin:0}
 .form-error a{color:inherit}
 .enquiry-content [aria-invalid=true]{border-color:#c0705c}
-.form-result h2{font-family:Georgia,serif;font-size:32px;font-weight:400}
+.form-result{padding:24px;border:1px solid var(--rule);background:#161614;border-radius:2px}
+.form-result h2{font-family:Georgia,serif;font-size:32px;font-weight:400;margin-top:0}
 .form-result p{font-size:15px}
 .form-result:focus-visible,.form-result h2:focus-visible,.form-error:focus-visible{outline:1px solid #fff}
 .work-enquiry{max-width:760px;margin:0 auto;padding:80px 24px 96px;scroll-margin-top:24px}
