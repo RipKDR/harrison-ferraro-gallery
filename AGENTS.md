@@ -20,6 +20,9 @@ User supplied nine additional painting photos and authorised publication of Harr
 ## Featured paintings — 21 September 2026
 Lead the opening gallery and collection with Over the shoulder (work-10), Figure in rose (work-11), and Figure with a skull (work-12), in that order. Preserve stable artwork IDs and catalogue reference numbers.
 
+## SEO loop — 28 September 2026
+`docs/seo/backlog.md` holds the verified baseline, ranked backlog and cycle log; `docs/seo/offsite-checklist.md` the off-site plan. `npm run seo:check` is a required gate (scripts/seo-check.mjs): it starts the built site, crawls sitemap + internal links, and fails on title/description/canonical/h1/alt/JSON-LD/link/sitemap faults, plus /robots.txt and /llms.txt 200. No new dependency. Measure with Lighthouse run 3x and compare like-for-like: `VERCEL=1 next build && VERCEL=1 next start` enables the image optimiser locally, and Vercel preview deployments are behind Deployment Protection (302) so they cannot be crawled or measured without a Vercel account. The site has no separate collection or studio page: the collection is `/#collection` on the home page.
+
 ## Public launch — 23 September 2026
 User confirmed the private preview is over: the site is indexed (robots allow all, sitemap). Production is Vercel at https://www.ferraro.studio. Enquiries send from hello@ferraro.studio via Resend. This supersedes the earlier mailto composer: the enquiry form posts to a server action (honeypot + rate limit) and the authorised Gmail address appears only as a fallback when sending fails. Analytics: Vercel Analytics + PostHog, both env-driven and no-op without keys. Unknown artwork facts (medium, size, year, price, availability) are omitted from UI and JSON-LD, never invented; track them as `TODO(harry)`.
 

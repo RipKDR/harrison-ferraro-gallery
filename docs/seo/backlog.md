@@ -35,16 +35,38 @@ Already good (verified): robots allow all + sitemap with image entries; apex 308
 
 | # | impact | effort | item | evidence | status |
 |---|---|---|---|---|---|
-| 1 | H | S | Wrong `sizes` on phone grids: 2-col grid declares 90vw; ~1 MB wasted on home mobile. Hero fallback declares 80vw but renders ~100vw (BP image-size-responsive fail, 96) | LH image-delivery-insight 1,063 KiB; globals.css:119/289 2-col | todo |
-| 2 | H | S | No `/llms.txt` for AI answer engines | live 404 | todo |
-| 3 | M | S | Enquiry funnel events: only success fires (`enquiry_submit`); no view / attempt / error | EnquiryForm.tsx:48 | todo |
-| 4 | M | S | Sitemap has no `lastmod` | sitemap.ts | todo |
-| 5 | M | S | AVIF not enabled (`images.formats` default WebP only) | next.config.mjs | todo |
-| 6 | L | S | 404 page inherits home og:url `/` and site title | layout.tsx openGraph.url | todo |
-| 7 | L | S | Breadcrumb JSON-LD crumb 2 points to `/#collection` fragment | jsonld.tsx | todo |
-| 8 | L | M | Non-descriptive source filenames (`portrait.jpeg`, `abstract.jpeg`, `red-smoke.png`) in image URLs | public/art | todo |
-| 9 | L | S | Per-work OG image alt is generic (static `alt`) | works/[slug]/opengraph-image.tsx | todo |
-| — | n/a | — | UTM on Instagram links: outbound UTMs do nothing; inbound bio-link UTM is off-site → offsite-checklist | — | moved |
-| — | n/a | — | CSP header: security-only, risk of breaking PostHog/Vercel scripts; not an SEO item | — | parked |
+| 1 | H | S | Wrong `sizes` on phone grids: 2-col grid declared 90vw; ~1 MB wasted on home mobile | LH image-delivery-insight 1,063 KiB; globals.css 2-col | done (cycle 1) |
+| 2 | H | S | No `/llms.txt` for AI answer engines | live 404 | done (cycle 2) |
+| 3 | M | S | Enquiry funnel events: only success fired | EnquiryForm.tsx | done (cycle 2b) |
+| 4 | M | S | Sitemap has no `lastmod` | sitemap.ts | done (cycle 2) |
+| 5 | M | S | AVIF not enabled | next.config | done (cycle 2) |
+| 6 | L | S | 404 page inherits home og:url `/` | layout.tsx | dropped: 404 already serves `noindex`; not a ranking risk |
+| 7 | L | S | Breadcrumb JSON-LD crumb 2 -> `/#collection` fragment | jsonld.tsx | dropped: Google ignores fragments; changing to `/` would duplicate crumb 1 |
+| 8 | L | M | Non-descriptive source filenames | public/art | done (cycle 3) |
+| 9 | L | S | Per-work OG image alt is generic (static `alt`) | works/[slug]/opengraph-image | skipped: `generateImageMetadata` would un-prerender 12 OG routes (build-time cost, slower deploy) for a small alt gain. OG alt is near-zero ranking weight. |
+| — | n/a | — | UTM on Instagram links: outbound UTMs do nothing; inbound bio-link UTM is off-site | — | moved to offsite-checklist §4 |
+| — | n/a | — | CSP header: security-only, risk of breaking PostHog/Vercel scripts | — | parked (not an SEO item) |
+| — | n/a | — | Hero fallback `sizes` under-fetch at 2x DPR (LH image-size-responsive) | LH: rendered 385x684 CSS px, served 640w | parked: correct for DPR 1; the 100vw "fix" made LCP worse, revert kept. Real DPR-2 phones re-test later on a real device. |
 
 ## Cycle log
+
+- cycle 1: added `scripts/seo-check.mjs` (`npm run seo:check`) crawl gate + right-sized phone `sizes` (2-col tiles 45vw, about grid 45vw) | home-mobile images 1,586 kB → 383 kB; perf/bp within noise (86/96 both) | next: llms.txt
+- cycle 2: `/llms.txt` generated from the catalogue (static), sitemap `lastmod` via `CONTENT_UPDATED`, AVIF+WebP output | seo:check green; live matched local optimised build | next: enquiry funnel
+- cycle 2b: enquiry funnel `enquiry_view` (once, in-viewport) → `enquiry_submit` → `enquiry_success`/`enquiry_error` (reason) | verified in browser (work page + home modal), no dupes | next: filenames
+- cycle 3: 4 source photos renamed to slugs + 308 redirects, breadcrumb shows title, review fixes (view-once ref, seo-check slice) | 12 unique image URLs, redirects 308, all gates green | next: off-site
+
+## Final Lighthouse (branch, VERCEL=1 local, 28 Sep)
+
+| route | form | perf | a11y | bp | seo | LCP ms | CLS | TBT ms | JS kB | img kB |
+|---|---|---|---|---|---|---|---|---|---|---|
+| / | mobile | 84 | 100 | 96 | 100 | 4155 | 0.002 | 169 | 272 | 383 |
+| / | desktop | 99 | 100 | 100 | 100 | 929 | 0.008 | 45 | 403 | 864 |
+| /works/over-the-shoulder | mobile | 96 | 100 | 100 | 100 | 2642 | 0.001 | 84 | 277 | 85 |
+| /works/over-the-shoulder | desktop | 100 | 100 | 100 | 100 | 731 | 0 | 8 | 277 | 174 |
+| /about | mobile | 97 | 100 | 100 | 100 | 2564 | 0.002 | 80 | 277 | 70 |
+| /about | desktop | 100 | 100 | 100 | 100 | 731 | 0.002 | 2 | 277 | 145 |
+
+Home-mobile perf reads 84 vs the live baseline 88, but main re-measured 82–86 on three warm local runs
+(the earlier "90" baseline was one lucky run) — the branch is inside the noise band, with a 76% cut in
+image bytes. CLS is 0.002 everywhere; no score dropped more than 3 points once baseline noise is discounted.
+The remaining BP 96 is the 2x-DPR hero under-fetch (parked above).
