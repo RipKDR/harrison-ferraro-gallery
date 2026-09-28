@@ -14,9 +14,11 @@ const defaultMessage = (interest: Interest) =>
   interest === 'General enquiry' ? "Hello Harrison, I'd like to get in touch about your work."
     : "I'd like to know more about this work, including its availability, price and dimensions.";
 
-const trackEnquiry = (interest: string | null, artworkId: string | undefined, method: 'email_service' | 'mailto') => {
+// Funnel: enquiry_view -> enquiry_submit -> enquiry_success | enquiry_error. The mailto path ends at submit
+// (whether the visitor presses Send in their email app is unknowable). No personal data is sent.
+const trackEnquiry = (event: 'enquiry_view' | 'enquiry_submit' | 'enquiry_success' | 'enquiry_error', interest: string | null, artworkId: string | undefined, method: 'email_service' | 'mailto', extra: Record<string, string> = {}) => {
   const work = artworks.find(item => item.id === artworkId);
-  trackEvent('enquiry_submit', { interest, method, ...(work ? artworkProperties(work) : { artwork_id: 'general' }) });
+  trackEvent(event, { interest, method, ...extra, ...(work ? artworkProperties(work) : { artwork_id: 'general' }) });
 };
 
 function mailtoFromForm(data: FormData) {
@@ -45,18 +47,33 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
   const selectedWork = selection.interest === 'Original artwork' ? artworks.find(work => work.id === selection.artwork) : undefined;
 
   useEffect(() => { (state.status === 'success' || mailto ? thanks : status).current?.focus(); }, [state, mailto]);
-  useEffect(() => { if (state.status === 'success') trackEnquiry(state.values?.interest ?? null, state.values?.artwork, 'email_service'); }, [state]);
+  // Bot submissions get a quiet success without values: not counted.
+  useEffect(() => {
+    if (state.status === 'success' && state.values) trackEnquiry('enquiry_success', state.values.interest ?? null, state.values.artwork, 'email_service');
+    if (state.status === 'error') trackEnquiry('enquiry_error', state.values?.interest ?? null, state.values?.artwork, 'email_service', { reason: state.fieldErrors ? 'validation' : 'send' });
+  }, [state]);
+  const form = useRef<HTMLFormElement>(null);
+  const method = emailEnabled ? 'email_service' : 'mailto';
+  useEffect(() => {
+    const el = form.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) { observer.disconnect(); trackEnquiry('enquiry_view', interest, artworkId, method); } });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [interest, artworkId, method]);
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     if (emailEnabled) {
       // Runs before React builds the action's FormData.
       if (elapsed.current) elapsed.current.value = String(Math.round(performance.now()));
+      const data = new FormData(event.currentTarget);
+      trackEnquiry('enquiry_submit', String(data.get('interest')), String(data.get('artwork')), 'email_service');
       return;
     }
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const href = mailtoFromForm(data);
-    trackEnquiry(String(data.get('interest')), String(data.get('artwork')), 'mailto');
+    trackEnquiry('enquiry_submit', String(data.get('interest')), String(data.get('artwork')), 'mailto');
     setMailto(href);
     window.location.href = href;
   }
@@ -83,7 +100,7 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
     <label>Artwork<select name="artwork" value={selection.artwork} onChange={event => setSelection(current => ({ ...current, artwork: event.target.value }))} {...fieldError('artwork')}>{artworks.map(work => <option key={work.id} value={work.id}>{artworkTitle(work)} ({work.number})</option>)}<option value={GENERAL}>General enquiry</option></select>{errors.artwork && <span className="field-error" id="enquiry-artwork-error">{errors.artwork}</span>}</label>
   </>;
 
-  return <form action={action} onSubmit={onSubmit} key={state.submission ?? 'initial'} aria-describedby="enquiry-privacy">
+  return <form ref={form} action={action} onSubmit={onSubmit} key={state.submission ?? 'initial'} aria-describedby="enquiry-privacy">
     {specificArtwork && selectedWork && <div className="enquiry-selection"><div className="enquiry-selection-image"><ArtworkImage work={selectedWork} sizes="64px" /></div><div><span className="eyebrow">Original artwork / {selectedWork.number}</span><h3>{artworkTitle(selectedWork)}</h3></div></div>}
     {specificArtwork ? <details className="enquiry-options" open={Boolean(errors.interest || errors.artwork)}><summary>Change artwork or enquiry type</summary><div>{options}</div></details> : options}
     <div className="form-row">
