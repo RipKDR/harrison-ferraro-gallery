@@ -4,6 +4,7 @@ import '@fontsource/bodoni-moda/400.css';
 import '@fontsource/bodoni-moda/400-italic.css';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '../lib/site';
 
 export const metadata: Metadata = {
@@ -38,5 +39,5 @@ export const viewport: Viewport = { themeColor: '#101010', colorScheme: 'dark' }
 export default function Layout({ children }: { children: React.ReactNode }) {
   // Vercel Analytics only exists on Vercel deployments; elsewhere its script would 404.
   const vercelAnalytics = Boolean(process.env.VERCEL) && process.env.NEXT_PUBLIC_VERCEL_ANALYTICS !== 'off';
-  return <html lang="en-AU" data-scroll-behavior="smooth"><body>{children}{vercelAnalytics && <Analytics />}</body></html>;
+  return <html lang="en-AU" data-scroll-behavior="smooth"><body>{children}{vercelAnalytics && <><Analytics /><SpeedInsights /></>}</body></html>;
 }

@@ -72,6 +72,16 @@ export async function submitEnquiry(_previous: FormState<EnquiryValues>, data: F
     console.error('Enquiry email failed', error.name, error.message);
     return { status: 'error', message: 'Your enquiry could not be sent. Please try again in a moment.', values, submission };
   }
+  // Receipt for the visitor, so they know it arrived. Fixed text only: echoing visitor-typed fields would let
+  // anyone relay arbitrary content to any address through this form. Best effort: never fails the enquiry.
+  const receipt = await config.resend.emails.send({
+    from: config.from,
+    to: values.email,
+    replyTo: config.to,
+    subject: headerSafe(`Your enquiry${work ? ` about ${artworkTitle(work)}` : ''}`),
+    text: `Hello,\n\nThanks for getting in touch. Your enquiry reached Harrison and he will reply to this address.\n\n${work ? `${workLine}\n\n` : ''}If you didn't send this, you can ignore this email.\n\nHarrison Ferraro\n${absoluteUrl('/')}`,
+  }).catch((e: Error) => ({ error: e }));
+  if (receipt.error) console.warn('Enquiry receipt not sent', receipt.error.message);
   return { status: 'success', values: { email: values.email, interest: values.interest, artwork: values.artwork }, submission };
 }
 
