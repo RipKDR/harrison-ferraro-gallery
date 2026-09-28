@@ -17,7 +17,8 @@ html{scroll-behavior:smooth}.skip-link{position:fixed;top:12px;left:12px;z-index
 /* Keep the enquiry recoverable and controls reachable on narrow screens. */
 .enquiry-content form[hidden]{display:none}
 .mobile-enquire{display:none}
-.panel{overscroll-behavior:contain}
+dialog.panel::backdrop{background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);cursor:pointer}
+dialog.panel{cursor:default}
 .panel h1:focus,.draft-result h2:focus{outline:none}
 .close-button{position:sticky;float:right;top:8px;margin:8px 10px -52px 0;right:auto}
 .preview-status{letter-spacing:.04em}
@@ -157,7 +158,7 @@ html{scroll-padding-top:64px}
 /* Portfolio, 26 Sep: the spatial entrance opens into an editorial catalogue. */
 :root{--paper:#e9e5dc;--paper-ink:#24231f;--paper-muted:#625e56;--accent:#793c37;--display:'Bodoni Moda',Georgia,serif}
 html,body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
-button:focus-visible,a:focus-visible{outline:2px solid currentColor;outline-offset:5px}
+button:focus-visible,a:focus-visible{outline:2px solid var(--ink);outline-offset:5px}
 .masthead{padding-top:34px}
 .masthead nav{gap:30px;padding-top:0}
 .masthead nav a,.masthead nav button{min-height:44px;display:inline-flex;align-items:center;gap:10px}
@@ -228,10 +229,11 @@ button:focus-visible,a:focus-visible{outline:2px solid currentColor;outline-offs
 .collecting-intro p{max-width:300px;font-size:14px}
 .collecting-intro .subtle-action{border-bottom:1px solid #797268;min-height:44px;font-size:12px;padding:14px 0;margin-top:20px}
 .collecting-questions{align-self:center}
-.collecting-section summary{display:flex;gap:20px;align-items:center;list-style:none;padding:25px 0;font-size:14px;min-height:64px}
+.collecting-section summary{display:flex;gap:20px;align-items:center;list-style:none;padding:25px 0;font-size:14px;min-height:64px;cursor:pointer}
 .collecting-section summary::-webkit-details-marker{display:none}
-.collecting-section summary:after{content:'+';font-size:22px;margin-left:auto;font-weight:300}
+.collecting-section summary:after{content:'+';font-size:22px;margin-left:auto;font-weight:300;transition:transform 0.2s ease}
 .collecting-section details[open] summary:after{content:'−'}
+.collecting-section details p{margin:0;padding:0 0 20px 32px;color:var(--muted);font-size:14px;line-height:1.6}
 .collecting-section summary>span{font-size:10px;color:#aba396}
 .collecting-section details p{font-size:13px;line-height:1.8;padding-left:35px;margin-bottom:24px}
 .studio-list{padding:65px 8%;background:#191917;border-top:0;align-items:center}
@@ -287,14 +289,17 @@ button:focus-visible,a:focus-visible{outline:2px solid currentColor;outline-offs
  .gallery-controls{bottom:64px!important;gap:17px}.explore{gap:10px}.explore-label{min-width:0;padding:0}.gallery-current-title{font-size:20px;white-space:normal}.gallery-action{font-size:9px}.progress{gap:8px}.gallery-position{font-size:10px}.progress-track{width:80px}.index-link{font-size:11px!important;gap:8px}.collection-cue{font-size:10px;bottom:10px}
  .collection-section{padding:65px 22px 60px}.section-heading{display:block;margin-bottom:40px}.section-heading h2{font-size:68px}.collection-section .eyebrow{font-size:10px;margin-bottom:24px}.section-intro{margin-top:28px;max-width:300px}.section-intro p{font-size:13px;margin-bottom:16px}.collection-count{font-size:10px;margin-bottom:12px}.collection-hint{font-size:10px}
  .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:35px 16px}.collection-image,.collection-item:last-child .collection-image{height:240px;aspect-ratio:auto;padding:14px}.home-collection .featured-item:nth-child(1){grid-column:1/-1}.home-collection .featured-item:nth-child(1) .collection-image{height:470px}.home-collection .featured-item:nth-child(2),.home-collection .featured-item:nth-child(3){padding-top:0}.home-collection .featured-item:nth-child(2) .collection-image,.home-collection .featured-item:nth-child(3) .collection-image{height:250px}.collection-grid>.collection-item:last-child:nth-child(odd){width:100%;justify-self:stretch}
- .collection-caption{gap:7px;margin-top:9px}.collection-caption>span{padding-top:12px;font-size:9px}.collection-caption h3{font-size:17px;line-height:1.25}.collection-caption h3 a{padding:7px 0}.quick-view{right:6px;top:6px;min-width:44px;min-height:44px}.collection-enquire{font-size:11px;padding:9px 0}.catalogue-note{font-size:10px;margin-top:40px}
+ .collection-caption{gap:7px;margin-top:9px}.collection-caption>span{padding-top:12px;font-size:9px}.collection-caption h3{font-size:17px;line-height:1.25}.collection-caption h3 a{padding:7px 0}.quick-view{right:6px;top:6px;min-width:44px;min-height:44px}.collection-enquire{font-size:11px;padding:12px 0;min-height:44px;display:flex;align-items:center;justify-content:space-between}.catalogue-note{font-size:10px;margin-top:40px}
  .artist-section{grid-template-columns:1fr}.artist-art{height:470px}.artist-art>.artwork-image{width:130%;height:160%;left:-15%;top:-30%}.artist-art-caption{left:22px;bottom:20px;font-size:9px}.artist-copy{padding:60px 28px}.artist-copy .eyebrow{margin-bottom:32px}.artist-section h2{font-size:59px;margin-bottom:28px}.artist-copy .artist-lead{font-size:21px}.artist-copy p{font-size:14px}.artist-links{margin-top:28px}
  .collecting-section{grid-template-columns:1fr;padding:65px 24px;gap:30px}.collecting-intro h2{font-size:60px}.collecting-intro p{max-width:320px}.collecting-intro .subtle-action{margin-top:12px}.collecting-section summary{font-size:13px;gap:14px;padding:22px 0}.collecting-section details p{padding-left:28px;font-size:13px}.studio-list{padding:55px 24px;gap:26px}.studio-list h2{font-size:39px}.site-footer{padding:35px 24px 22px;gap:24px}.footer-meta{width:100%;font-size:12px}.footer-links{gap:25px}.footer-links a{font-size:12px}.footer-wordmark{font-size:20.1cqw;margin:24px 0 10px}.site-footer p{font-size:9px}
 }
 @media(max-width:700px){
  .compact-wordmark{font-size:10px;letter-spacing:.1em}.compact-header nav{gap:14px}.compact-header nav a,.compact-header nav button{font-size:11px}.compact-header{gap:14px}
  .about-hero{grid-template-columns:minmax(0,1fr);gap:36px;padding:30px 24px 60px}.about-page-content{grid-row:1;padding:0;min-width:0}.about-page-content h1{font-size:clamp(60px,20vw,78px)}.about-page-content .eyebrow{margin-bottom:25px}.about-hero-art>a{height:470px;padding:24px}.about-hero-art figcaption{font-size:10px}.about-page-content .large-copy{font-size:24px}.about-actions{margin-top:24px}
- .work-page .work-layout{grid-template-columns:1fr;padding:15px 22px 40px;gap:10px}.work-page .work-photo-area{padding:16px}.work-page-photo{height:57svh;min-height:300px}.work-page .work-info{padding:28px 0}.work-page .work-info h1{font-size:46px}.work-page .work-info .breadcrumb{margin-bottom:26px}.work-page .work-info dl{margin-top:25px}.work-page .work-info .small-note{font-size:12px}.work-enquiry{padding:60px 24px}.work-enquiry h2{font-size:39px}.panel h1{font-size:44px}.work-page .full-view .work-layout{height:100%;padding:0;display:block}.work-page .full-view .work-photo-area{height:100%;padding:54px 8px 10px}
+ .work-page .work-layout{grid-template-columns:1fr;padding:15px 22px 40px;gap:10px}.work-page .work-photo-area{padding:16px}.work-page-photo{height:57svh;min-height:300px}.work-page .work-info{padding:28px 0}.work-page .work-info h1{font-size:46px}.work-page .work-info .breadcrumb{margin-bottom:26px}.work-page .work-info dl{margin-top:25px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:18px 24px}
+.work-page .work-info dt{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
+.work-page .work-info dd{margin:0;font-size:14px;color:var(--ink)}
+.work-page .work-info .small-note{font-size:12px}.work-enquiry{padding:60px 24px}.work-enquiry h2{font-size:39px}.panel h1{font-size:44px}.work-page .full-view .work-layout{height:100%;padding:0;display:block}.work-page .full-view .work-photo-area{height:100%;padding:54px 8px 10px}
 }
 @container(max-width:370px){.masthead{padding:22px 16px}.wordmark{font-size:15px}.masthead nav{gap:12px}.masthead nav a,.masthead nav button{font-size:12px}.gallery-intro{left:16px}.gallery-current-title{font-size:18px}.gallery-controls{left:16px;right:16px}.index-link{font-size:10px!important}.section-heading h2{font-size:58px}.collection-section{padding-left:16px;padding-right:16px}.collection-grid{column-gap:12px}.collection-image{height:210px;padding:12px}.home-collection .featured-item:nth-child(1) .collection-image{height:400px}.home-collection .featured-item:nth-child(2) .collection-image,.home-collection .featured-item:nth-child(3) .collection-image{height:210px}.collection-caption h3{font-size:15px}.artist-section h2{font-size:51px}.footer-links{gap:19px}}
 @media(prefers-reduced-motion:reduce){.collection-item,.art-card{opacity:1!important;transform:none!important}}
