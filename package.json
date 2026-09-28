@@ -7,6 +7,7 @@
     "dev": "node scripts/dev.mjs",
     "build": "next build && node scripts/stage-next.mjs && node scripts/prepare-sites-build.mjs",
     "preview": "next start",
+    "seo:check": "node scripts/seo-check.mjs",
     "test:sites": "node --test tests/sites-worker.test.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ."

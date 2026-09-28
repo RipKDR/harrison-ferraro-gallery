@@ -55,7 +55,7 @@ export default function AboutPage() {
           <div className="collection-grid">
             {artworks.slice(3, 6).map(work => (
               <article className="collection-item" key={work.id}>
-                <Link className="collection-image" href={artworkPath(work)} aria-label={`View artwork: ${artworkTitle(work)}`}><ArtworkImage work={work} sizes="(max-width: 700px) 90vw, 30vw" /><span className="view-art">View artwork <ArrowUpRight size={20} /></span></Link>
+                <Link className="collection-image" href={artworkPath(work)} aria-label={`View artwork: ${artworkTitle(work)}`}><ArtworkImage work={work} sizes="(max-width: 700px) 45vw, 30vw" /><span className="view-art">View artwork <ArrowUpRight size={20} /></span></Link>
                 <div className="collection-caption"><h3><Link href={artworkPath(work)}>{artworkTitle(work)}</Link></h3></div>
               </article>
             ))}
