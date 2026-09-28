@@ -21,6 +21,7 @@ const attr = (tag, name) => decode(tag.match(new RegExp(`\\s${name}="([^"]*)"`, 
 const get = url => fetch(url, { redirect: 'manual', signal: AbortSignal.timeout(30_000) });
 
 const sitemapRes = await get(new URL('/sitemap.xml', base));
+for (const path of ['/robots.txt', '/llms.txt']) { const status = (await get(new URL(path, base))).status; if (status !== 200) fail(path, `status ${status}`); }
 if (sitemapRes.status !== 200) fail('/sitemap.xml', `status ${sitemapRes.status}`);
 const sitemapUrls = [...(await sitemapRes.text()).matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]).filter(u => !/\.(png|jpe?g|webp|avif)$/i.test(u));
 

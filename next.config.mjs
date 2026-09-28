@@ -21,5 +21,5 @@ export default {
     ];
   },
   // Vercel runs the image optimiser; elsewhere (e.g. the static Sites mirror) serve source files directly.
-  images: { unoptimized: !process.env.VERCEL },
+  images: { unoptimized: !process.env.VERCEL, formats: ['image/avif', 'image/webp'] },
 };
