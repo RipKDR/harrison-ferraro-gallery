@@ -36,7 +36,8 @@ function mailtoFromForm(data: FormData) {
 export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL, emailEnabled, headingId }: { interest?: Interest; artworkId?: string; emailEnabled: boolean; headingId?: string }) {
   const [state, action, pending] = useActionState(submitEnquiry, initialState);
   const [mailto, setMailto] = useState<string | null>(null);
-  const [selection, setSelection] = useState({ interest, artwork: interest === 'General enquiry' ? GENERAL : artworkId });
+  // '' selects the "Choose a painting" placeholder, so an original is never sent without a painting.
+  const [selection, setSelection] = useState({ interest, artwork: interest === 'General enquiry' ? GENERAL : artworkId === GENERAL ? '' : artworkId });
   const elapsed = useRef<HTMLInputElement>(null);
   const status = useRef<HTMLParagraphElement>(null);
   const thanks = useRef<HTMLHeadingElement>(null);
@@ -97,9 +98,9 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
   }
 
   const options = <>
-    <label>I’m interested in<select name="interest" value={selection.interest} onChange={event => setSelection(current => ({ ...current, interest: event.target.value as Interest }))} {...fieldError('interest')}>{INTERESTS.map(option => <option key={option}>{option}</option>)}</select>{errors.interest && <span className="field-error" id="enquiry-interest-error">{errors.interest}</span>}</label>
+    <label>I’m interested in<select name="interest" value={selection.interest} onChange={event => { const next = event.target.value as Interest; setSelection(current => ({ interest: next, artwork: next === 'Original artwork' && current.artwork === GENERAL ? '' : current.artwork })); }} {...fieldError('interest')}>{INTERESTS.map(option => <option key={option}>{option}</option>)}</select>{errors.interest && <span className="field-error" id="enquiry-interest-error">{errors.interest}</span>}</label>
     {/* A general enquiry has no artwork: show the picker only for originals. */}
-    {selection.interest !== 'Original artwork' ? <input type="hidden" name="artwork" value={GENERAL} /> : <label>Artwork<select name="artwork" value={selection.artwork} onChange={event => setSelection(current => ({ ...current, artwork: event.target.value }))} {...fieldError('artwork')}>{artworks.map(work => <option key={work.id} value={work.id}>{artworkTitle(work)} ({work.number})</option>)}<option value={GENERAL}>General enquiry</option></select>{errors.artwork && <span className="field-error" id="enquiry-artwork-error">{errors.artwork}</span>}</label>}
+    {selection.interest !== 'Original artwork' ? <input type="hidden" name="artwork" value={GENERAL} /> : <label>Artwork<select name="artwork" value={selection.artwork} onChange={event => setSelection(current => ({ ...current, artwork: event.target.value }))} required {...fieldError('artwork')}><option value="" disabled>Choose a painting</option>{artworks.map(work => <option key={work.id} value={work.id}>{artworkTitle(work)} ({work.number})</option>)}</select>{errors.artwork && <span className="field-error" id="enquiry-artwork-error">{errors.artwork}</span>}</label>}
   </>;
 
   return <form ref={form} action={action} onSubmit={onSubmit} key={state.submission ?? 'initial'} aria-describedby="enquiry-privacy">

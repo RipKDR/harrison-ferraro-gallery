@@ -42,7 +42,7 @@ export async function submitEnquiry(_previous: FormState<EnquiryValues>, data: F
 
   const fieldErrors: FormState<EnquiryValues>['fieldErrors'] = {};
   if (!INTERESTS.includes(values.interest as (typeof INTERESTS)[number])) fieldErrors.interest = 'Choose what you are interested in.';
-  if (values.artwork !== GENERAL && !findArtwork(values.artwork)) fieldErrors.artwork = 'Choose an artwork.';
+  if (values.artwork === GENERAL ? values.interest === 'Original artwork' : !findArtwork(values.artwork)) fieldErrors.artwork = 'Choose an artwork.';
   if (!values.name) fieldErrors.name = 'Enter your name.';
   if (!EMAIL_PATTERN.test(values.email)) fieldErrors.email = 'Enter a valid email address.';
   if (values.message.length < 2) fieldErrors.message = 'Write a short message.';
