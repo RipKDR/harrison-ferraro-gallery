@@ -2,14 +2,15 @@ import Link from 'next/link';
 import { CompactHeader } from './CompactHeader';
 
 // Masthead for standalone pages; the home page keeps its own panel-driven masthead.
-export function SiteHeader() {
+// Work pages pass `#enquire` so Enquire goes to their own pre-filled form.
+export function SiteHeader({ enquireHref = '/about#enquire' }: { enquireHref?: string }) {
   return (<>
     <header className="masthead masthead-static">
       <Link className="wordmark" href="/" aria-label="Harrison Ferraro home">HARRISON<br />FERRARO</Link>
       <nav aria-label="Main navigation">
         <Link href="/#collection">Works</Link>
         <Link href="/about">About</Link>
-        <Link className="nav-enquire" href="/about#enquire">Enquire</Link>
+        <Link className="nav-enquire" href={enquireHref}>Enquire</Link>
       </nav>
     </header>
     <CompactHeader>
@@ -17,7 +18,7 @@ export function SiteHeader() {
       <nav aria-label="Quick navigation">
         <Link href="/#collection">Works</Link>
         <Link href="/about">About</Link>
-        <Link className="nav-enquire" href="/about#enquire">Enquire</Link>
+        <Link className="nav-enquire" href={enquireHref}>Enquire</Link>
       </nav>
     </CompactHeader>
   </>);

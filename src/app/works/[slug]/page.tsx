@@ -56,7 +56,7 @@ export default async function WorkPage({ params }: Props) {
       <TrackArtworkView slug={work.slug} source="page" />
       <WorkKeyboardNav previous={artworkPath(previous)} next={artworkPath(next)} />
       <a className="skip-link" href="#main">Skip to the artwork</a>
-      <SiteHeader />
+      <SiteHeader enquireHref="#enquire" />
       <main id="main">
         <article className="work-layout">
           <div className="work-photo-area">
@@ -70,7 +70,6 @@ export default async function WorkPage({ params }: Props) {
             <p>{work.description}</p>
             <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
             {unconfirmed && <p className="small-note">{work.facts.title ? '' : 'Descriptive working title. '}Please enquire for the confirmed details, price and availability.</p>}
-            <p className="collector-note">A direct conversation with Harrison. Ask about the painting, request further details, or include your destination for a delivery quote.</p>
             <ShareArtwork work={work} />
             <nav className="work-pagination" aria-label="More works">
               <Link href={artworkPath(previous)} aria-label={`Previous work: ${artworkTitle(previous)}`}><ArrowLeft size={18} /> Previous</Link>

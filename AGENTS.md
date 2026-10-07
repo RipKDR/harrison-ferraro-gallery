@@ -38,6 +38,9 @@ User removes prints from the website and delegates design improvements to create
 ## Audit pass — 28 September 2026
 One enquiry invitation per page: the footer "A painting starts a conversation" band was removed; the collecting section's "Talk to Harrison" is the home page's solid CTA. Catalogue numbers show on the work page (Reference No.) only, not on grid captions or hero markers. Phones get no "+" quick-view button (the image already opens the work). Keep copy plain and factual; no poster-style taglines.
 
+## Design polish — 7 October 2026
+User decisions after the audit in `docs/design/audit-2026-10-07.md`: per-card "Enquire" and quick-view on the home collection show on hover/focus only (hidden on touch screens; the work page carries the CTA). The "Between the figure and the feeling" line stays on About only; the home artist section heading is the artist's name. No text under 11px. Keep the first-row stagger and 01/02/03 section numbers. One page gutter (6%, 22px phones, 16px under 370px) for collection, collecting, studio list and footer. Before/after screenshots live in `docs/design/before` and `docs/design/after`.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

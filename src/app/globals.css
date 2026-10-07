@@ -265,7 +265,6 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ink);outline-offset
 .work-page .work-photo-area{padding:28px;background:#1c1b18}
 .work-page .work-info{padding:30px 0}
 .work-page .work-info h1,.panel h1{font-family:var(--display);font-size:clamp(40px,4.5vw,64px)}
-.work-info .collector-note{margin-top:28px;font-size:13px;line-height:1.8}
 .work-info .solid-action{font-size:13px}
 .work-page .work-info .breadcrumb{font-size:10px;line-height:1.6}
 .work-page .full-view .work-layout{padding:0;gap:0;border:0;display:block;height:100%;min-height:0}
@@ -319,3 +318,32 @@ a.collection-enquire{display:flex;color:inherit;text-decoration:none;align-items
 @container(max-width:700px){.quick-view{display:none}.collection-enquire{font-size:12px}.artist-art-caption{font-size:11px}}
 /* About on phones: a painting leads, at a height that leaves the name in view. */
 @container(max-width:700px){.about-page-content{grid-row:auto}.about-hero{gap:28px;padding-top:18px}.about-hero-art>a{height:min(62svh,470px);padding:16px}.about-page-content h1{font-size:clamp(52px,15vw,64px);margin-bottom:24px}}
+
+/* Design polish, 7 Oct 2026 ----------------------------------------------------------------------- */
+/* One page gutter: collecting, studio list and footer line up with the collection grid. */
+.collecting-section,.studio-list,.site-footer{padding-left:6%;padding-right:6%}
+@media(min-width:1600px){.collecting-section,.studio-list,.site-footer{padding-left:max(6%,calc((100vw - 1450px)/2));padding-right:max(6%,calc((100vw - 1450px)/2))}}
+@container(max-width:700px){.collecting-section,.studio-list,.site-footer{padding-left:22px;padding-right:22px}}
+@container(max-width:370px){.collecting-section,.studio-list,.site-footer{padding-left:16px;padding-right:16px}}
+/* Collection: quick view and per-card enquiry appear on hover/focus so the paintings lead; touch screens open the work page. */
+@media(hover:hover){.quick-view,.collection-enquire{opacity:0;transition:opacity .2s}.collection-item:hover .quick-view,.collection-item:hover .collection-enquire,.collection-item:focus-within .quick-view,.collection-item:focus-within .collection-enquire{opacity:1}}
+@media(hover:none){.collection-enquire{display:none}}
+.home-collection .section-intro{align-self:end}
+/* Type floor: nothing under 11px. */
+.gallery-action,.collecting-section summary>span,.studio-list .eyebrow,.site-footer p,.footer-meta span:last-child,.about-hero-art figcaption,.about-page-content .eyebrow,.work-page .work-info .breadcrumb,.enquiry-selection .eyebrow{font-size:11px}
+@container(max-width:700px){.gallery-intro,.gallery-action,.gallery-position,.collection-cue,.collection-section .eyebrow,.collection-count,.collection-hint,.collection-caption>span,.catalogue-note,.site-footer p,.index-link{font-size:11px!important}}
+@media(max-width:700px){.about-hero-art figcaption,.work-page .work-info dt,.compact-wordmark{font-size:11px}}
+/* Work page: breathing room under the CTA; stacked layout on tablets; facts as full-width rows on phones. */
+.work-page .work-info .solid-action{margin-bottom:28px}
+@media(max-width:1000px) and (min-width:701px){.work-page .work-layout{grid-template-columns:1fr;gap:0;padding:28px 6% 48px}.work-page-photo{height:min(70svh,760px)}}
+@media(max-width:700px){.work-page .work-info dl{display:block}.work-page .work-info dt{text-transform:none;letter-spacing:0;font-size:14px;margin:0}}
+.more-works .section-heading h2,.about-works .section-heading h2{font-size:clamp(40px,4.5vw,64px)}
+/* Form disclosures match the collecting list: +/− instead of the browser triangle. */
+.enquiry-options summary,.delivery-options summary{list-style:none;display:flex;justify-content:space-between;align-items:center}
+.enquiry-options summary::-webkit-details-marker,.delivery-options summary::-webkit-details-marker{display:none}
+.enquiry-options summary:after,.delivery-options summary:after{content:'+';font-size:18px;font-weight:300}
+.enquiry-options[open] summary:after,.delivery-options[open] summary:after{content:'−'}
+/* After a successful send the "send below" instruction is stale. */
+.enquiry-content:has(.form-result) .enquiry-notice{display:none}
+/* 404: CTA width matches other pages. */
+.not-found-content .solid-action,.not-found-content .line-action{max-width:420px}

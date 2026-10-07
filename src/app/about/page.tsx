@@ -36,7 +36,7 @@ export default function AboutPage() {
             <Link href={artworkPath(featuredArtworks[0])} aria-label={`View artwork: ${artworkTitle(featuredArtworks[0])}`}>
               <ArtworkImage work={featuredArtworks[0]} preload sizes="(max-width: 700px) 85vw, 40vw" />
             </Link>
-            <figcaption><span>No. {featuredArtworks[0].number}</span><span>{artworkTitle(featuredArtworks[0])}</span></figcaption>
+            <figcaption><span>{artworkTitle(featuredArtworks[0])}</span></figcaption>
           </figure>
           <article className="about-content about-page-content">
             <span className="eyebrow">The artist · Melbourne, Australia</span>
@@ -45,13 +45,13 @@ export default function AboutPage() {
             <p>My work moves between dark figurative painting and abstraction. I am drawn to the tension between a recognisable face and the marks that surround it: layered surfaces, shifting light and gestures that carry a feeling beyond the figure.</p>
             <p>For original paintings or a conversation about the work, get in touch directly.</p>
             <div className="about-actions">
-              <a className="line-action" href="#enquire">Start a conversation <ArrowRight size={22} /></a>
+              <a className="line-action" href="#enquire">Enquire <ArrowRight size={22} /></a>
               <InstagramLink className="contact-link" placement="about">Follow on Instagram <ArrowUpRight size={18} /></InstagramLink>
             </div>
           </article>
         </section>
         <section className="collection-section about-works" aria-labelledby="about-works-title">
-          <div className="section-heading"><div><span className="eyebrow">Selected works</span><h2 id="about-works-title">From the studio.</h2></div><p><Link href="/#collection">See all works</Link></p></div>
+          <div className="section-heading"><div><span className="eyebrow">The collection</span><h2 id="about-works-title">Selected works.</h2></div><p><Link href="/#collection">See all works</Link></p></div>
           <div className="collection-grid">
             {artworks.slice(3, 6).map(work => (
               <article className="collection-item" key={work.id}>
