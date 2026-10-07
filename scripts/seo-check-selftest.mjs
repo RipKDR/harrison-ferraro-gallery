@@ -15,7 +15,7 @@ process.on('exit', restore);
 
 // Each fault must be caught. `expect` is the substring the checker's output must contain.
 const faults = [
-  { name: 'title over 60 chars', files: [[WORK, s => s.replace('    title,\n', "    title: title + ' padded out well past the sixty character limit',\n", 1)]], expect: 'chars (>60)' },
+  { name: 'title over 60 chars', files: [[WORK, s => s.replace(/    title,(\r?\n)/, "    title: title + ' padded out well past the sixty character limit',$1")]], expect: 'chars (>60)' },
   { name: 'img without alt', files: [[ABOUT, s => s.replace('<ArtworkImage work={featuredArtworks[0]} preload sizes="(max-width: 700px) 85vw, 40vw" />', '<img src={featuredArtworks[0].src} width={400} height={600} />', 1)]], expect: 'img without alt' },
   { name: 'invalid JSON-LD', files: [[ABOUT, s => s.replace('      <JsonLd data={personJsonLd} />', "      <JsonLd data={{ missing: true }} />", 1)]], expect: 'JSON-LD' },
   { name: 'broken internal link', files: [[ABOUT, s => s.replace('href="/#collection">See all works', 'href="/works/does-not-exist">See all works', 1)]], expect: 'broken internal link' },
