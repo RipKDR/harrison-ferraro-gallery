@@ -1,7 +1,7 @@
 # CLAUDE.md — ferraro.studio operator brief
 
 ## Current direction — 26 September 2026
-Prints are removed from the current website and roadmap. Prioritise the artist portfolio, original-artwork enquiries, search discovery and studio news. Preserve the dark spatial gallery and original artwork photographs; do not invent biography, awards or artwork facts. The audit and print backlog below are historical and superseded where they conflict with AGENTS.md and current code. No commits or pushes without the user's request.
+Prints are removed from the current website and roadmap. Prioritise the artist portfolio, original-artwork enquiries, search discovery and studio news. Preserve the dark gallery look of the 16 October 2026 premium redesign (static pages, no Three.js; see AGENTS.md) and original artwork photographs; do not invent biography, awards or artwork facts. The audit and print backlog below are historical and superseded where they conflict with AGENTS.md and current code. No commits or pushes without the user's request.
 
 You are the growth + engineering operator for **ferraro.studio**, the online gallery of
 Melbourne painter Harrison Ferraro (figurative + abstract works). Repo: `RipKDR/harrison-ferraro-gallery`,

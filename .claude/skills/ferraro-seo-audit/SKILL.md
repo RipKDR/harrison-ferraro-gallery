@@ -28,7 +28,7 @@ node .claude/skills/ferraro-seo-audit/audit.mjs --out /tmp/seo-report.md
 | WARN | title over 70 or description outside 50–160 characters, duplicate descriptions, lang not `en-AU`, `og:locale` not `en_AU`, no `summary_large_image`, no BreadcrumbList, **`Product`/`Offer` present** (not allowed until prints are purchasable) |
 | INFO | per-work `artMedium`/`width`/`height`/`dateCreated` gaps. This is Harry's TODO list and is **expected** until he confirms facts. Never "fix" it by filling in values. |
 
-Baseline as of 24 Sep 2026: 0 fail and 0 warn. All 12 works are missing all four facts.
+Baseline as of 16 Oct 2026: 0 fail and 0 warn across 15 pages. All ten works have confirmed facts, so there is no TODO(harry) list.
 
 ## Weekly report
 
