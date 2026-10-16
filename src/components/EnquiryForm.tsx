@@ -41,6 +41,13 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
   const thanks = useRef<HTMLHeadingElement>(null);
   const values = state.values ?? {};
   const errors = state.fieldErrors ?? {};
+  // Once per error response, show what was submitted (also on a no-JS re-render); later picks stay.
+  const [syncedAt, setSyncedAt] = useState<number>();
+  if (state.status === 'error' && state.submission !== syncedAt) {
+    setSyncedAt(state.submission);
+    const submitted = INTERESTS.find(option => option === values.interest);
+    if (submitted) setSelection({ interest: submitted, artwork: artworkBySlug(values.artwork ?? '')?.slug ?? GENERAL });
+  }
   const fieldError = (key: keyof EnquiryValues) => errors[key] ? { 'aria-invalid': true, 'aria-describedby': `enquiry-${key}-error` } : {};
   const specificArtwork = interest === 'Original artwork' && Boolean(artworkBySlug(artworkId));
   const selectedWork = selection.interest === 'Original artwork' ? artworkBySlug(selection.artwork) : undefined;
@@ -102,12 +109,12 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
 
   return <form ref={form} action={action} onSubmit={onSubmit} key={state.submission ?? 'initial'} aria-describedby="enquiry-privacy">
     {specificArtwork && selectedWork && <p className="enquiry-for">Enquiring about <strong>{selectedWork.title}</strong></p>}
-    {specificArtwork ? <details className="enquiry-options" open={Boolean(errors.interest || errors.artwork)}><summary>Change painting or enquiry type</summary><div>{options}</div></details> : options}
+    {specificArtwork ? <details className="enquiry-options" open={Boolean(errors.interest || errors.artwork) || undefined}><summary>Change painting or enquiry type</summary><div>{options}</div></details> : options}
     <div className="form-row">
       <label>Your name<input name="name" required autoComplete="name" maxLength={100} defaultValue={values.name} {...fieldError('name')} />{errors.name && <span className="field-error" id="enquiry-name-error">{errors.name}</span>}</label>
       {emailEnabled && <label>Email address<input name="email" type="email" required autoComplete="email" maxLength={254} defaultValue={values.email} {...fieldError('email')} />{errors.email && <span className="field-error" id="enquiry-email-error">{errors.email}</span>}</label>}
     </div>
-    <details className="delivery-options" open={Boolean(values.country || values.postcode)}><summary>Add a delivery destination (optional)</summary><fieldset className="delivery-fields"><legend>Delivery destination</legend><p className="small-note">Helps Harrison prepare packing and delivery options with your quote.</p><div className="form-row"><label>Country<input name="country" autoComplete="country-name" maxLength={100} placeholder="e.g. Australia" defaultValue={values.country} /></label><label>Postcode<input name="postcode" autoComplete="postal-code" maxLength={20} placeholder="e.g. 3000" defaultValue={values.postcode} /></label></div></fieldset></details>
+    <details className="delivery-options" open={Boolean(values.country || values.postcode) || undefined}><summary>Add a delivery destination (optional)</summary><fieldset className="delivery-fields"><legend>Delivery destination</legend><p className="small-note">Helps Harrison prepare packing and delivery options with your quote.</p><div className="form-row"><label>Country<input name="country" autoComplete="country-name" maxLength={100} placeholder="e.g. Australia" defaultValue={values.country} /></label><label>Postcode<input name="postcode" autoComplete="postal-code" maxLength={20} placeholder="e.g. 3000" defaultValue={values.postcode} /></label></div></fieldset></details>
     <label>Your message<textarea name="message" required rows={4} maxLength={3000} defaultValue={values.message ?? defaultMessage(interest)} {...fieldError('message')} />{errors.message && <span className="field-error" id="enquiry-message-error">{errors.message}</span>}</label>
     <div className="hp-field" aria-hidden="true"><label>Leave this empty<input name={HONEYPOT} tabIndex={-1} autoComplete="off" /></label></div>
     <input type="hidden" name={ELAPSED} defaultValue="" ref={elapsed} />
