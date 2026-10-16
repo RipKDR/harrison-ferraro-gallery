@@ -1,8 +1,8 @@
-import { artworkPath, artworks, artworkTitle } from '../../artworks';
+import { artworkPath, artworkPrice, artworks, artworkSize } from '../../artworks';
 import { absoluteUrl, INSTAGRAM_URL, SITE_DESCRIPTION, SITE_NAME } from '../../lib/site';
 
 // llms.txt (llmstxt.org): a plain-text map of the site for AI answer engines, generated from the
-// catalogue so it never drifts. Only facts already published on the site; unknown facts stay out.
+// catalogue so it never drifts. Only facts already published on the site.
 export const dynamic = 'force-static';
 
 export function GET() {
@@ -10,15 +10,15 @@ export function GET() {
 
 > ${SITE_DESCRIPTION}
 
-Titles are descriptive working titles. Medium, dimensions, year, price and availability are given on request: enquire through the site.
-
 ## Works
 
-${artworks.map(work => `- [${artworkTitle(work)}](${absoluteUrl(artworkPath(work))}): ${work.description}`).join('\n')}
+${artworks.map(work => `- [${work.title}](${absoluteUrl(artworkPath(work))}): ${work.description} ${work.medium}, ${artworkSize(work)}, ${work.year}. ${work.available ? `Available, ${artworkPrice(work)}.` : 'Sold.'}`).join('\n')}
 
-## About
+## Pages
 
-- [About the artist](${absoluteUrl('/about')}): artist statement and enquiries
+- [All works](${absoluteUrl('/works')}): every painting with size and price
+- [About the artist](${absoluteUrl('/about')}): artist statement and portrait
+- [Enquire](${absoluteUrl('/contact')}): ask about a painting or a delivery quote
 - [Instagram](${INSTAGRAM_URL}): new paintings and studio news
 `;
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

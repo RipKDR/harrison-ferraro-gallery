@@ -8,29 +8,44 @@ const securityHeaders = [
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=()' },
 ];
 
+// October 2026 catalogue: old work and photo URLs that are the same painting point at its new page;
+// works no longer in the catalogue point at the works page.
+const movedWorks = [
+  ['figure-with-a-skull', '/works/figure-with-skull'],
+  ['portrait-with-a-rose', '/works/portrait-with-rose'],
+  ['figure-in-rose', '/works/new-painting-2026'],
+  ['figure-in-red', '/works/figure-exhaling-red'],
+  ['portrait-with-an-ember', '/works/woman-cigarette'],
+  ...['figure-in-motion', 'abstract-in-pale-violet', 'portrait-in-crimson', 'portrait-in-light', 'figure-in-grey', 'white-on-charcoal'].map(slug => [slug, '/works']),
+];
+const movedPhotos = [
+  ['red-smoke.png', 'figure-exhaling-red-web.jpg'],
+  ['figure-in-red.png', 'figure-exhaling-red-web.jpg'],
+  ['figure-with-skull.jpg', 'figure-with-skull-web.jpg'],
+  ['over-the-shoulder.jpg', 'over-the-shoulder-web.jpg'],
+  ['portrait-with-rose.jpg', 'portrait-with-rose-web.jpg'],
+  ['figure-in-rose.jpg', 'new-painting-2026-web.jpg'],
+  ['portrait-with-ember.jpg', 'woman-cigarette-web.jpg'],
+];
+
 export default {
   allowedDevOrigins: ['terminal.local'],
   devIndicators: false,
   poweredByHeader: false,
-  // Source photos renamed to their artwork slugs (image search reads filenames); old URLs stay reachable.
   async redirects() {
     return [
-      ['red-smoke.png', 'figure-in-red.png'],
-      ['portrait.jpeg', 'figure-in-motion.jpg'],
-      ['abstract.jpeg', 'abstract-in-pale-violet.jpg'],
-      ['portrait-in-crimson.jpeg', 'portrait-in-crimson.jpg'],
-    ].map(([from, to]) => ({ source: `/art/${from}`, destination: `/art/${to}`, permanent: true }));
+      ...movedWorks.map(([from, to]) => ({ source: `/works/${from}`, destination: to, permanent: true })),
+      ...movedPhotos.map(([from, to]) => ({ source: `/art/${from}`, destination: `/art/${to}`, permanent: true })),
+    ];
   },
   async headers() {
     return [
       { source: '/:path*', headers: securityHeaders },
       // Source photographs rarely change: cache for a week, revalidate in the background after that.
       { source: '/art/:file*', headers: [{ key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' }] },
-      { source: '/gallery-background.:ext', headers: [{ key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' }] },
     ];
   },
   // Vercel runs the image optimiser; elsewhere (e.g. the static Sites mirror) serve source files directly.
-  // WebP only: these painterly textures are 40% *larger* in AVIF at q=75 (measured, 8 of 12 works),
-  // and AVIF costs Vercel's optimiser ~5x the encode time. formats: ['image/avif', 'image/webp']
-  images: { unoptimized: !process.env.VERCEL },
+  // AVIF first: ~47% smaller than WebP at the optimiser's settings (measured at 1080 px, all 11 photos).
+  images: { unoptimized: !process.env.VERCEL, formats: ['image/avif', 'image/webp'] },
 };

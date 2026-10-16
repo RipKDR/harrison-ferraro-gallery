@@ -2,30 +2,29 @@
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
 import { submitEnquiry } from '../app/actions';
-import { artworks, artworkTitle } from '../artworks';
-import { ArtworkImage } from '../ArtworkImage';
+import { artworkBySlug, artworkPath, artworks } from '../artworks';
 import { artworkProperties, trackEvent } from '../lib/analytics';
 import { ELAPSED, type EnquiryValues, type FormState, GENERAL, HONEYPOT, INTERESTS, type Interest } from '../lib/forms';
-import { FALLBACK_CONTACT_EMAIL } from '../lib/site';
+import { absoluteUrl, FALLBACK_CONTACT_EMAIL } from '../lib/site';
 
 const initialState: FormState<EnquiryValues> = { status: 'idle' };
 
 const defaultMessage = (interest: Interest) =>
   interest === 'General enquiry' ? "Hello Harrison, I'd like to get in touch about your work."
-    : "I'd like to know more about this work, including its availability, price and dimensions.";
+    : "Hello Harrison, I'm interested in this painting.";
 
 // Funnel: enquiry_view -> enquiry_submit -> enquiry_success | enquiry_error. The mailto path ends at submit
 // (whether the visitor presses Send in their email app is unknowable). No personal data is sent.
 const trackEnquiry = (event: 'enquiry_view' | 'enquiry_submit' | 'enquiry_success' | 'enquiry_error', interest: string | null, artworkId: string | undefined, method: 'email_service' | 'mailto', extra: Record<string, string> = {}) => {
-  const work = artworks.find(item => item.id === artworkId);
+  const work = artworkBySlug(artworkId ?? '');
   trackEvent(event, { interest, method, ...extra, ...(work ? artworkProperties(work) : { artwork_id: 'general' }) });
 };
 
 function mailtoFromForm(data: FormData) {
-  const work = artworks.find(item => item.id === data.get('artwork'));
+  const work = artworkBySlug(String(data.get('artwork')));
   const destination = [data.get('country'), data.get('postcode')].filter(Boolean).join(', ') || 'Not supplied';
-  const body = `Interest: ${data.get('interest')}\nWork: ${work ? `${artworkTitle(work)} (ref. ${work.number})` : 'General enquiry'}\nDestination: ${destination}\nFrom: ${data.get('name')}\n\n${data.get('message')}`;
-  const subject = `${data.get('interest')}: ${work ? artworkTitle(work) : 'general enquiry'}`;
+  const body = `Interest: ${data.get('interest')}\nWork: ${work ? `${work.title}\n${absoluteUrl(artworkPath(work))}` : 'General enquiry'}\nDestination: ${destination}\nFrom: ${data.get('name')}\n\n${data.get('message')}`;
+  const subject = `${data.get('interest')}: ${work ? work.title : 'general enquiry'}`;
   return `mailto:${FALLBACK_CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
@@ -33,7 +32,7 @@ function mailtoFromForm(data: FormData) {
  * `emailEnabled` comes from the server (Resend configured). Without it the same form composes the
  * enquiry in the visitor's email app instead, so there is always a working way to get in touch.
  */
-export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL, emailEnabled, headingId }: { interest?: Interest; artworkId?: string; emailEnabled: boolean; headingId?: string }) {
+export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL, emailEnabled }: { interest?: Interest; artworkId?: string; emailEnabled: boolean }) {
   const [state, action, pending] = useActionState(submitEnquiry, initialState);
   const [mailto, setMailto] = useState<string | null>(null);
   const [selection, setSelection] = useState({ interest, artwork: interest === 'General enquiry' ? GENERAL : artworkId });
@@ -43,8 +42,8 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
   const values = state.values ?? {};
   const errors = state.fieldErrors ?? {};
   const fieldError = (key: keyof EnquiryValues) => errors[key] ? { 'aria-invalid': true, 'aria-describedby': `enquiry-${key}-error` } : {};
-  const specificArtwork = interest === 'Original artwork' && artworks.some(work => work.id === artworkId);
-  const selectedWork = selection.interest === 'Original artwork' ? artworks.find(work => work.id === selection.artwork) : undefined;
+  const specificArtwork = interest === 'Original artwork' && Boolean(artworkBySlug(artworkId));
+  const selectedWork = selection.interest === 'Original artwork' ? artworkBySlug(selection.artwork) : undefined;
 
   useEffect(() => { (state.status === 'success' || mailto ? thanks : status).current?.focus(); }, [state, mailto]);
   // Bot submissions get a quiet success without values: not counted.
@@ -81,29 +80,29 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
 
   if (state.status === 'success') {
     return <div className="form-result" role="status">
-      <h2 ref={thanks} tabIndex={-1} id={headingId}>Thank you.</h2>
+      <h2 ref={thanks} tabIndex={-1}>Thank you.</h2>
       <p>Your enquiry has been sent to Harrison. {values.email ? <>He will reply to <strong>{values.email}</strong>.</> : null}</p>
     </div>;
   }
 
   if (mailto) {
     return <div className="form-result" role="status">
-      <h2 ref={thanks} tabIndex={-1} id={headingId}>Almost there.</h2>
+      <h2 ref={thanks} tabIndex={-1}>Almost there.</h2>
       <p>Your email app should now be open with the enquiry ready. Press <strong>Send</strong> there. Nothing has been sent yet.</p>
-      <a className="solid-action" href={mailto}>Open the email again <ArrowUpRight size={22} /></a>
+      <a className="button" href={mailto}>Open the email again <ArrowUpRight size={20} /></a>
       <p className="small-note">If no email app opens, write to <a href={`mailto:${FALLBACK_CONTACT_EMAIL}`}>{FALLBACK_CONTACT_EMAIL}</a>.</p>
-      <button className="subtle-action" type="button" onClick={() => setMailto(null)}>Edit enquiry</button>
+      <button className="text-button" type="button" onClick={() => setMailto(null)}>Edit enquiry</button>
     </div>;
   }
 
   const options = <>
     <label>I’m interested in<select name="interest" value={selection.interest} onChange={event => setSelection(current => ({ ...current, interest: event.target.value as Interest }))} {...fieldError('interest')}>{INTERESTS.map(option => <option key={option}>{option}</option>)}</select>{errors.interest && <span className="field-error" id="enquiry-interest-error">{errors.interest}</span>}</label>
-    <label>Artwork<select name="artwork" value={selection.artwork} onChange={event => setSelection(current => ({ ...current, artwork: event.target.value }))} {...fieldError('artwork')}>{artworks.map(work => <option key={work.id} value={work.id}>{artworkTitle(work)} ({work.number})</option>)}<option value={GENERAL}>General enquiry</option></select>{errors.artwork && <span className="field-error" id="enquiry-artwork-error">{errors.artwork}</span>}</label>
+    <label>Artwork<select name="artwork" value={selection.artwork} onChange={event => setSelection(current => ({ ...current, artwork: event.target.value }))} {...fieldError('artwork')}>{artworks.map(work => <option key={work.slug} value={work.slug}>{work.title}</option>)}<option value={GENERAL}>General enquiry</option></select>{errors.artwork && <span className="field-error" id="enquiry-artwork-error">{errors.artwork}</span>}</label>
   </>;
 
   return <form ref={form} action={action} onSubmit={onSubmit} key={state.submission ?? 'initial'} aria-describedby="enquiry-privacy">
-    {specificArtwork && selectedWork && <div className="enquiry-selection"><div className="enquiry-selection-image"><ArtworkImage work={selectedWork} sizes="64px" /></div><div><span className="eyebrow">Original artwork / {selectedWork.number}</span><h3>{artworkTitle(selectedWork)}</h3></div></div>}
-    {specificArtwork ? <details className="enquiry-options" open={Boolean(errors.interest || errors.artwork)}><summary>Change artwork or enquiry type</summary><div>{options}</div></details> : options}
+    {specificArtwork && selectedWork && <p className="enquiry-for">Enquiring about <strong>{selectedWork.title}</strong></p>}
+    {specificArtwork ? <details className="enquiry-options" open={Boolean(errors.interest || errors.artwork)}><summary>Change painting or enquiry type</summary><div>{options}</div></details> : options}
     <div className="form-row">
       <label>Your name<input name="name" required autoComplete="name" maxLength={100} defaultValue={values.name} {...fieldError('name')} />{errors.name && <span className="field-error" id="enquiry-name-error">{errors.name}</span>}</label>
       {emailEnabled && <label>Email address<input name="email" type="email" required autoComplete="email" maxLength={254} defaultValue={values.email} {...fieldError('email')} />{errors.email && <span className="field-error" id="enquiry-email-error">{errors.email}</span>}</label>}
@@ -114,6 +113,6 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
     <input type="hidden" name={ELAPSED} defaultValue="" ref={elapsed} />
     {state.status === 'error' && <p className="form-error" role="alert" ref={status} tabIndex={-1}>{state.message} {!state.fieldErrors && <>You can also email <a href={`mailto:${FALLBACK_CONTACT_EMAIL}`}>{FALLBACK_CONTACT_EMAIL}</a>.</>}</p>}
     <p className="small-note" id="enquiry-privacy">{emailEnabled ? 'Your details are sent to Harrison by email only to answer this enquiry.' : 'This opens your email app with the enquiry written out, ready to send to Harrison.'}</p>
-    <button className="line-action" type="submit" disabled={pending}>{pending ? 'Sending…' : emailEnabled ? 'Send enquiry' : 'Write the email'} <ArrowRight size={22} /></button>
+    <button className="button" type="submit" disabled={pending}>{pending ? 'Sending…' : emailEnabled ? 'Send enquiry' : 'Write the email'} <ArrowRight size={20} /></button>
   </form>;
 }

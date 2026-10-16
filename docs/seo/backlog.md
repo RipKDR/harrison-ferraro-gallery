@@ -39,7 +39,7 @@ Already good (verified): robots allow all + sitemap with image entries; apex 308
 | 2 | H | S | No `/llms.txt` for AI answer engines | live 404 | done (cycle 2) |
 | 3 | M | S | Enquiry funnel events: only success fired | EnquiryForm.tsx | done (cycle 2b) |
 | 4 | M | S | Sitemap has no `lastmod` | sitemap.ts | done (cycle 2) |
-| 5 | M | S | AVIF not enabled | next.config | reverted (cycle 4): AVIF is 40% *larger* than WebP for these painterly textures at q=75 (947 kB vs 1,329 kB over 8 works) and ~5x the encode time. WebP is the better format here. |
+| 5 | M | S | AVIF not enabled | next.config | re-enabled (cycle 5): measured through Next 16.3.5's own optimiser, which encodes AVIF at q×50/80, AVIF is 47% smaller than WebP on the October photos. Cycle 4 had reverted it as 40% *larger* at q=75 (947 kB vs 1,329 kB over 8 works) with ~5x the encode time. |
 | 6 | L | S | 404 page inherits home og:url `/` | layout.tsx | dropped: 404 already serves `noindex`; not a ranking risk |
 | 7 | L | S | Breadcrumb JSON-LD crumb 2 -> `/#collection` fragment | jsonld.tsx | dropped: Google ignores fragments; changing to `/` would duplicate crumb 1 |
 | 8 | L | M | Non-descriptive source filenames | public/art | done (cycle 3) |
@@ -55,6 +55,7 @@ Already good (verified): robots allow all + sitemap with image entries; apex 308
 - cycle 2b: enquiry funnel `enquiry_view` (once, in-viewport) → `enquiry_submit` → `enquiry_success`/`enquiry_error` (reason) | verified in browser (work page + home modal), no dupes | next: filenames
 - cycle 3: 4 source photos renamed to slugs + 308 redirects, breadcrumb shows title, review fixes (view-once ref, seo-check slice) | 12 unique image URLs, redirects 308, all gates green | next: CTA fold
 - cycle 4: AVIF reverted (measured larger than WebP here); work-page enquiry CTA moved under the h1 | CTA on a 390px phone: 1,054 px -> 800 px, now inside the 844 px fold; home-mobile images 1,586 kB -> 681 kB vs main | next: off-site (no code items left above low)
+- cycle 5 (16 Oct, premium redesign): ten-work catalogue with new photos; AVIF+WebP re-enabled | `VERCEL=1` local `/_next/image?q=75` over all ten works: w=640 AVIF 575 kB vs WebP 1,088 kB; w=1080 AVIF 1,145 kB vs WebP 2,158 kB (47% smaller at both) | next: Lighthouse on the Vercel preview
 
 ## Final Lighthouse (branch, VERCEL=1 local, WebP, 28 Sep)
 

@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-/** ← / → move between work pages, unless the visitor is typing or a viewer dialog is open. */
+/** ← / → move between work pages, unless the visitor is typing. */
 export function WorkKeyboardNav({ previous, next }: { previous: string; next: string }) {
   const router = useRouter();
   useEffect(() => {
@@ -10,7 +10,7 @@ export function WorkKeyboardNav({ previous, next }: { previous: string; next: st
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
       if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
       const target = event.target as HTMLElement;
-      if (target.closest('input, textarea, select, [contenteditable]') || document.querySelector('dialog[open]')) return;
+      if (target.closest('input, textarea, select, [contenteditable]')) return;
       router.push(event.key === 'ArrowLeft' ? previous : next);
     }
     window.addEventListener('keydown', onKey);
