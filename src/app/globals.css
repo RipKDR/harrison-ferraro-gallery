@@ -36,7 +36,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .visually-hidden, .hp-field { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* Header: one for every page. */
-.site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px var(--gutter); }
+.site-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 18px var(--gutter); }
 .wordmark { font-family: var(--display); font-size: 25px; line-height: 1; text-decoration: none; }
 .wordmark span { display: block; font-style: italic; }
 .site-header nav { display: flex; gap: 18px; }
