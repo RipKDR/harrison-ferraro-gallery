@@ -22,7 +22,7 @@ export default function WorksPage() {
       <p>Original paintings in acrylic, charcoal and pastel on canvas. Prices are in Australian dollars.</p>
     </header>
     <div className="works-grid">
-      {artworks.map(work => <WorkCard key={work.slug} work={work} sizes="(max-width: 999px) 45vw, 22vw" />)}
+      {artworks.map((work, index) => <WorkCard key={work.slug} work={work} sizes="(max-width: 999px) 45vw, 22vw" eager={index < 2} />)}
     </div>
   </>;
 }
