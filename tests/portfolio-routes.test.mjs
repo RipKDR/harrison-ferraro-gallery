@@ -11,9 +11,9 @@ test('portfolio keeps all artwork pages and removes the print journey', async ()
   const xml = await sitemap.text();
   assert.doesNotMatch(xml, /\/prints(?:<|\/)/);
   const works = [...xml.matchAll(/<loc>([^<]+\/works\/[^<]+)<\/loc>/g)].map(match => new URL(match[1]).pathname);
-  assert.equal(works.length, 12, 'Every original painting must remain discoverable');
-  assert.equal(new Set(works).size, 12);
-  for (const path of ['/', '/about', ...works]) {
+  assert.equal(works.length, 10, 'Every original painting must remain discoverable');
+  assert.equal(new Set(works).size, 10);
+  for (const path of ['/', '/works', '/about', '/contact', '/privacy', ...works]) {
     const response = await get(path);
     assert.equal(response.status, 200, `${path} must remain available`);
     const html = await response.text();

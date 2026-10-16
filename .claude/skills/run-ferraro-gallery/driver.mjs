@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Headless-Chromium driver for ferraro.studio. Runs against an already running server (BASE).
 //
-//   node driver.mjs smoke            # every route, desktop + mobile screenshots, console errors, SSR checks
-//   node driver.mjs forms            # submit waitlist + enquiry on a work page, assert the captured email
+//   node driver.mjs smoke            # every route, desktop + mobile screenshots, console errors, sideways scroll
+//   node driver.mjs forms            # submit enquiry + studio list on a work page, assert the captured emails
 //   node driver.mjs shot <path> [--mobile] [--full]
 //   node driver.mjs repl [--mobile]  # stdin commands: nav/click/fill/select/press/wait/text/eval/shot/errors/quit
 //
@@ -45,7 +45,7 @@ async function openPage(browser, device) {
 }
 
 // Wait for eager images (lazy ones below the fold never complete headless and would stall 15 s)
-// plus a beat for the client-side canvas mapping, so screenshots are not blank.
+// plus a beat for fonts and layout, so screenshots are not blank.
 async function settle(page) {
   await page.waitForLoadState('load');
   await page.waitForFunction(() => [...document.querySelectorAll('img')].every(img => img.complete || img.loading === 'lazy'), null, { timeout: 15000 }).catch(() => {});
@@ -56,40 +56,37 @@ async function shot(browser, path, { mobile = false, full = false } = {}) {
   const { context, page, errors } = await openPage(browser, mobile ? MOBILE : DESKTOP);
   const response = await page.goto(BASE + path, { waitUntil: 'domcontentloaded' });
   await settle(page);
+  if (full) {
+    // Lazy images only load near the viewport: scroll the whole page first, then wait for every image.
+    await page.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += innerHeight / 2) { scrollTo(0, y); await new Promise(r => setTimeout(r, 120)); }
+      scrollTo(0, 0);
+    });
+    await page.waitForFunction(() => [...document.images].every(img => img.complete), null, { timeout: 15000 }).catch(() => {});
+  }
   const file = join(SHOTS, `${slug(path)}-${mobile ? 'mobile' : 'desktop'}${full ? '-full' : ''}.png`);
   await page.screenshot({ path: file, fullPage: full });
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
   await context.close();
-  return { status: response?.status(), file, errors };
+  return { status: response?.status(), file, errors, overflow };
 }
 
 async function smoke(browser) {
   const sitemap = await (await fetch(`${BASE}/sitemap.xml`)).text();
   const workPaths = [...sitemap.matchAll(/<loc>https?:\/\/[^<]+?(\/works\/[^<]+)<\/loc>/g)].map(m => m[1]);
   check(workPaths.length > 0, `sitemap lists work pages (${workPaths.length})`);
-  const routes = ['/', '/about', ...workPaths.slice(0, 2)];
+  const routes = ['/', '/works', '/about', '/contact', '/privacy', ...workPaths.slice(0, 2)];
   for (const path of routes) {
     for (const mobile of [false, true]) {
-      const { status, file, errors } = await shot(browser, path, { mobile });
-      check(status === 200, `${path} ${mobile ? 'mobile' : 'desktop'} -> ${status} (${file})`);
-      check(errors.length === 0, `${path} ${mobile ? 'mobile' : 'desktop'} console clean${errors.length ? `: ${errors.slice(0, 3).join(' | ')}` : ''}`);
+      const { status, file, errors, overflow } = await shot(browser, path, { mobile });
+      const label = `${path} ${mobile ? 'mobile' : 'desktop'}`;
+      check(status === 200, `${label} -> ${status} (${file})`);
+      check(errors.length === 0, `${label} console clean${errors.length ? `: ${errors.slice(0, 3).join(' | ')}` : ''}`);
+      check(overflow <= 0, `${label} no sideways scroll${overflow > 0 ? ` (${overflow}px too wide)` : ''}`);
     }
   }
   const missing = await shot(browser, '/works/does-not-exist');
   check(missing.status === 404, `unknown work -> ${missing.status}`);
-
-  // Home: open a work in the modal, then check the hash link and Escape close.
-  const { context, page, errors } = await openPage(browser, DESKTOP);
-  await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
-  await settle(page);
-  await page.locator('.marker-0').click();
-  await page.locator('dialog[open]').waitFor({ timeout: 5000 });
-  check(/#work-\d+/.test(page.url()), `modal sets artwork hash (${page.url()})`);
-  await page.screenshot({ path: join(SHOTS, 'home-modal-desktop.png') });
-  await page.keyboard.press('Escape');
-  await page.waitForTimeout(300);
-  check(await page.locator('dialog[open]').count() === 0, 'Escape closes the artwork dialog');
-  check(errors.length === 0, `home interaction console clean${errors.length ? `: ${errors.join(' | ')}` : ''}`);
-  await context.close();
 }
 
 function captured() {
@@ -106,7 +103,6 @@ async function forms(browser) {
   const emailMode = await page.locator('button:has-text("Send enquiry")').count() > 0;
   console.log(`form mode: ${emailMode ? 'email service (server action)' : 'mailto fallback (no RESEND_API_KEY/ENQUIRY_TO_EMAIL at server start)'}`);
   if (!emailMode) {
-    check(await page.locator('.waitlist-form a.waitlist-mailto').count() === 1, 'waitlist falls back to a mailto link');
     check(await page.locator('.studio-list a.waitlist-mailto').count() === 1, 'studio list falls back to a mailto link');
     await context.close();
     return;
@@ -114,16 +110,10 @@ async function forms(browser) {
   const before = captured().length;
   await page.waitForTimeout(HUMAN_DELAY_MS);
 
-  await page.locator('.waitlist-form input[type=email]').fill('collector@example.com');
-  await page.locator('.waitlist-form button[type=submit]').click();
-  const waitlist = page.locator('.waitlist-form [role=status], .waitlist-form [role=alert]');
-  await waitlist.first().waitFor({ timeout: 10000 });
-  const waitlistText = (await waitlist.first().innerText()).trim();
-  check(/on the list/.test(waitlistText), `waitlist result: ${waitlistText}`);
-
   const form = page.locator('#enquire form');
   await form.locator('input[name=name]').fill('Driver Test');
   await form.locator('input[name=email]').fill('collector@example.com');
+  await form.locator('.delivery-options summary').click();
   await form.locator('input[name=country]').fill('Australia');
   await form.locator('input[name=postcode]').fill('3000');
   await form.locator('textarea[name=message]').fill('Smoke test enquiry from the run-ferraro-gallery driver.');
@@ -144,8 +134,11 @@ async function forms(browser) {
   check(/studio list/.test(studioText), `studio list result: ${studioText}`);
 
   const sent = captured().slice(before).filter(entry => entry.path === '/emails');
-  check(sent.length === 3, `mock Resend received ${sent.length} email(s) (expect waitlist + enquiry + studio list)`);
-  for (const entry of sent) console.log(`  -> ${entry.body.subject}  [replyTo ${entry.body.replyTo ?? entry.body.reply_to}]`);
+  check(sent.length === 2, `mock Resend received ${sent.length} email(s) (expect enquiry + studio list)`);
+  for (const entry of sent) console.log(`  -> ${entry.body.subject}  [to ${entry.body.to}, replyTo ${entry.body.replyTo ?? entry.body.reply_to}]`);
+  // The form is open to anyone, so nothing may ever be addressed to the visitor's (unverified) address.
+  check(sent.every(entry => !/collector@|fan@/.test(JSON.stringify(entry.body.to))), 'every email goes to the studio only, never to the visitor');
+  check(!captured().slice(before).some(entry => entry.path.startsWith('/contacts')), 'no visitor is added to a Resend contact list');
   check(errors.length === 0, `forms console clean${errors.length ? `: ${errors.join(' | ')}` : ''}`);
   await context.close();
 }
@@ -178,7 +171,8 @@ async function repl(browser, mobile) {
 }
 
 const [command = 'smoke', ...rest] = process.argv.slice(2);
-const browser = await chromium.launch({ args: ['--no-sandbox'] });
+// PW_CHANNEL=chrome uses an installed Google Chrome when Playwright's own Chromium is not downloaded.
+const browser = await chromium.launch({ args: ['--no-sandbox'], channel: process.env.PW_CHANNEL });
 try {
   if (command === 'smoke') await smoke(browser);
   else if (command === 'forms') await forms(browser);

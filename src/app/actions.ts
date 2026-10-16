@@ -1,6 +1,6 @@
 'use server';
 import { headers } from 'next/headers';
-import { artworks, artworkTitle } from '../artworks';
+import { artworkBySlug, artworkPath, artworkPrice } from '../artworks';
 import { emailConfig, headerSafe } from '../lib/email';
 import { EMAIL_PATTERN, type EnquiryValues, type FormState, GENERAL, ELAPSED, HONEYPOT, INTERESTS, type StudioListValues } from '../lib/forms';
 import { rateLimit } from '../lib/rate-limit';
@@ -25,12 +25,10 @@ function looksAutomated(data: FormData) {
   return Number.isFinite(elapsed) && elapsed >= 0 && elapsed < MIN_FILL_MS;
 }
 
-const findArtwork = (id: string) => artworks.find(work => work.id === id);
-
 export async function submitEnquiry(_previous: FormState<EnquiryValues>, data: FormData): Promise<FormState<EnquiryValues>> {
   const values: EnquiryValues = {
     interest: text(data, 'interest', 40),
-    artwork: text(data, 'artwork', 20),
+    artwork: text(data, 'artwork', 60),
     name: text(data, 'name', 100),
     email: text(data, 'email', 254),
     country: text(data, 'country', 100),
@@ -42,7 +40,7 @@ export async function submitEnquiry(_previous: FormState<EnquiryValues>, data: F
 
   const fieldErrors: FormState<EnquiryValues>['fieldErrors'] = {};
   if (!INTERESTS.includes(values.interest as (typeof INTERESTS)[number])) fieldErrors.interest = 'Choose what you are interested in.';
-  if (values.artwork !== GENERAL && !findArtwork(values.artwork)) fieldErrors.artwork = 'Choose an artwork.';
+  if (values.artwork !== GENERAL && !artworkBySlug(values.artwork)) fieldErrors.artwork = 'Choose an artwork.';
   if (!values.name) fieldErrors.name = 'Enter your name.';
   if (!EMAIL_PATTERN.test(values.email)) fieldErrors.email = 'Enter a valid email address.';
   if (values.message.length < 2) fieldErrors.message = 'Write a short message.';
@@ -58,37 +56,29 @@ export async function submitEnquiry(_previous: FormState<EnquiryValues>, data: F
     return { status: 'error', message: 'Enquiries cannot be sent from the website right now.', values, submission };
   }
 
-  const work = findArtwork(values.artwork);
-  const workLine = work ? `${artworkTitle(work)} (ref. ${work.number})\n${absoluteUrl(`/works/${work.slug}`)}` : 'General enquiry';
+  const work = artworkBySlug(values.artwork);
+  const workLine = work ? `${work.title}, ${artworkPrice(work)}\n${absoluteUrl(artworkPath(work))}` : 'General enquiry';
   const destination = [values.country, values.postcode].filter(Boolean).join(', ') || 'Not supplied';
   const { error } = await config.resend.emails.send({
     from: config.from,
     to: config.to,
     replyTo: values.email,
-    subject: headerSafe(`${values.interest}: ${work ? artworkTitle(work) : 'general enquiry'} — from ${values.name}`),
+    subject: headerSafe(`${values.interest}: ${work ? work.title : 'general enquiry'} — from ${values.name}`),
     text: `New enquiry from ferraro.studio\n\nInterest: ${values.interest}\nWork: ${workLine}\nDestination: ${destination}\nFrom: ${values.name} <${values.email}>\n\n${values.message}\n\nReply to this email to respond directly.`,
   });
   if (error) {
     console.error('Enquiry email failed', error.name, error.message);
     return { status: 'error', message: 'Your enquiry could not be sent. Please try again in a moment.', values, submission };
   }
-  // Receipt for the visitor, so they know it arrived. Fixed text only: echoing visitor-typed fields would let
-  // anyone relay arbitrary content to any address through this form. Best effort: never fails the enquiry.
-  const receipt = await config.resend.emails.send({
-    from: config.from,
-    to: values.email,
-    replyTo: config.to,
-    subject: headerSafe(`Your enquiry${work ? ` about ${artworkTitle(work)}` : ''}`),
-    text: `Hello,\n\nThanks for getting in touch. Your enquiry reached Harrison and he will reply to this address.\n\n${work ? `${workLine}\n\n` : ''}If you didn't send this, you can ignore this email.\n\nHarrison Ferraro\n${absoluteUrl('/')}`,
-  }).catch((e: Error) => ({ error: e }));
-  if (receipt.error) console.warn('Enquiry receipt not sent', receipt.error.message);
+  // No receipt to the visitor: the address is unverified, so mailing it would let anyone use this form
+  // to send mail to any inbox. The only recipient is the studio.
   return { status: 'success', values: { email: values.email, interest: values.interest, artwork: values.artwork }, submission };
 }
 
 /**
  * General studio list (new work and studio news) for visitors not yet asking about a
- * specific painting. Harry is notified of each sign-up, and the
- * address joins RESEND_STUDIO_LIST_SEGMENT_ID when set so a broadcast (with unsubscribe) can be sent.
+ * specific painting. Harry is notified of each sign-up, with reply-to set to the visitor.
+ * The address is unverified, so it is never added to a mailing list automatically.
  */
 export async function joinStudioList(_previous: FormState<StudioListValues>, data: FormData): Promise<FormState<StudioListValues>> {
   const values: StudioListValues = { email: text(data, 'email', 254) };
@@ -104,18 +94,12 @@ export async function joinStudioList(_previous: FormState<StudioListValues>, dat
     return { status: 'error', message: 'Sign-ups are unavailable right now. Please try again later.', values, submission };
   }
 
-  let segmentNote = 'No Resend segment configured (RESEND_STUDIO_LIST_SEGMENT_ID).';
-  if (config.studioListSegmentId) {
-    const { error } = await config.resend.contacts.create({ email: values.email, segments: [{ id: config.studioListSegmentId }] });
-    segmentNote = error ? `Not added to the segment (${error.name}: ${error.message}).` : 'Added to the studio list segment.';
-    if (error) console.warn('Studio list contact not created', error.name, error.message);
-  }
   const { error } = await config.resend.emails.send({
     from: config.from,
     to: config.to,
     replyTo: values.email,
     subject: headerSafe(`Studio list: ${values.email}`),
-    text: `New studio list sign-up on ferraro.studio\n\nEmail: ${values.email}\n\n${segmentNote}`,
+    text: `New studio list sign-up on ferraro.studio\n\nEmail: ${values.email}\n\nThis address is unverified. Reply to confirm before adding it to any mailing list.`,
   });
   if (error) {
     console.error('Studio list notification failed', error.name, error.message);

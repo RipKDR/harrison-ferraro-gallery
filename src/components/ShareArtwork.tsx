@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Check, ShareNetwork } from '@phosphor-icons/react';
-import { type Artwork, artworkPath, artworkTitle } from '../artworks';
+import { type Artwork, artworkPath } from '../artworks';
 import { artworkProperties, trackEvent } from '../lib/analytics';
 import { absoluteUrl, SITE_NAME } from '../lib/site';
 
@@ -13,7 +13,7 @@ export function ShareArtwork({ work }: { work: Artwork }) {
   async function share() {
     if (typeof navigator.share === 'function' && window.matchMedia('(pointer: coarse)').matches) {
       try {
-        await navigator.share({ title: `${artworkTitle(work)} — ${SITE_NAME}`, url });
+        await navigator.share({ title: `${work.title} — ${SITE_NAME}`, url });
         trackEvent('artwork_share', { ...artworkProperties(work), method: 'native' });
         return;
       } catch (error) {
@@ -31,7 +31,7 @@ export function ShareArtwork({ work }: { work: Artwork }) {
   }
 
   return <>
-    <button type="button" className="subtle-action" onClick={share}>
+    <button type="button" className="text-button" onClick={share}>
       {state === 'copied' ? <Check size={17} /> : <ShareNetwork size={17} />} {state === 'copied' ? 'Link copied' : 'Share this work'}
     </button>
     {state === 'failed' && <p className="small-note" role="status">Copy the address from your browser to share this work.</p>}

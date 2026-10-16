@@ -15,3 +15,8 @@ dist/
 .cursor
 .agents
 .claude
+.no-amnesia/
+.governor/
+.solofounder/
+.sixth-sense/
+.codex/

@@ -1,24 +1,18 @@
+'use client';
 import Link from 'next/link';
-import { CompactHeader } from './CompactHeader';
+import { usePathname } from 'next/navigation';
 
-// Masthead for standalone pages; the home page keeps its own panel-driven masthead.
+const links = [['/works', 'Works'], ['/about', 'About'], ['/contact', 'Enquire']] as const;
+
 export function SiteHeader() {
-  return (<>
-    <header className="masthead masthead-static">
-      <Link className="wordmark" href="/" aria-label="Harrison Ferraro home">HARRISON<br />FERRARO</Link>
-      <nav aria-label="Main navigation">
-        <Link href="/#collection">Works</Link>
-        <Link href="/about">About</Link>
-        <Link className="nav-enquire" href="/about#enquire">Enquire</Link>
-      </nav>
-    </header>
-    <CompactHeader>
-      <Link className="compact-wordmark" href="/">HARRISON FERRARO</Link>
-      <nav aria-label="Quick navigation">
-        <Link href="/#collection">Works</Link>
-        <Link href="/about">About</Link>
-        <Link className="nav-enquire" href="/about#enquire">Enquire</Link>
-      </nav>
-    </CompactHeader>
-  </>);
+  const path = usePathname();
+  return <header className="site-header">
+    <Link className="wordmark" href="/">Harrison <span>Ferraro</span></Link>
+    <nav aria-label="Main">
+      {links.map(([href, label]) => (
+        <Link key={href} href={href} className={href === '/contact' ? 'nav-enquire' : undefined}
+          aria-current={path === href ? 'page' : path.startsWith(`${href}/`) ? 'true' : undefined}>{label}</Link>
+      ))}
+    </nav>
+  </header>;
 }

@@ -4,18 +4,18 @@ import { InstagramLink } from './InstagramLink';
 import { StudioListForm } from './StudioListForm';
 
 export function SiteFooter({ emailEnabled }: { emailEnabled: boolean }) {
-  return (<>
+  return <footer className="site-footer">
     <StudioListForm emailEnabled={emailEnabled} />
-    <footer className="site-footer">
-      <div className="footer-meta"><span>Harrison Ferraro</span><span>Melbourne, Australia</span></div>
-      <nav className="footer-links" aria-label="Footer navigation">
-        <Link href="/#collection">Works</Link>
+    <div className="footer-base">
+      <p>Harrison Ferraro · Melbourne, Australia</p>
+      <nav aria-label="Footer">
+        <Link href="/works">Works</Link>
         <Link href="/about">About</Link>
-        <Link href="/about#enquire">Enquire</Link>
+        <Link href="/contact">Enquire</Link>
         <InstagramLink placement="footer">Instagram <ArrowUpRight size={16} /></InstagramLink>
+        <Link href="/privacy">Privacy</Link>
       </nav>
-      <div className="footer-wordmark" aria-hidden="true">FERRARO</div>
-      <p>© {new Date().getFullYear()} Harrison Ferraro. All rights reserved.</p>
-    </footer>
-  </>);
+      <p>© {new Date().getFullYear()} Harrison Ferraro</p>
+    </div>
+  </footer>;
 }

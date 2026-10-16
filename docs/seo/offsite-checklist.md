@@ -14,8 +14,7 @@ enquiry invitation, no keyword stuffing, no fake facts, original photos only.
    carries `lastmod` and image entries, so image results can be picked up. 2 min.
 4. **URL inspection → Request indexing** for the 3 featured works (highest-value pages):
    `https://www.ferraro.studio/works/over-the-shoulder`, `/works/figure-in-rose`, `/works/figure-with-a-skull`. 5 min.
-5. **Fix what it reports first** (expect some): "Alternate page with proper canonical" for `/#collection` links
-   is harmless; real issues are the ones the `npm run seo:check` gate lists. 20–60 min depending on count.
+5. **Fix what it reports first** (expect some). The old `/#collection` home anchor is gone; the collection is `/works`. Real issues are the ones the `npm run seo:check` gate lists. 20–60 min depending on count.
 6. **Weekly habit (5 min/week)**: Performance → Core Web Vitals; Pages → the pages with impressions but no
    clicks. This is where to judge the loop's effect.
 

@@ -4,11 +4,11 @@ import { join } from 'node:path';
 
 const font = readFile(join(process.cwd(), 'node_modules/@fontsource/bodoni-moda/files/bodoni-moda-latin-900-normal.woff'));
 
-// Typographic "HF" monogram in the site's Bodoni Moda on the gallery black. No artwork imagery.
+// Typographic "HF" monogram on the gallery black. No artwork imagery. Bodoni Moda because Satori cannot read the site's woff2 fonts.
 export async function renderMonogram(size: number) {
   return new ImageResponse(
     (
-      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#101010', color: '#eeeae4', fontFamily: 'Bodoni Moda', fontSize: size * 0.5, letterSpacing: '0.04em', paddingTop: size * 0.03 }}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0b0a09', color: '#ece5d8', fontFamily: 'Bodoni Moda', fontSize: size * 0.5, letterSpacing: '0.04em', paddingTop: size * 0.03 }}>
         HF
       </div>
     ),

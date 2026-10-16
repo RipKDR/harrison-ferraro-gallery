@@ -1,64 +1,42 @@
 ---
 name: ferraro-catalogue
-description: Update the ferraro.studio artwork catalogue in src/artworks.ts. Use when Harry confirms a title, medium, dimensions, year, availability or price; when adding a new painting or photo; when changing the featured three works; or when asked what artwork facts are still missing (TODO(harry)).
+description: Update the ferraro.studio artwork catalogue in src/artworks.ts. Use when Harry confirms or changes a title, price, size, medium, year or availability; when adding or removing a painting or photo; when changing which work leads the home page; or when asked what artwork facts are still missing (TODO(harry)).
 ---
 
 # Catalogue changes (`src/artworks.ts`)
 
-`src/artworks.ts` holds every artwork. A work page, sitemap entry, OG image, alt text and JSON-LD are all generated from one record. Paths are relative to the repo root.
+`src/artworks.ts` holds every artwork in display order. A work page, its `/works` card, sitemap entry, share card, alt text, JSON-LD, `llms.txt` line and enquiry email all come from one record. Paths are relative to the repo root.
 
 ## Rules (from CLAUDE.md and AGENTS.md; not negotiable)
 
-- **Only enter facts Harry has confirmed in writing in this conversation or in a linked message.** Never estimate medium, size, year, availability or price. A missing field stays missing and is listed as `TODO(harry)` in the PR.
-- Changing `price` or `availability` needs his explicit approval in the PR description.
-- Never change `id`, `slug` or `number` on an existing work. They are used in shared links, enquiry emails and analytics. When a confirmed title differs from the label, set `facts.title` and keep the slug.
-- Use original photos only. Don't add AI-generated, repainted or cropped derivative image files. Perspective correction is done at runtime from `corners`.
+- **Only enter facts Harry has confirmed in writing in this conversation or in a linked message.** Never estimate medium, size, year, availability or price. A missing fact stays missing and is listed as `TODO(harry)` in the PR.
+- Changing `price` or availability needs his explicit approval in the PR description.
+- Never change a `slug`. It is the URL, the photo file name, the enquiry form value and the analytics key. When a title changes, change `title` only. If a slug ever has to move, add the old one to `movedWorks` in `next.config.mjs` so the old URL permanently redirects (308).
+- Photos are the original photograph cropped to the canvas edge, nothing else: no repainting, no generated detail, no upscaling. `width` and `height` must equal the file's pixel size, because a painting is never displayed larger than that.
 
-## Confirm facts for an existing work
+## What a record holds
 
-Edit the `facts` map near the top of `src/artworks.ts`:
+Each `entries` item sets `slug`, `title`, `price` (whole AUD), `width`, `height` (photo pixels) and `description` (one factual visual sentence, used in alt text). The `artworks` map adds the facts all ten share: year 2026, "Acrylic, charcoal and pastel on canvas", available, and 60 × 90 cm (90 × 60 for the landscape work). The photo path is always `/art/<slug>-web.jpg`.
 
-```ts
-'work-10':{medium:'Oil on canvas',widthCm:60,heightCm:90,year:'2026',availability:'available',price:'Price on request'},
-```
-
-Fields are `title`, `medium`, `widthCm`, `heightCm`, `depthCm`, `year` (string), `availability` (`'available' | 'reserved' | 'sold'`) and `price` (free text, e.g. `'Price on request'`).
-
-The same edit updates these places automatically (verified on a throwaway build):
-- The work page `<dl>` rows for Medium, Dimensions (rendered `H × W cm`), Year, Availability and Price.
-- The alt text, e.g. `"… — oil on canvas by Harrison Ferraro: …"`.
-- The `VisualArtwork` JSON-LD fields `artMedium` and `dateCreated`, plus width and height in `CMT`.
-- The TODO(harry) list in the SEO audit, which drops the fields you filled.
-
-One place is **not** updated: the home-page artwork modal (`src/Home.tsx`). It always shows "Acquisition: Enquire for details" and ignores `facts`.
+When one work differs from the shared facts (for example it sells), add that field to the `Entry` type as optional and spread `...entry` after the shared defaults so it wins. `available: false` already renders as "Sold" in place of the price on cards, the home label and the work page.
 
 ## Add a new work
 
-1. Copy the original photo into `public/art/<kebab-name>.jpg`. Read its pixel size:
+1. Crop the original photo to the canvas edge and save it as `public/art/<slug>-web.jpg` (JPEG). Read its pixel size:
    ```bash
-   node -e "require('sharp')('public/art/figure-in-grey.jpg').metadata().then(m=>console.log(m.width,m.height,m.format))"
+   node -e "require('sharp')('public/art/<slug>-web.jpg').metadata().then(m=>console.log(m.width,m.height))"
    ```
-2. Add **both** of the following. Missing either one breaks the build.
-   - A `facts` key: `'work-13':{},`.
-   - A `catalogue` entry with these fields:
-     - `id`: the next `work-NN`.
-     - `slug`: kebab-case of the label.
-     - `number`: `'NN'`.
-     - `label`: a descriptive working title.
-     - `description`: one factual visual sentence.
-     - `src`, `width`, `height`: from step 1.
-     - `ratio`: the painting's width ÷ height. Use the confirmed dimensions when you have them; otherwise estimate from the corners.
-     - `corners`: the photographed canvas's TL, TR, BR and BL corners as 0–1 fractions of the photo. Record the mapping in `docs/catalogue-preparation.json` as well.
-3. The featured three are set by `featuredIds` (currently `work-10`, `work-11`, `work-12`, in that order, per AGENTS.md). The 3D gallery must stay at exactly three works. Change that list only when asked.
-4. Build, audit and screenshot. Check that the crop looks right in the screenshot; if it doesn't, adjust `corners`.
+2. Add an `entries` item. Its position is its display order: the first work leads the home opening, the next six are the scroll rooms, and `/works` shows them all.
+3. Bump `CONTENT_UPDATED` in `src/lib/site.ts`, then update the expected count in `tests/portfolio-routes.test.mjs`.
+4. Build, check and screenshot:
    ```bash
    npm run typecheck && .claude/skills/run-ferraro-gallery/serve.sh prod
-   node .claude/skills/ferraro-seo-audit/audit.mjs      # expect the new /works/<slug> page and 0 fail
+   npm run seo:check
    node .claude/skills/run-ferraro-gallery/driver.mjs shot /works/<slug> --mobile
    ```
 
 ## Gotchas
 
-- **`tsc` passes but `next build` fails when a work has no `facts` key.** `facts` is a `Record<string, ArtworkFacts>` and `noUncheckedIndexedAccess` is off, so `facts['work-13']` type-checks as defined. At build time it is `undefined`, and the build fails with `TypeError: Cannot read properties of undefined (reading 'title')` at `artworkTitle`, reported as "Failed to collect page data for /about". Always run the build, not just the typecheck.
-- **`red-smoke.png` (work-01) is 5.6 MB.** It is the only PNG. It is served as-is in the sitemap image and, outside Vercel, to the page (`images.unoptimized` is on unless `VERCEL` is set). Prefer JPEG for new photos.
-- `artworks` (catalogue order with the featured works first) is the order used by the index, the sitemap, the previous/next links and the "More works" section. Adding a work changes the neighbours of the works around it.
+- **A wrong `width`/`height` fails silently.** Nothing checks the record against the file; too large and the photo is upscaled, wrong ratio and it is squashed. Re-run the `sharp` one-liner for every photo you touch.
+- `artworks` order is the order of the home page, `/works`, the sitemap, previous/next links and related works. Adding or moving a work changes its neighbours' pages.
+- Outside Vercel `images.unoptimized` is on, so local builds serve the JPEG as-is. Keep files at their native size; don't add a larger copy for "quality".

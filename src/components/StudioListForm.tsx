@@ -9,7 +9,7 @@ import { FALLBACK_CONTACT_EMAIL } from '../lib/site';
 const initialState: FormState<StudioListValues> = { status: 'idle' };
 
 /**
- * General studio list shown above the footer on every page. `emailEnabled` comes from the server;
+ * General studio list in the footer of every page. `emailEnabled` comes from the server;
  * without Resend the visitor asks to be added by email instead.
  */
 export function StudioListForm({ emailEnabled }: { emailEnabled: boolean }) {
@@ -21,9 +21,8 @@ export function StudioListForm({ emailEnabled }: { emailEnabled: boolean }) {
   useEffect(() => { if (state.status === 'success') trackEvent('studio_list_join', { method: 'email_service' }); }, [state]);
 
   const heading = <div className="studio-list-copy">
-    <span className="eyebrow">From the studio</span>
-    <h2 id={`${id}-title`}>New work, first.</h2>
-    <p>Occasional notes on new paintings and news from the studio.</p>
+    <h2 id={`${id}-title`}>New paintings, by email</h2>
+    <p>An occasional email when new paintings are finished.</p>
   </div>;
 
   if (!emailEnabled) {

@@ -10,10 +10,12 @@ PORT=${PORT:-4180}
 MOCK_PORT=${MOCK_PORT:-4199}
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# lsof does not see listeners in this container; fuser does, and netstat where fuser is not installed.
+listeners() { netstat -ltnp 2>/dev/null | awk -v re=":($PORT|$MOCK_PORT)\$" '$4 ~ re { split($7, a, "/"); print a[1] }'; }
 stop() {
-  # lsof does not see listeners in this container; fuser does.
-  fuser -k "$PORT/tcp" "$MOCK_PORT/tcp" >/dev/null 2>&1 || true
-  for _ in $(seq 20); do fuser "$PORT/tcp" >/dev/null 2>&1 || break; sleep 0.25; done
+  fuser -k "$PORT/tcp" "$MOCK_PORT/tcp" >/dev/null 2>&1 || listeners | xargs -r kill 2>/dev/null || true
+  for _ in $(seq 40); do fuser "$PORT/tcp" >/dev/null 2>&1 || [ -n "$(listeners)" ] || return 0; sleep 0.25; done
+  listeners | xargs -r kill -9 2>/dev/null || true
 }
 
 wait_up() {
@@ -38,8 +40,9 @@ case "${1:-prod}" in
   prod-email)
     stop
     nohup node "$HERE/mock-resend.mjs" --port "$MOCK_PORT" ${MOCK_FAIL:+--fail} >/tmp/ferraro-mock-resend.log 2>&1 &
+    # The segment is set as production may have it; driver.mjs forms checks no contact is created anyway.
     export RESEND_BASE_URL="http://127.0.0.1:$MOCK_PORT" RESEND_API_KEY=re_local_mock \
-      ENQUIRY_TO_EMAIL=harry@example.com RESEND_PRINT_WAITLIST_SEGMENT_ID=seg_local_mock
+      ENQUIRY_TO_EMAIL=harry@example.com RESEND_STUDIO_LIST_SEGMENT_ID=seg_local_mock
     npm run build >/tmp/ferraro-build.log 2>&1 || { tail -30 /tmp/ferraro-build.log; exit 1; }
     nohup node_modules/.bin/next start --port "$PORT" >/tmp/ferraro-server.log 2>&1 &
     wait_up ;;

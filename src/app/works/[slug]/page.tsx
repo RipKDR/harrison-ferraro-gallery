@@ -1,18 +1,16 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight, ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
-import { artworkBySlug, artworkFactRows, artworkPath, artworks, artworkTitle, artworkUnconfirmed } from '../../../artworks';
+import { ArrowLeft, ArrowRight } from '@phosphor-icons/react/dist/ssr';
+import { artworkBySlug, artworkPath, artworkPrice, artworks, artworkSize } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
-import { ArtworkViewer } from '../../../components/ArtworkViewer';
 import { EnquiryForm } from '../../../components/EnquiryForm';
-import { isEmailConfigured } from '../../../lib/email-status';
-import { TrackArtworkView } from '../../../components/TrackArtworkView';
 import { ShareArtwork } from '../../../components/ShareArtwork';
+import { TrackArtworkView } from '../../../components/TrackArtworkView';
+import { WorkCard } from '../../../components/WorkCard';
 import { WorkKeyboardNav } from '../../../components/WorkKeyboardNav';
-import { SiteHeader } from '../../../components/SiteHeader';
+import { isEmailConfigured } from '../../../lib/email-status';
 import { breadcrumbJsonLd, JsonLd, visualArtworkJsonLd } from '../../../lib/jsonld';
-import { SiteFooter } from '../../../components/SiteFooter';
 import { SITE_NAME } from '../../../lib/site';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -26,8 +24,8 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const work = artworkBySlug((await params).slug);
   if (!work) return {};
-  const title = artworkTitle(work);
-  const description = `${work.description} A painting by Melbourne artist ${SITE_NAME}.`;
+  const title = work.title;
+  const description = `${work.title} (${work.year}), an original painting by ${SITE_NAME}. ${work.medium}, ${artworkSize(work)}. ${work.available ? `Available, ${artworkPrice(work)}.` : 'Sold.'}`;
   const url = artworkPath(work);
   return {
     title,
@@ -44,60 +42,46 @@ export default async function WorkPage({ params }: Props) {
   const index = artworks.indexOf(work);
   const previous = artworks[(index - 1 + artworks.length) % artworks.length];
   const next = artworks[(index + 1) % artworks.length];
-  // Next three works in catalogue order, wrapping around: stable internal links between every page.
   const related = [1, 2, 3].map(offset => artworks[(index + offset) % artworks.length]);
-  const emailEnabled = isEmailConfigured();
-  const facts: [string, string][] = [['Artist', SITE_NAME], ['Reference', `No. ${work.number}`], ...artworkFactRows(work)];
-  const unconfirmed = artworkUnconfirmed(work);
-  return (
-    <div className="site work-page">
-      <JsonLd data={visualArtworkJsonLd(work)} />
-      <JsonLd data={breadcrumbJsonLd(work)} />
-      <TrackArtworkView slug={work.slug} source="page" />
-      <WorkKeyboardNav previous={artworkPath(previous)} next={artworkPath(next)} />
-      <a className="skip-link" href="#main">Skip to the artwork</a>
-      <SiteHeader />
-      <main id="main">
-        <article className="work-layout">
-          <div className="work-photo-area">
-            <ArtworkViewer work={work} />
-          </div>
-          <div className="work-info">
-            <nav className="eyebrow breadcrumb" aria-label="Breadcrumb"><Link href="/">Harrison Ferraro</Link> / <Link href="/#collection">Works</Link> / <span aria-current="page">{artworkTitle(work)}</span></nav>
-            <h1>{artworkTitle(work)}</h1>
-            {/* CTA directly under the title: on a 390px phone the fact list pushed it ~210px below the fold. */}
-            <a className="solid-action" href="#enquire">Enquire about the original <ArrowRight size={22} /></a>
-            <p>{work.description}</p>
-            <dl>{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
-            {unconfirmed && <p className="small-note">{work.facts.title ? '' : 'Descriptive working title. '}Please enquire for the confirmed details, price and availability.</p>}
-            <p className="collector-note">A direct conversation with Harrison. Ask about the painting, request further details, or include your destination for a delivery quote.</p>
-            <ShareArtwork work={work} />
-            <nav className="work-pagination" aria-label="More works">
-              <Link href={artworkPath(previous)} aria-label={`Previous work: ${artworkTitle(previous)}`}><ArrowLeft size={18} /> Previous</Link>
-              <Link href="/#collection">All works</Link>
-              <Link href={artworkPath(next)} aria-label={`Next work: ${artworkTitle(next)}`}>Next <ArrowRight size={18} /></Link>
-            </nav>
-          </div>
-        </article>
-        <section className="enquiry-content work-enquiry" id="enquire" aria-labelledby="enquire-title">
-          <span className="eyebrow">A conversation about art</span>
-          <h2 id="enquire-title">Enquire about {artworkTitle(work)}</h2>
-          <p className="enquiry-notice">{emailEnabled ? 'Send your enquiry below and Harrison will reply to you by email.' : 'Write your enquiry below and it opens, ready to send, in your email app.'}</p>
-          <EnquiryForm artworkId={work.id} emailEnabled={emailEnabled} />
-        </section>
-        <section className="collection-section more-works" aria-labelledby="more-works-title">
-          <div className="section-heading"><div><span className="eyebrow">The collection</span><h2 id="more-works-title">More works.</h2></div><p><Link href="/#collection">See all {artworks.length} works</Link></p></div>
-          <div className="collection-grid">
-            {related.map(other => (
-              <article className="collection-item" key={other.id}>
-                <Link className="collection-image" href={artworkPath(other)} aria-label={`View artwork: ${artworkTitle(other)}`}><ArtworkImage work={other} sizes="(max-width: 700px) 45vw, 30vw" /><span className="view-art">View artwork <ArrowUpRight size={20} /></span></Link>
-                <div className="collection-caption"><h3><Link href={artworkPath(other)}>{artworkTitle(other)}</Link></h3></div>
-              </article>
-            ))}
-          </div>
-        </section>
-      </main>
-      <SiteFooter emailEnabled={emailEnabled} />
-    </div>
-  );
+  return <>
+    <JsonLd data={visualArtworkJsonLd(work)} />
+    <JsonLd data={breadcrumbJsonLd(work)} />
+    <TrackArtworkView slug={work.slug} />
+    <WorkKeyboardNav previous={artworkPath(previous)} next={artworkPath(next)} />
+    <article className="work">
+      <div className="stage spot">
+        <ArtworkImage work={work} eager sizes="(max-width: 999px) 100vw, 50vw" />
+      </div>
+      <div className="label work-label">
+        <h1>{work.title}</h1>
+        <p className="price">{work.available ? `${artworkPrice(work)} · Available` : 'Sold'}</p>
+        <a className="button" href="#enquire">Enquire about this painting <ArrowRight size={20} /></a>
+        <dl>
+          <div><dt>Year</dt><dd>{work.year}</dd></div>
+          <div><dt>Medium</dt><dd>{work.medium}</dd></div>
+          <div><dt>Size</dt><dd>{artworkSize(work)}</dd></div>
+        </dl>
+        <p className="description">{work.description}</p>
+        <ShareArtwork work={work} />
+        <nav className="pager" aria-label="More paintings">
+          <Link href={artworkPath(previous)} aria-label={`Previous painting: ${previous.title}`}><ArrowLeft size={18} /> Previous</Link>
+          <Link href="/works">All works</Link>
+          <Link href={artworkPath(next)} aria-label={`Next painting: ${next.title}`}>Next <ArrowRight size={18} /></Link>
+        </nav>
+      </div>
+    </article>
+    <section className="enquire" id="enquire" aria-labelledby="enquire-title">
+      <div className="enquire-head">
+        <h2 id="enquire-title">Enquire about {work.title}</h2>
+        <p>Ask anything about the painting. Add your country and postcode for a delivery quote.</p>
+      </div>
+      <EnquiryForm artworkId={work.slug} emailEnabled={isEmailConfigured()} />
+    </section>
+    <section className="more ruled" aria-labelledby="more-title">
+      <h2 id="more-title">More paintings</h2>
+      <div className="more-grid">
+        {related.map(other => <WorkCard key={other.slug} work={other} sizes="(max-width: 699px) 45vw, 30vw" />)}
+      </div>
+    </section>
+  </>;
 }

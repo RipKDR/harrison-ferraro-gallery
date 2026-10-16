@@ -1,4 +1,4 @@
-export default {
+const worker = {
   async fetch(request, env) {
     const response = await env.ASSETS.fetch(request);
     const acceptsHtml = request.headers.get("accept")?.includes("text/html");
@@ -13,3 +13,5 @@ export default {
     return env.ASSETS.fetch(new Request(indexUrl, request));
   },
 };
+
+export default worker;

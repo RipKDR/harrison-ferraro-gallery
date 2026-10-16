@@ -1,5 +1,4 @@
-import { type Artwork, artworkAlt, artworkPath, artworkTitle } from '../artworks';
-import { artworks } from '../artworks';
+import { type Artwork, artworkAlt, artworkPath, artworks } from '../artworks';
 import { INSTAGRAM_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
 
 const ARTIST_ID = `${SITE_URL}/#artist`;
@@ -27,24 +26,21 @@ export const websiteJsonLd = {
 
 const centimetres = (value: number) => ({ '@type': 'QuantitativeValue', value, unitCode: 'CMT' });
 
-// Only confirmed facts are emitted; unknown medium, size and year are left out rather than guessed.
-// Product/Offer markup is absent while acquisition remains enquiry-led.
+// Product/Offer markup is absent while sales are enquiry-led (there is no checkout to point an Offer at).
 export function visualArtworkJsonLd(work: Artwork) {
-  const { facts } = work;
   return {
     '@context': 'https://schema.org',
     '@type': 'VisualArtwork',
-    name: artworkTitle(work),
+    name: work.title,
     url: absoluteUrl(artworkPath(work)),
     image: { '@type': 'ImageObject', contentUrl: absoluteUrl(work.src), width: work.width, height: work.height, caption: artworkAlt(work) },
     description: work.description,
     artform: 'Painting',
+    artMedium: work.medium,
+    width: centimetres(work.widthCm),
+    height: centimetres(work.heightCm),
+    dateCreated: String(work.year),
     creator: { '@type': 'Person', '@id': ARTIST_ID, name: SITE_NAME, url: SITE_URL, sameAs: [INSTAGRAM_URL] },
-    ...(facts.medium && { artMedium: facts.medium }),
-    ...(facts.widthCm && { width: centimetres(facts.widthCm) }),
-    ...(facts.heightCm && { height: centimetres(facts.heightCm) }),
-    ...(facts.depthCm && { depth: centimetres(facts.depthCm) }),
-    ...(facts.year && { dateCreated: facts.year }),
   };
 }
 
@@ -61,12 +57,21 @@ export const profilePageJsonLd = {
   mainEntity: { '@id': ARTIST_ID },
 };
 
-// The home page lists the full collection; this mirrors that list for search engines.
+export const contactPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  url: absoluteUrl('/contact'),
+  name: `Enquire — ${SITE_NAME}`,
+  inLanguage: 'en-AU',
+  mainEntity: { '@id': ARTIST_ID },
+};
+
+// The works page lists the full collection; this mirrors that list for search engines.
 export const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  url: SITE_URL,
-  name: `${SITE_NAME} — Selected works`,
+  url: absoluteUrl('/works'),
+  name: `${SITE_NAME} — Works`,
   description: SITE_DESCRIPTION,
   inLanguage: 'en-AU',
   author: { '@id': ARTIST_ID },
@@ -77,7 +82,7 @@ export const collectionJsonLd = {
       '@type': 'ListItem',
       position: index + 1,
       url: absoluteUrl(artworkPath(work)),
-      name: artworkTitle(work),
+      name: work.title,
       image: absoluteUrl(work.src),
     })),
   },
@@ -89,8 +94,8 @@ export function breadcrumbJsonLd(work: Artwork) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: SITE_NAME, item: SITE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Works', item: absoluteUrl('/#collection') },
-      { '@type': 'ListItem', position: 3, name: artworkTitle(work), item: absoluteUrl(artworkPath(work)) },
+      { '@type': 'ListItem', position: 2, name: 'Works', item: absoluteUrl('/works') },
+      { '@type': 'ListItem', position: 3, name: work.title, item: absoluteUrl(artworkPath(work)) },
     ],
   };
 }

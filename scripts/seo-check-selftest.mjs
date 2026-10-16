@@ -2,7 +2,7 @@
 // fail is a gate nobody should trust. Injects one fault at a time into a copy of the tree,
 // runs the checker against it, and restores the originals.
 import { execFileSync } from 'node:child_process';
-import { copyFileSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const WORK = 'src/app/works/[slug]/page.tsx';
 const ABOUT = 'src/app/about/page.tsx';
@@ -16,9 +16,9 @@ process.on('exit', restore);
 // Each fault must be caught. `expect` is the substring the checker's output must contain.
 const faults = [
   { name: 'title over 60 chars', files: [[WORK, s => s.replace(/    title,(\r?\n)/, "    title: title + ' padded out well past the sixty character limit',$1")]], expect: 'chars (>60)' },
-  { name: 'img without alt', files: [[ABOUT, s => s.replace('<ArtworkImage work={featuredArtworks[0]} preload sizes="(max-width: 700px) 85vw, 40vw" />', '<img src={featuredArtworks[0].src} width={400} height={600} />', 1)]], expect: 'img without alt' },
-  { name: 'invalid JSON-LD', files: [[ABOUT, s => s.replace('      <JsonLd data={personJsonLd} />', "      <JsonLd data={{ missing: true }} />", 1)]], expect: 'JSON-LD' },
-  { name: 'broken internal link', files: [[ABOUT, s => s.replace('href="/#collection">See all works', 'href="/works/does-not-exist">See all works', 1)]], expect: 'broken internal link' },
+  { name: 'img without alt', files: [[ABOUT, s => s.replace(/<Image className="portrait"[^>]*\/>/, '<img src="/art/harry-portrait-web.jpg" width={400} height={600} />')]], expect: 'img without alt' },
+  { name: 'invalid JSON-LD', files: [[ABOUT, s => s.replace('<JsonLd data={personJsonLd} />', '<JsonLd data={{ missing: true }} />')]], expect: 'JSON-LD' },
+  { name: 'broken internal link', files: [[ABOUT, s => s.replace('href="/works">See the works', 'href="/works/does-not-exist">See the works')]], expect: 'broken internal link' },
   { name: 'sitemap URL that 308s', files: [[SITEMAP, s => s.replace('url: absoluteUrl(artworkPath(work)),', "url: absoluteUrl(artworkPath(work)) + '/',", 1)]], expect: 'status 308' },
   { name: 'missing canonical', files: [[ABOUT, s => s.replace('alternates: { canonical: \'/about\' },', '', 1)]], expect: 'missing canonical' },
 ];
