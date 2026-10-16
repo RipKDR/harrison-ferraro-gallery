@@ -1,8 +1,9 @@
 'use client';
 import { useEffect } from 'react';
 
-/** Fallback for browsers without CSS scroll timelines: reveals each [data-fx] block as it enters, and sets --fx
- *  (about 1 entering at the bottom, 0 centred, -1 leaving at the top) for a light parallax. Off with reduced motion. */
+/** Fallback for browsers without CSS scroll timelines: reveals each [data-fx] beat as it enters, and sets --fx
+ *  (about 1 entering at the bottom, 0 centred, -1 leaving at the top) so the painting, title and label drift apart.
+ *  Off with reduced motion. The opening is not a [data-fx] beat — its image must stay visible. */
 export function ScrollMotion() {
   useEffect(() => {
     if (CSS.supports('animation-timeline: view()') || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
