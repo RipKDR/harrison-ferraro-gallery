@@ -26,7 +26,7 @@ When one work differs from the shared facts (for example it sells), add that fie
    ```bash
    node -e "require('sharp')('public/art/<slug>-web.jpg').metadata().then(m=>console.log(m.width,m.height))"
    ```
-2. Add an `entries` item. Its position is its display order: the first work leads the home page, the next six hang below it, and `/works` shows them all.
+2. Add an `entries` item. Its position is its display order: the first work leads the home opening, the next six are the scroll rooms, and `/works` shows them all.
 3. Bump `CONTENT_UPDATED` in `src/lib/site.ts`, then update the expected count in `tests/portfolio-routes.test.mjs`.
 4. Build, check and screenshot:
    ```bash

@@ -12,7 +12,7 @@ Responsive Next.js App Router portfolio. Next.js 16.3.5 was verified against the
 
 ## Pages
 
-`/` leads with one painting and the statement, then six more works. `/works` shows all ten works. The studio list sign-up is in the footer of every page. Each `/works/[slug]` page has the painting, a wall label with the price, and an Enquire button that jumps to an enquiry form already filled in with that work. ← / → move between works, and Share uses the phone's share sheet (copy-link on desktop). `/about` has the portrait and statement, `/contact` takes general enquiries, and `/privacy` covers email and analytics. Old work URLs and photo paths permanently redirect (308) to their new equivalents (`next.config.mjs`).
+`/` is a scroll-told exhibition: one painting opens the show (pinned on desktop), then six full-bleed rooms with the statement between them, and one close enquiry. `/works` shows all ten works. The studio list sign-up is in the footer of every page. Each `/works/[slug]` page has the painting, a wall label with the price, and an Enquire button that jumps to an enquiry form already filled in with that work. ← / → move between works, and Share uses the phone's share sheet (copy-link on desktop). `/about` has the portrait and statement, `/contact` takes general enquiries, and `/privacy` covers email and analytics. Old work URLs and photo paths permanently redirect (308) to their new equivalents (`next.config.mjs`).
 
 Enquiries and studio list sign-ups are sent by server actions through Resend (see `.env.example`). Only the studio receives email; the visitor's address is used only as reply-to. Nothing is stored by the website. Without Resend env vars, both forms fall back to a `mailto:` link. Prints were removed on 26 September 2026.
 

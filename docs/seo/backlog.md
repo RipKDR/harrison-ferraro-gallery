@@ -27,7 +27,7 @@ Local = `next start` without `VERCEL` env, so images are unoptimised originals (
 | /about | mobile | 88 | 100 | 100 | 100 | 3030 | 0.002 | 277 | 277 | 7025 |
 | /about | desktop | 100 | 100 | 100 | 100 | 820 | 0.002 | 12 | 277 | 7025 |
 
-Notes: the site has no separate collection page or studio page. The collection is `/#collection` on the home page, and the studio list is a footer form, so `/` and `/about` stand in for them. INP needs field data (Speed Insights / CrUX); TBT is the lab proxy. seo:check baseline: 14 pages, 0 problems.
+Notes: the site has no separate studio page. At this 28 Sep baseline the collection was `/#collection` on the home page; it is now `/works`, and the home is a scroll exhibition rather than a collection anchor. The studio list is a footer form, so `/` and `/about` stood in for a studio page. INP needs field data (Speed Insights / CrUX); TBT is the lab proxy. seo:check baseline: 14 pages, 0 problems.
 
 Already good (verified): robots allow all + sitemap with image entries; apex 308 to www; og:image per work (file-convention OG route, 1200x630 from original photo); unique title/description per work; one h1; server-rendered <img> with descriptive alt + LCP preload; WebP from Vercel optimiser; Three.js dynamic-imported, idle-loaded, desktop only; CSS poster fallback; Person/WebSite/CollectionPage/VisualArtwork/BreadcrumbList JSON-LD.
 
