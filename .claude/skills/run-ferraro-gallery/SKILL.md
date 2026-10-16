@@ -104,7 +104,7 @@ npm run dev    # http://localhost:4173 (scripts/dev.mjs); Ctrl-C to stop
 - **`next dev` edits tracked files.** It rewrites `next-env.d.ts` (to `.next/dev/types`) and regenerates the `<!-- BEGIN:nextjs-agent-rules -->` block in `AGENTS.md`. Check `git diff AGENTS.md next-env.d.ts` before committing. `next build` does not do this.
 - **Lazy images never finish loading in a headless browser.** Waiting on `img.complete` for every image stalls on `loading="lazy"` images below the fold. The driver's `settle()` skips lazy images, and `shot --full` scrolls the page before capturing.
 - **Production can't be reached from the cloud container.** The network policy denies `www.ferraro.studio` (403 on CONNECT), so verify against the local build.
-- **Stale-looking docs.** `CLAUDE.md`'s audit table and `CODEX-HANDOFF.md` predate the 23 Sep launch and the October 2026 redesign. `README.md` and `AGENTS.md` describe current state. Check the code before trusting a backlog item.
+- **Stale-looking docs.** `docs/archive/` (handoff notes, QA log, commercial plan) predates the 23 Sep launch and the October 2026 redesign. `README.md` and `AGENTS.md` describe current state. Check the code before trusting a backlog item.
 
 ## Troubleshooting
 
