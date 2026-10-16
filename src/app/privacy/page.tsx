@@ -17,7 +17,7 @@ export default function PrivacyPage() {
     <h1>Privacy</h1>
     <p>Last updated 16 October 2026.</p>
     <h2>Enquiries and the studio list</h2>
-    <p>When you send an enquiry, your name, email address, message and any delivery destination you add are emailed to Harrison through Resend, an email delivery service, so he can reply. If you join the studio list, your email address is sent to Harrison and kept with Resend so he can tell you when new paintings are finished. You can unsubscribe at any time: reply to any studio email or <Link href="/contact">send an enquiry</Link>.</p>
+    <p>When you send an enquiry, your name, email address, message and any delivery destination you add are emailed to Harrison through Resend, an email delivery service, so he can reply. If you join the studio list, your email address is emailed to Harrison the same way so he can tell you when new paintings are finished. It is not added to a mailing list automatically. You can unsubscribe at any time: reply to any studio email or <Link href="/contact">send an enquiry</Link>.</p>
     <h2>Analytics</h2>
     <p>This site uses Vercel Web Analytics and Speed Insights to count page views and measure loading speed. They do not use cookies. When enabled, PostHog records which pages and paintings are viewed and may set a first-party cookie.</p>
     <h2>Microsoft Clarity</h2>

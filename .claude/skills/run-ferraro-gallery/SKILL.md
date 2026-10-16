@@ -73,7 +73,7 @@ printf '%s\n' 'nav /works/figure-with-skull' \
 | command | what it does |
 |---|---|
 | `smoke` | status, console errors, sideways scroll and screenshots for every route on desktop and mobile, plus the 404; exits 1 on any FAIL |
-| `forms` | detects email or mailto mode; submits the enquiry and studio list after the 3 s human delay; checks the 2 captured emails go only to the studio |
+| `forms` | detects email or mailto mode; submits the enquiry and studio list after the 3 s human delay; checks the 2 captured emails go only to the studio and no contact is created |
 | `shot <path> [--mobile] [--full]` | one screenshot, plus any console errors; `--full` scrolls first so lazy images load |
 | `repl [--mobile]` | `nav click fill select press wait text eval shot errors quit` |
 
@@ -99,7 +99,7 @@ npm run dev    # http://localhost:4173 (scripts/dev.mjs); Ctrl-C to stop
 
 - **Email mode is fixed at build time, not at start time.** Pages are static, so `isEmailConfigured()` runs during `next build`. If you start `next start` with `RESEND_API_KEY` and `ENQUIRY_TO_EMAIL` set on a build made without them, the forms stay in mailto mode. In production this means **adding or changing the Resend env vars in Vercel requires a redeploy.** `serve.sh prod-email` sets the env vars before the build for this reason.
 - **A submit within 2.5 s of page load is silently dropped, and so is one with the honeypot filled.** The `looksAutomated()` check in `src/app/actions.ts` makes it look like a success: the UI shows the normal thank-you and nothing is sent. Automated tests must wait first. `driver.mjs forms` waits 3 s.
-- **The resend SDK honours `RESEND_BASE_URL`.** That is how `mock-resend.mjs` intercepts calls with no code patch. The studio list makes 2 calls when `RESEND_STUDIO_LIST_SEGMENT_ID` is set: `POST /contacts`, then `POST /emails`.
+- **The resend SDK honours `RESEND_BASE_URL`.** That is how `mock-resend.mjs` intercepts calls with no code patch. Each form makes exactly one call, `POST /emails`, to the studio. Sign-ups are never added to a Resend contact list, even with `RESEND_STUDIO_LIST_SEGMENT_ID` set, and `forms` fails if a `POST /contacts` appears.
 - **`lsof` can't see listeners in this container, and `fuser` is not always installed.** A missed old server makes the next start fail with `EADDRINUSE` while the old one keeps serving stale pages. `serve.sh stop` uses `fuser` when present, otherwise `netstat`, and force-kills after 10 s.
 - **`next dev` edits tracked files.** It rewrites `next-env.d.ts` (to `.next/dev/types`) and regenerates the `<!-- BEGIN:nextjs-agent-rules -->` block in `AGENTS.md`. Check `git diff AGENTS.md next-env.d.ts` before committing. `next build` does not do this.
 - **Lazy images never finish loading in a headless browser.** Waiting on `img.complete` for every image stalls on `loading="lazy"` images below the fold. The driver's `settle()` skips lazy images, and `shot --full` scrolls the page before capturing.

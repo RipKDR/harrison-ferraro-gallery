@@ -40,8 +40,9 @@ case "${1:-prod}" in
   prod-email)
     stop
     nohup node "$HERE/mock-resend.mjs" --port "$MOCK_PORT" ${MOCK_FAIL:+--fail} >/tmp/ferraro-mock-resend.log 2>&1 &
+    # The segment is set as production may have it; driver.mjs forms checks no contact is created anyway.
     export RESEND_BASE_URL="http://127.0.0.1:$MOCK_PORT" RESEND_API_KEY=re_local_mock \
-      ENQUIRY_TO_EMAIL=harry@example.com RESEND_PRINT_WAITLIST_SEGMENT_ID=seg_local_mock
+      ENQUIRY_TO_EMAIL=harry@example.com RESEND_STUDIO_LIST_SEGMENT_ID=seg_local_mock
     npm run build >/tmp/ferraro-build.log 2>&1 || { tail -30 /tmp/ferraro-build.log; exit 1; }
     nohup node_modules/.bin/next start --port "$PORT" >/tmp/ferraro-server.log 2>&1 &
     wait_up ;;

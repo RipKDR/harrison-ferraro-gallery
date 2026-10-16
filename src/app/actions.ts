@@ -77,8 +77,8 @@ export async function submitEnquiry(_previous: FormState<EnquiryValues>, data: F
 
 /**
  * General studio list (new work and studio news) for visitors not yet asking about a
- * specific painting. Harry is notified of each sign-up, and the
- * address joins RESEND_STUDIO_LIST_SEGMENT_ID when set so a broadcast (with unsubscribe) can be sent.
+ * specific painting. Harry is notified of each sign-up, with reply-to set to the visitor.
+ * The address is unverified, so it is never added to a mailing list automatically.
  */
 export async function joinStudioList(_previous: FormState<StudioListValues>, data: FormData): Promise<FormState<StudioListValues>> {
   const values: StudioListValues = { email: text(data, 'email', 254) };
@@ -94,18 +94,12 @@ export async function joinStudioList(_previous: FormState<StudioListValues>, dat
     return { status: 'error', message: 'Sign-ups are unavailable right now. Please try again later.', values, submission };
   }
 
-  let segmentNote = 'No Resend segment configured (RESEND_STUDIO_LIST_SEGMENT_ID).';
-  if (config.studioListSegmentId) {
-    const { error } = await config.resend.contacts.create({ email: values.email, segments: [{ id: config.studioListSegmentId }] });
-    segmentNote = error ? `Not added to the segment (${error.name}: ${error.message}).` : 'Added to the studio list segment.';
-    if (error) console.warn('Studio list contact not created', error.name, error.message);
-  }
   const { error } = await config.resend.emails.send({
     from: config.from,
     to: config.to,
     replyTo: values.email,
     subject: headerSafe(`Studio list: ${values.email}`),
-    text: `New studio list sign-up on ferraro.studio\n\nEmail: ${values.email}\n\n${segmentNote}`,
+    text: `New studio list sign-up on ferraro.studio\n\nEmail: ${values.email}\n\nThis address is unverified. Reply to confirm before adding it to any mailing list.`,
   });
   if (error) {
     console.error('Studio list notification failed', error.name, error.message);

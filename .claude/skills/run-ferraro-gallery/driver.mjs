@@ -138,6 +138,7 @@ async function forms(browser) {
   for (const entry of sent) console.log(`  -> ${entry.body.subject}  [to ${entry.body.to}, replyTo ${entry.body.replyTo ?? entry.body.reply_to}]`);
   // The form is open to anyone, so nothing may ever be addressed to the visitor's (unverified) address.
   check(sent.every(entry => !/collector@|fan@/.test(JSON.stringify(entry.body.to))), 'every email goes to the studio only, never to the visitor');
+  check(!captured().slice(before).some(entry => entry.path.startsWith('/contacts')), 'no visitor is added to a Resend contact list');
   check(errors.length === 0, `forms console clean${errors.length ? `: ${errors.join(' | ')}` : ''}`);
   await context.close();
 }
