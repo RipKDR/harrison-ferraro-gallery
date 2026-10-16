@@ -25,8 +25,13 @@ export function ScrollMotion() {
       update();
     });
     const onScroll = () => { frame ||= requestAnimationFrame(update); };
+    // Mark beats already on screen before fx-js hides the rest, so they don't flash out for a frame.
+    document.querySelectorAll<HTMLElement>('[data-fx]').forEach(el => {
+      const { top, bottom } = el.getBoundingClientRect();
+      if (bottom > 0 && top < innerHeight) el.classList.add('is-in');
+      observer.observe(el);
+    });
     root.classList.add('fx-js');
-    document.querySelectorAll<HTMLElement>('[data-fx]').forEach(el => observer.observe(el));
     addEventListener('scroll', onScroll, { passive: true });
     return () => { observer.disconnect(); removeEventListener('scroll', onScroll); cancelAnimationFrame(frame); root.classList.remove('fx-js'); };
   }, []);

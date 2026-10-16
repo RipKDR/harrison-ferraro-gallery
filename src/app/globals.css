@@ -316,7 +316,9 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
     /* Linear, and only while the beat is actually on screen, so the rates stay visible
    instead of finishing during the fade-in. Entrances still use --ease. */
     .room-work, .room-copy { animation: drift linear both; animation-timeline: --beat; animation-range: cover 28% cover 74%; }
-    .beat:focus-within .beat-frame { animation: none; translate: none; opacity: 1; }
+    /* Focus keeps hold (dropping it would jump the frame up to a viewport away), only forces it visible. */
+    .beat:focus-within .beat-frame { animation: hold linear both; animation-timeline: --beat; animation-range: cover; opacity: 1; pointer-events: auto; }
+    .beat:last-child:focus-within .beat-frame { animation: none; }
   }
 }
 /* Phone: the opening is taller than the screen, so as it leaves, cover the painting with the veil

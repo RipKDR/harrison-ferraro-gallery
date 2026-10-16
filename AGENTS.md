@@ -44,6 +44,10 @@ User asked for a premium, dark, gothic, handmade gallery and supplied ten confir
 ## Exhibition scroll — 16 October 2026
 The first cinematic scroll was rejected: the opening read as a brochure row over a faint floor word, the pinned painting shrank, and six rooms repeated one card with two paintings stacked in the crossfade. Replaced on the same branch. The opening is a room again — the painting on the wall, the statement and wall label beside it, a large perspective FERRARO on the floor — and the painting stays at scale 1. The next six catalogue works hang differently (monument, intimate, low, wide, tower, aside); Blue Undertow is the wide one. Each beat owns the screen and dissolves in place. The image, title and label drift at different rates, in px, lighter on a phone. Motion is CSS scroll timelines, with ScrollMotion (IntersectionObserver plus a rAF `--fx`) only when `animation-timeline: view()` is unsupported and reduced motion is off. `prefers-reduced-motion: reduce` is the still page. Grain is a still fixed layer behind content, never over a painting. Harry's statement stays verbatim. One enquiry invitation, on the close. `/works` remains the full catalogue.
 
+## Cursor Cloud specific instructions
+
+`npm ci` is the install. Next.js 16 needs Node 20.9 or newer; the default image already has a new enough Node. There is no database and no extra system package. `npm run dev` serves the gallery on port 4173. Open `http://localhost:4173` or `http://127.0.0.1:4173` — both hosts are in `allowedDevOrigins`, so the dev hot-reload socket connects. Resend, PostHog, and search-console keys in `.env.example` are optional; without `RESEND_API_KEY` and `ENQUIRY_TO_EMAIL` the enquiry and studio-list forms use the mailto fallback. Verify with `npm run typecheck`, `npm run lint`, `node --test tests/portfolio-routes.test.mjs` while the dev server is up, then `npm run build` and `npm run test:sites`.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
