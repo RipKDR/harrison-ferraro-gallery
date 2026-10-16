@@ -44,6 +44,10 @@ User asked for a premium, dark, gothic, handmade gallery and supplied ten confir
 ## Cinematic scroll — 16 October 2026
 Home is a scroll-told exhibition: a pinned opening on desktop, six full-bleed rooms, two statement interludes, and one close enquiry CTA. Motion is CSS scroll timelines, with ScrollMotion (IntersectionObserver plus a rAF `--fx`) only when `animation-timeline: view()` is unsupported and reduced motion is off. `prefers-reduced-motion: reduce` is the static page. Paintings are never scaled above 1. Phone room parallax is lighter than desktop. Grain is a still fixed layer behind content, never over a painting. Harry's statement stays verbatim. This supersedes the home hang from the premium redesign (lead painting, six-card grid, pull quote). The first catalogue entry still leads the opening; the next six are the rooms. `/works` remains the full catalogue.
 
+## Cursor Cloud specific instructions
+
+`npm ci` is the install. Next.js 16.3.5 needs Node 20.9 or newer; the default image already has a new enough Node. There is no database and no extra system package. `npm run dev` serves the gallery on port 4173. Open `http://localhost:4173` or `http://127.0.0.1:4173` — both hosts are in `allowedDevOrigins`, so the dev hot-reload socket connects. Resend, PostHog, and search-console keys in `.env.example` are optional; without `RESEND_API_KEY` and `ENQUIRY_TO_EMAIL` the enquiry and studio-list forms use the mailto fallback. Verify with `npm run typecheck`, `npm run lint`, `node --test tests/portfolio-routes.test.mjs` while the dev server is up, then `npm run build` and `npm run test:sites`.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

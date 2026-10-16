@@ -29,7 +29,7 @@ const movedPhotos = [
 ];
 
 export default {
-  allowedDevOrigins: ['terminal.local'],
+  allowedDevOrigins: ['terminal.local', '127.0.0.1'],
   devIndicators: false,
   poweredByHeader: false,
   async redirects() {
