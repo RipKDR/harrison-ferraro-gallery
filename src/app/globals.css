@@ -347,7 +347,7 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
   .opening-work { --d: -16px; }
   .opening-label { --d: -52px; }
   .opening-text { --d: -88px; }
-  .floor { --d: 22px; }
+  .floor { --d: 0px; }
 }
 @keyframes veil { from { opacity: .94; } }
 @keyframes cover-up { to { opacity: 1; } }
