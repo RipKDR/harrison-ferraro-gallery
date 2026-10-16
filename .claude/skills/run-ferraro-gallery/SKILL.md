@@ -34,7 +34,7 @@ npm run typecheck && npm run lint && npm run build && npm run test:sites && npm 
 
 Expected results:
 - Lint shows 0 errors and 4 existing warnings (2 `import/no-anonymous-default-export`, 2 unused imports in `scripts/seo-check-selftest.mjs`).
-- The build prerenders 36 pages.
+- The build prerenders 39 pages.
 - `test:sites` passes 4 tests.
 - `seo:check` crawls 15 pages (14 in the sitemap; `/privacy` is linked but not listed) with no problems.
 

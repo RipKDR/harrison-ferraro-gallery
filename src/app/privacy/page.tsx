@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description,
   alternates: { canonical: '/privacy' },
   openGraph: { type: 'website', locale: 'en_AU', siteName: SITE_NAME, url: '/privacy', title: `Privacy — ${SITE_NAME}`, description },
+  twitter: { card: 'summary_large_image', title: `Privacy — ${SITE_NAME}`, description },
 };
 
 // Keep in step with the code: layout.tsx (Clarity, Vercel), instrumentation-client.ts (PostHog), actions.ts (Resend).
