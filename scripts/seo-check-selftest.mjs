@@ -2,7 +2,7 @@
 // fail is a gate nobody should trust. Injects one fault at a time into a copy of the tree,
 // runs the checker against it, and restores the originals.
 import { execFileSync } from 'node:child_process';
-import { copyFileSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const WORK = 'src/app/works/[slug]/page.tsx';
 const ABOUT = 'src/app/about/page.tsx';

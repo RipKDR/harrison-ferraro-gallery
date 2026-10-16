@@ -28,7 +28,7 @@ const movedPhotos = [
   ['portrait-with-ember.jpg', 'woman-cigarette-web.jpg'],
 ];
 
-export default {
+const config = {
   allowedDevOrigins: ['terminal.local'],
   devIndicators: false,
   poweredByHeader: false,
@@ -49,3 +49,5 @@ export default {
   // AVIF first: ~47% smaller than WebP at the optimiser's settings (measured at 1080 px, all 11 photos).
   images: { unoptimized: !process.env.VERCEL, formats: ['image/avif', 'image/webp'] },
 };
+
+export default config;

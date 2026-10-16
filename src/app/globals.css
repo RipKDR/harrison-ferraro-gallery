@@ -86,8 +86,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .floor span { display: block; padding: 10px 0 2px; font: 400 17vw/0.9 var(--display); letter-spacing: .04em; text-indent: .04em; text-align: center; text-transform: uppercase; white-space: nowrap; color: rgb(236 229 216 / .34); }
 .opening-label { position: relative; z-index: 1; max-width: 22rem; }
 .show { position: relative; }
-.beat { height: 100svh; }
-.beat-frame { height: 100%; display: grid; align-items: center; padding: 24px var(--gutter); }
+.beat { min-height: 100svh; }
+.beat-frame { min-height: 100svh; display: grid; align-items: center; padding: 24px var(--gutter); }
 .interlude-copy { max-width: 16em; }
 .interlude-copy p { margin: 0; font-family: var(--display); font-size: clamp(32px, 6.4vw, 72px); line-height: 1.05; text-wrap: balance; }
 .interlude-copy .text-link { margin-top: 22px; }
@@ -309,7 +309,8 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
    Turned off above 1800px height so a full-page capture still shows every beat in place. */
 @media (prefers-reduced-motion: no-preference) and (max-height: 1800px) and (min-height: 640px) {
   @supports (animation-timeline: view()) {
-    .beat { view-timeline: --beat; }
+    .beat { height: 100svh; view-timeline: --beat; }
+    .beat-frame { height: 100%; }
     .beat-frame { animation: hold linear both, own linear both; animation-timeline: --beat, --beat; animation-range: cover, cover; }
     .beat:last-child .beat-frame { animation: own-last linear both; animation-timeline: --beat; animation-range: cover; }
     /* Linear, and only while the beat is actually on screen, so the rates stay visible
