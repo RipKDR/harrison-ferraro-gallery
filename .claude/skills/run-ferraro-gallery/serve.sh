@@ -10,10 +10,12 @@ PORT=${PORT:-4180}
 MOCK_PORT=${MOCK_PORT:-4199}
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# lsof does not see listeners in this container; fuser does, and netstat where fuser is not installed.
+listeners() { netstat -ltnp 2>/dev/null | awk -v re=":($PORT|$MOCK_PORT)\$" '$4 ~ re { split($7, a, "/"); print a[1] }'; }
 stop() {
-  # lsof does not see listeners in this container; fuser does.
-  fuser -k "$PORT/tcp" "$MOCK_PORT/tcp" >/dev/null 2>&1 || true
-  for _ in $(seq 20); do fuser "$PORT/tcp" >/dev/null 2>&1 || break; sleep 0.25; done
+  fuser -k "$PORT/tcp" "$MOCK_PORT/tcp" >/dev/null 2>&1 || listeners | xargs -r kill 2>/dev/null || true
+  for _ in $(seq 40); do fuser "$PORT/tcp" >/dev/null 2>&1 || [ -n "$(listeners)" ] || return 0; sleep 0.25; done
+  listeners | xargs -r kill -9 2>/dev/null || true
 }
 
 wait_up() {
