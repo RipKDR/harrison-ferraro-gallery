@@ -30,5 +30,4 @@ Goal: grow qualified traffic and convert it into original-artwork enquiries and 
 - Check Core Web Vitals, broken links, missing alt text/metadata. Open fix PRs.
 
 ## Open questions for Harry
-- Confirm the titles Bruise, Pitch, Last Light and Smoke at the Easel.
 - Is the Sites static mirror (`worker/`, `scripts/stage-next.mjs`, `scripts/prepare-sites-build.mjs`) still wanted? Vercel builds skip it.
