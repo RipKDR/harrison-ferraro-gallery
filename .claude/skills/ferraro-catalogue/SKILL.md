@@ -11,7 +11,7 @@ description: Update the ferraro.studio artwork catalogue in src/artworks.ts. Use
 
 - **Only enter facts Harry has confirmed in writing in this conversation or in a linked message.** Never estimate medium, size, year, availability or price. A missing fact stays missing and is listed as `TODO(harry)` in the PR.
 - Changing `price` or availability needs his explicit approval in the PR description.
-- Never change a `slug`. It is the URL, the photo file name, the enquiry form value and the analytics key. When a title changes, change `title` only. If a slug ever has to move, add the old one to `movedWorks` in `next.config.mjs` so the old URL 301s.
+- Never change a `slug`. It is the URL, the photo file name, the enquiry form value and the analytics key. When a title changes, change `title` only. If a slug ever has to move, add the old one to `movedWorks` in `next.config.mjs` so the old URL permanently redirects (308).
 - Photos are the original photograph cropped to the canvas edge, nothing else: no repainting, no generated detail, no upscaling. `width` and `height` must equal the file's pixel size, because a painting is never displayed larger than that.
 
 ## What a record holds
