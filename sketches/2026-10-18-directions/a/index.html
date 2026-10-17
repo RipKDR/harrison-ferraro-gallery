@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Harrison Ferraro, paintings (prototype A: Open floor)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500&display=swap">
+<link rel="stylesheet" href="./a.css">
+<script type="importmap">{ "imports": { "three": "/vendor/three/three.module.js" } }</script>
+<script type="module" src="./a.js"></script>
+</head>
+<body>
+<p class="proto" data-proto>Prototype A, Open floor. <a href="/">Compare directions</a></p>
+
+<canvas class="room art" aria-hidden="true"></canvas>
+
+<header class="top">
+  <h1>Harrison Ferraro</h1>
+  <nav aria-label="Site">
+    <button type="button" class="link" data-open="index" aria-haspopup="dialog">Index</button>
+    <button type="button" class="link" data-open="about" aria-haspopup="dialog">About</button>
+  </nav>
+</header>
+
+<main class="stage" aria-label="Paintings, 2026">
+  <div class="work">
+    <figure class="hang">
+      <img class="art" src="/art/figure-with-skull-web.jpg" width="944" height="1303" draggable="false" fetchpriority="high"
+        style="--nw: 944px; --nh: 1303px; --r: 1.38030"
+        alt="Figure with Skull, a painting by Harrison Ferraro. A dark-haired woman holds a skull against her cheek, drawn in charcoal over layers of white and pale pink.">
+    </figure>
+    <div class="label">
+      <div class="said" aria-live="polite">
+        <p class="visually-hidden" data-pos>Painting 1 of 10</p>
+        <h2 data-title>Figure with Skull</h2>
+        <p class="price"><span class="kind">Original</span> <span data-original>$1,400 AUD</span></p>
+        <p class="price"><span class="kind">Signed print, edition of 10,</span> <span data-print>about $466.67 AUD</span></p>
+      </div>
+      <button type="button" class="link details" data-details aria-haspopup="dialog">Details and prints</button>
+      <nav class="walk" aria-label="Walk the floor">
+        <button type="button" class="step" data-step="-1"><span class="dir"><span aria-hidden="true">←</span> Previous</span><span class="to" data-to="-1">Smoke at the Easel</span></button>
+        <button type="button" class="step" data-step="1"><span class="dir">Next <span aria-hidden="true">→</span></span><span class="to" data-to="1">Over the Shoulder</span></button>
+      </nav>
+    </div>
+  </div>
+</main>
+
+<dialog id="index" class="panel" aria-labelledby="index-title">
+  <div class="panel-in">
+    <h2 id="index-title">Index</h2>
+    <ul data-list></ul>
+    <button type="button" class="link" data-close>Close</button>
+  </div>
+</dialog>
+
+<dialog id="about" class="panel" aria-labelledby="about-title">
+  <div class="panel-in">
+    <h2 id="about-title">Harrison Ferraro</h2>
+    <p class="attribution">Painter, Melbourne, Australia</p>
+    <p class="statement" data-statement></p>
+    <button type="button" class="link" data-close>Close</button>
+  </div>
+</dialog>
+
+<dialog id="detail" class="sheet" aria-labelledby="detail-title">
+  <div class="sheet-in">
+    <div class="sheet-art" data-art></div>
+    <div class="sheet-info">
+      <button type="button" class="link close" data-close>Close</button>
+      <h2 id="detail-title" data-f="title"></h2>
+      <p class="facts"><span data-f="year"></span><br><span data-f="medium"></span><br><span data-f="size"></span></p>
+      <fieldset class="choice">
+        <legend>Original or print</legend>
+        <label><input type="radio" name="kind" value="original" checked><span class="what">Original painting</span><span class="cost" data-f="original"></span></label>
+        <label><input type="radio" name="kind" value="print"><span class="what">Signed print, edition of 10</span><span class="cost" data-f="print"></span></label>
+      </fieldset>
+      <p class="summary" data-summary aria-live="polite"></p>
+      <button type="button" class="enquire" data-enquire>Enquire about the original <span aria-hidden="true">→</span></button>
+      <p class="status" data-status role="status"></p>
+      <button type="button" class="link" data-zoom aria-pressed="false">Actual pixels</button>
+      <p class="note">Print prices are a third of the original, shown to the cent for this preview; final rounding is to be confirmed.</p>
+    </div>
+  </div>
+</dialog>
+</body>
+</html>

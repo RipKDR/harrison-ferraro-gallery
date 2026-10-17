@@ -50,3 +50,12 @@ export const artworkPath = (work: Artwork) => `/works/${work.slug}`;
 export const artworkAlt = (work: Artwork) => `${work.title}, a painting by Harrison Ferraro. ${work.description}`;
 export const artworkSize = (work: Artwork) => `${work.widthCm} × ${work.heightCm} cm`;
 export const artworkPrice = (work: Artwork) => `$${work.price.toLocaleString('en-AU')} AUD`;
+
+export const PRINT_EDITION = 10;
+/** One third, not a retail price: repeating-cent rounding remains provisional. */
+export function printPrice(work: Pick<Artwork, 'price'>) {
+  const third = work.price / 3;
+  const exact = Number.isInteger(third);
+  const amount = third.toLocaleString('en-AU', exact ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return `${exact ? '' : 'about '}$${amount} AUD`;
+}

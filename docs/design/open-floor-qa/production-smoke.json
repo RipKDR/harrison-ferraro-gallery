@@ -1,0 +1,66 @@
+[
+  {
+    "test": "compiled home hydrates, loads room and initial painting",
+    "passed": true
+  },
+  {
+    "test": "compiled index reaches all ten works",
+    "passed": true,
+    "works": [
+      {
+        "title": "Figure with Skull",
+        "original": "$1,400 AUD",
+        "print": "about $466.67 AUD"
+      },
+      {
+        "title": "Over the Shoulder",
+        "original": "$1,200 AUD",
+        "print": "$400 AUD"
+      },
+      {
+        "title": "Rose Sitter",
+        "original": "$1,400 AUD",
+        "print": "about $466.67 AUD"
+      },
+      {
+        "title": "Vigil",
+        "original": "$1,200 AUD",
+        "print": "$400 AUD"
+      },
+      {
+        "title": "Blue Undertow",
+        "original": "$950 AUD",
+        "print": "about $316.67 AUD"
+      },
+      {
+        "title": "Red Breath",
+        "original": "$1,400 AUD",
+        "print": "about $466.67 AUD"
+      },
+      {
+        "title": "Last Light",
+        "original": "$1,200 AUD",
+        "print": "$400 AUD"
+      },
+      {
+        "title": "Bruise",
+        "original": "$950 AUD",
+        "print": "about $316.67 AUD"
+      },
+      {
+        "title": "Pitch",
+        "original": "$950 AUD",
+        "print": "about $316.67 AUD"
+      },
+      {
+        "title": "Smoke at the Easel",
+        "original": "$1,400 AUD",
+        "print": "about $466.67 AUD"
+      }
+    ]
+  },
+  {
+    "test": "compiled print enquiry client navigation preserves selection",
+    "passed": true
+  }
+]

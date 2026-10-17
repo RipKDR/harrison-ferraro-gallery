@@ -1,30 +1,29 @@
-/* Harrison Ferraro: dark wall, bone type, red only where it matters (Enquire, the word "red").
-   Contrast on --ink: bone 15.9, ash 6.96, red 5.11; bone on --red-deep 5.24. */
+/* Shared secondary pages use the approved Open floor family and dark/bone/ash palette. */
 :root {
   color-scheme: dark;
-  --ink: #0b0a09;
+  --ink: #0f0e0d;
   --ink-2: #15130f;
-  --bone: #ece5d8;
-  --ash: #a1988c;
+  --bone: #ece6dc;
+  --ash: #aaa399;
   --red: #e8483c;
   --red-deep: #b02a22;
   --red-deeper: #8f1a15;
   --error: #ff8f80;
   --field: #6d655c;
   --hair: #2b2723;
-  --display: var(--font-display), Georgia, serif;
-  --text: var(--font-text), Georgia, serif;
+  --display: var(--font-sans), 'Helvetica Neue', Arial, sans-serif;
+  --text: var(--font-sans), 'Helvetica Neue', Arial, sans-serif;
   --gutter: clamp(20px, 4vw, 56px);
   --section: clamp(96px, 13vw, 190px);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { background: var(--ink); color: var(--bone); font: 400 112.5%/1.6 var(--text); -webkit-font-smoothing: antialiased; text-size-adjust: 100%; }
+html { background: var(--ink); color: var(--bone); font: 400 100%/1.6 var(--text); -webkit-font-smoothing: antialiased; text-size-adjust: 100%; }
 body { margin: 0; min-height: 100svh; display: flex; flex-direction: column; }
 /* Clip, not hidden: the spotlight may spill past the screen edge without creating a sideways scroll. */
 main { flex: 1; overflow-x: clip; }
-/* The wall: a still grain behind everything, never over a painting. Fixed, so the pages slide across it. */
-body::before { content: ''; position: fixed; inset: 0; z-index: -1; opacity: .05; pointer-events: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .9 0 0 0 0 .85 1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E") 0 0 / 200px; }
+/* No decorative grain in the approved direction. */
+body::before { content: none; }
 h1, h2, h3 { margin: 0 0 .5em; font-family: var(--display); font-weight: 400; line-height: 1.05; text-wrap: balance; }
 p { margin: 0 0 1em; text-wrap: pretty; }
 a { color: inherit; text-underline-offset: .22em; text-decoration-thickness: 1px; }

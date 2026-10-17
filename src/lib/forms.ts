@@ -1,4 +1,4 @@
-export const INTERESTS = ['Original artwork', 'General enquiry'] as const;
+export const INTERESTS = ['Original artwork', 'Signed print', 'General enquiry'] as const;
 export type Interest = (typeof INTERESTS)[number];
 export const GENERAL = 'general';
 

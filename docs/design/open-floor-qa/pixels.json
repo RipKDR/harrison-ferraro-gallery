@@ -1,0 +1,118 @@
+[
+  {
+    "state": "source-1440-blue-undertow",
+    "meanAbsoluteChannelDelta": 0.24332021604938273
+  },
+  {
+    "state": "source-1440-first",
+    "meanAbsoluteChannelDelta": 0.03490509259259259
+  },
+  {
+    "state": "source-1440-focus",
+    "meanAbsoluteChannelDelta": 0.29726105967078187
+  },
+  {
+    "state": "source-1440-last-light",
+    "meanAbsoluteChannelDelta": 0.025890946502057616
+  },
+  {
+    "state": "source-1440-print",
+    "meanAbsoluteChannelDelta": 0.3426710390946502
+  },
+  {
+    "state": "source-1440-red-breath",
+    "meanAbsoluteChannelDelta": 0.4608256172839506
+  },
+  {
+    "state": "source-1920-blue-undertow",
+    "meanAbsoluteChannelDelta": 0.021059027777777777
+  },
+  {
+    "state": "source-1920-first",
+    "meanAbsoluteChannelDelta": 0.02189621913580247
+  },
+  {
+    "state": "source-1920-last-light",
+    "meanAbsoluteChannelDelta": 0.016563303755144032
+  },
+  {
+    "state": "source-1920-native-ceiling",
+    "meanAbsoluteChannelDelta": 0.012895929783950618
+  },
+  {
+    "state": "source-1920-red-breath",
+    "meanAbsoluteChannelDelta": 0.0210961612654321
+  },
+  {
+    "state": "source-360-blue-undertow",
+    "meanAbsoluteChannelDelta": 0.22787630579297247
+  },
+  {
+    "state": "source-360-first",
+    "meanAbsoluteChannelDelta": 0.23439696106362773
+  },
+  {
+    "state": "source-360-last-light",
+    "meanAbsoluteChannelDelta": 0.22763888888888886
+  },
+  {
+    "state": "source-360-red-breath",
+    "meanAbsoluteChannelDelta": 0.22838200379867046
+  },
+  {
+    "state": "source-390-blue-undertow",
+    "meanAbsoluteChannelDelta": 0.5455624417709726
+  },
+  {
+    "state": "source-390-first",
+    "meanAbsoluteChannelDelta": 0.1992678332725726
+  },
+  {
+    "state": "source-390-focus",
+    "meanAbsoluteChannelDelta": 1.211186049337708
+  },
+  {
+    "state": "source-390-last-light",
+    "meanAbsoluteChannelDelta": 0.7078016769959898
+  },
+  {
+    "state": "source-390-print",
+    "meanAbsoluteChannelDelta": 1.654679588447361
+  },
+  {
+    "state": "source-390-red-breath",
+    "meanAbsoluteChannelDelta": 1.084523230850245
+  },
+  {
+    "state": "source-768-blue-undertow",
+    "meanAbsoluteChannelDelta": 0.08108478122287326
+  },
+  {
+    "state": "source-768-first",
+    "meanAbsoluteChannelDelta": 0.0838788350423177
+  },
+  {
+    "state": "source-768-last-light",
+    "meanAbsoluteChannelDelta": 0.08168453640407985
+  },
+  {
+    "state": "source-768-red-breath",
+    "meanAbsoluteChannelDelta": 0.08225377400716145
+  },
+  {
+    "state": "source-844-blue-undertow",
+    "meanAbsoluteChannelDelta": 0.11770668773038441
+  },
+  {
+    "state": "source-844-first",
+    "meanAbsoluteChannelDelta": 0.1183720176611172
+  },
+  {
+    "state": "source-844-last-light",
+    "meanAbsoluteChannelDelta": 0.12703548426297243
+  },
+  {
+    "state": "source-844-red-breath",
+    "meanAbsoluteChannelDelta": 0.13383866002349412
+  }
+]

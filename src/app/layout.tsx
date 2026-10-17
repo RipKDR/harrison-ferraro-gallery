@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { IM_Fell_French_Canon, Newsreader } from 'next/font/google';
+import { Schibsted_Grotesk } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
@@ -10,8 +10,7 @@ import { SiteHeader } from '../components/SiteHeader';
 import { isEmailConfigured } from '../lib/email-status';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '../lib/site';
 
-const display = IM_Fell_French_Canon({ weight: '400', style: ['normal', 'italic'], subsets: ['latin'], variable: '--font-display' });
-const text = Newsreader({ subsets: ['latin'], variable: '--font-text' });
+const sans = Schibsted_Grotesk({ weight: ['400', '500'], subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -40,12 +39,12 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = { themeColor: '#0b0a09', colorScheme: 'dark' };
+export const viewport: Viewport = { themeColor: '#0f0e0d', colorScheme: 'dark', viewportFit: 'cover' };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   // Vercel Analytics only exists on Vercel deployments; elsewhere its script would 404.
   const vercelAnalytics = Boolean(process.env.VERCEL) && process.env.NEXT_PUBLIC_VERCEL_ANALYTICS !== 'off';
-  return <html lang="en-AU" className={`${display.variable} ${text.variable}`} data-scroll-behavior="smooth"><body>
+  return <html lang="en-AU" className={sans.variable} data-scroll-behavior="smooth"><body>
     <a className="skip-link" href="#main">Skip to content</a>
     <SiteHeader />
     <main id="main">{children}</main>

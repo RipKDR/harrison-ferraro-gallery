@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react/dist/ssr';
-import { artworkBySlug, artworkPath, artworkPrice, artworks, artworkSize } from '../../../artworks';
+import { artworkBySlug, artworkPath, artworkPrice, artworks, artworkSize, printPrice, PRINT_EDITION } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
 import { EnquiryForm } from '../../../components/EnquiryForm';
 import { ShareArtwork } from '../../../components/ShareArtwork';
@@ -55,6 +55,7 @@ export default async function WorkPage({ params }: Props) {
       <div className="label work-label">
         <h1>{work.title}</h1>
         <p className="price">{work.available ? <>{artworkPrice(work)}<span>Available</span></> : 'Sold'}</p>
+        <p className="small-note">Signed print, edition of {PRINT_EDITION}: {printPrice(work)}. One third of the original; final rounding is provisional.</p>
         <a className="button" href="#enquire">Enquire about this painting <ArrowRight size={20} /></a>
         <dl>
           <div><dt>Year</dt><dd>{work.year}</dd></div>
