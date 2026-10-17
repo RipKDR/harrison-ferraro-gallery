@@ -71,55 +71,59 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .text-button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0; border: 0; background: none; color: var(--ash); text-decoration: underline; text-underline-offset: 5px; cursor: pointer; }
 .text-button:hover { color: var(--bone); }
 
-/* Home: a room, then one painting at a time. Phone stacks the room in document order (painting, floor,
-   label, statement). Desktop (below) parks them at three depths. This is the still page. */
-.hero-pin { position: relative; }
-.opening { position: relative; display: flex; flex-direction: column; gap: 22px; padding: 4px var(--gutter) 8px; }
-.opening-work { align-self: center; width: min(84%, 420px); }
-.opening-work .art { margin-inline: auto; }
-.opening-text h1 { font-size: clamp(28px, 7.4vw, 42px); line-height: 1.08; }
-.attribution { display: block; margin-top: 18px; font: 400 17px/1.4 var(--text); color: var(--ash); }
-.opening-text .text-link { margin-top: 4px; }
-/* Decorative (aria-hidden), so the floor word may sit quieter than body text. It is still the ground of the room. */
-.floor { order: 1; position: relative; margin: 2px calc(var(--gutter) * -1) 0; overflow: hidden; pointer-events: none; }
-.floor-plane { position: relative; perspective: 70vw; perspective-origin: 50% 0; }
-.floor::before { content: ''; position: absolute; inset: 0; background: radial-gradient(48% 80% at 50% 0, rgb(236 229 216 / .09), transparent 70%); }
-.floor span { display: block; padding: 10px 0 2px; font: 400 17vw/0.9 var(--display); letter-spacing: .04em; text-indent: .04em; text-align: center; text-transform: uppercase; white-space: nowrap; color: rgb(236 229 216 / .34); transform-origin: 50% 100%; transform: rotateX(55deg); }
-.opening-label { position: relative; z-index: 1; max-width: 22rem; }
-.show { position: relative; }
-.beat { min-height: 100svh; }
-.beat-frame { min-height: 100svh; display: grid; align-items: center; padding: 24px var(--gutter); }
-.interlude-copy p { max-width: 13em; margin: 0; font-family: var(--display); font-size: clamp(32px, 6.4vw, 72px); line-height: 1.05; text-wrap: balance; }
-.interlude-copy .text-link { margin-top: 22px; }
-.room-link { display: grid; gap: 18px; width: 100%; text-decoration: none; }
-.room-work { justify-self: center; }
-.room-work .art { width: min(var(--w), 88%, calc(54svh * var(--ratio))); }
-.room-title { margin: 0 0 12px; color: var(--bone); font-size: clamp(36px, 9vw, 64px); line-height: .95; }
-.room-meta { max-width: 20rem; }
-.room-cue { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 8px; color: var(--bone); text-decoration: underline; text-underline-offset: 6px; }
-.room-link:hover .room-cue { text-decoration-thickness: 2px; }
-.room-link:focus-visible { outline: 0; }
-.room-link:focus-visible .art { outline: 2px solid var(--bone); outline-offset: 8px; }
-/* Rhythm: same facts, different hang. Nothing is cropped; width is the only change. */
-.room-intimate .room-work .art { width: min(var(--w), 64%, calc(46svh * var(--ratio))); }
-.room-intimate .room-link { justify-items: end; padding-top: 6svh; }
-.room-intimate .room-title { font-size: clamp(30px, 7vw, 48px); }
-.room-low .room-copy { order: -1; }
-.room-low .room-work .art { width: min(var(--w), 78%, calc(50svh * var(--ratio))); }
-.room-wide .room-work { justify-self: stretch; }
-.room-wide .room-work .art { width: min(var(--w), 100%, calc(40svh * var(--ratio))); }
-.room-wide .room-title { font-size: clamp(32px, 7.5vw, 52px); }
-.room-tower .room-work .art { width: min(var(--w), 58%, calc(60svh * var(--ratio))); }
-.room-tower .room-link { justify-items: center; }
-.room-tower .room-title { font-size: clamp(28px, 6.5vw, 44px); }
-.room-aside .room-copy { order: -1; }
-.room-aside .room-work .art { width: min(var(--w), 74%, calc(48svh * var(--ratio))); }
-/* The close is shorter than a room and the footer follows it directly, so the invitation isn't marooned. */
-.close, .close .beat-frame { min-height: 76svh; }
-body:has(.show) .site-footer { margin-top: 0; }
-.close .beat-frame { justify-items: center; align-content: center; gap: 28px; text-align: center; }
-.close p { max-width: 14em; margin: 0; font-family: var(--display); font-style: italic; font-size: clamp(32px, 5.4vw, 68px); line-height: 1.08; text-wrap: balance; }
-.close-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px 36px; }
+/* Home: one gallery wall. The smoke canvas is fixed under the grain, so it hangs in the room and never over a
+   painting. --cm is one centimetre of canvas: each painting is its width in cm, so the landscape one hangs half again
+   as wide as a portrait, and every frame shares one centre line. Labels hang below the frame, outside the box being
+   centred, so they never push a painting off the line. This is the still hang (reduced motion, no script): the wall
+   wraps down the page. .is-walking below pins it and walks along it. */
+.smoke { position: fixed; inset: 0; z-index: -2; width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity 3s; }
+.smoke.is-on { opacity: 1; }
+.walk { padding: 0 var(--gutter); container-type: inline-size; }
+.walk-track { --gap: 32px; --cm: calc(100cqi / 72); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 150px var(--gap); margin: 0; padding: clamp(8px, 3vw, 24px) 0 110px; list-style: none; }
+.walk-track > li { position: relative; }
+.walk-vinyl, .walk-plate { flex: 1 1 100%; }
+.walk-vinyl h1 { margin: 0 0 22px; font-size: clamp(60px, 15vw, 168px); line-height: .86; letter-spacing: -.015em; }
+.walk-vinyl p { max-width: 24em; margin: 0 0 6px; color: var(--ash); }
+.walk-work { width: min(100%, calc(var(--wcm) * var(--cm))); }
+.walk-work .work-card { display: block; animation: none; }
+.walk-work .art { margin-inline: auto; }
+.walk-work .label { position: absolute; top: calc(100% + 16px); left: 0; right: 0; }
+/* The close is a wall label too: the ask reads as part of the hang. */
+.walk-plate { display: grid; justify-items: start; gap: 18px; max-width: 26rem; }
+.walk-plate .label-title { margin: 0; font-size: clamp(26px, 3vw, 34px); }
+/* Bone like every other link: ash measured 3.99:1 where the smoke settles behind the plate. */
+.walk-plate .text-link { color: var(--bone); }
+.walk-index { display: none; }
+@media (min-width: 600px) {
+  .walk-track { --gap: clamp(32px, 6vw, 64px); --cm: calc((100cqi - var(--gap)) / 136); }
+}
+/* The walk. The stage pins for the section's height (set by WalkMotion) and the track slides left under it. Here --cm
+   comes from the screen's height, so a portrait canvas fills 60% of it, with a gallery's 40 cm between frames and 80 cm
+   of quiet wall before the peak. The header lies over the wall instead of pushing it below the fold. */
+body:has(.walk.is-walking) .site-header { position: absolute; inset: 0 0 auto; z-index: 2; }
+/* On the home wall the name is already lettered as the h1; the wordmark would only repeat it as a link to this page.
+   Hidden rather than removed, so the nav keeps its place. */
+body:has(.walk) .wordmark { visibility: hidden; }
+.walk.is-walking { padding: 0; }
+.is-walking .walk-stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+.is-walking .walk-track { --cm: min(.66svh, (100vw - 2 * var(--gutter)) / 62); --gap: calc(40 * var(--cm)); flex-wrap: nowrap; justify-content: flex-start; width: max-content; height: 100%; padding: 0 var(--gutter) 9svh; will-change: transform; }
+.is-walking .walk-track > li { flex: none; }
+/* No 100% cap here: inside a max-content track a percentage width falls back to the photo's native width. */
+.is-walking .walk-work { width: calc(var(--wcm) * var(--cm)); }
+.is-walking .walk-vinyl { width: min(calc(72 * var(--cm)), calc(100vw - 2 * var(--gutter))); }
+.is-walking .walk-vinyl h1 { font-size: min(calc(15 * var(--cm)), 16vw); }
+.is-walking .walk-peak { margin-left: calc(40 * var(--cm)); }
+.is-walking .walk-plate { width: min(calc(64 * var(--cm)), calc(100vw - 2 * var(--gutter))); margin-right: calc(30 * var(--cm)); }
+/* A phone is too narrow for the name and a canvas side by side, so the name hangs above the wall (still on the track,
+   so it slides away with the first step) and the canvases shrink to fit beneath it. */
+@media (max-width: 699px) {
+  .is-walking .walk-track { --cm: min((100svh - 400px) / 90, (100vw - 2 * var(--gutter)) / 62); padding: 270px var(--gutter) 120px; }
+  .is-walking .walk-vinyl { position: absolute; top: 88px; left: var(--gutter); }
+  .is-walking .walk-vinyl h1 { margin-bottom: 14px; font-size: 44px; }
+  .is-walking .walk-vinyl p { margin: 0; font-size: 15px; line-height: 1.5; }
+  /* 80 cm of wall is wider than a phone, which left a screen of bare smoke; 55 cm keeps both frames' edges in view. */
+  .is-walking .walk-peak { margin-left: calc(15 * var(--cm)); }
+}
 
 /* Works index: labels line up at one eye-line however tall each painting is. */
 .page-head { max-width: calc(48rem + 2 * var(--gutter)); padding: clamp(32px, 7vw, 112px) var(--gutter) clamp(48px, 6vw, 88px); }
@@ -214,50 +218,12 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
 }
 
 @media (min-width: 1000px) {
-  /* The opening is a room, not a row. Painting on the wall, floor word under it, statement low and left,
-     wall label off to the right — three depths, one picture. */
-  .opening { display: block; height: calc(100svh - 88px); padding: 0; overflow: clip; }
-  .opening-work { position: absolute; z-index: 1; left: 50%; top: 42%; width: auto; transform: translate(-50%, -50%); }
-  .opening-work .art { width: min(var(--w), 36vw, calc(64svh * var(--ratio))); }
-  /* The horizon sits below the painting and its wall text: nothing hung stands on the floor. */
-  .floor { position: absolute; z-index: 0; inset: auto 0 0; height: 24%; margin: 0; }
-  .floor-plane { position: absolute; inset: 0; perspective: 48vw; perspective-origin: 50% 0; }
-  .floor span { position: absolute; inset: auto 0 2%; padding: 0; transform-origin: 50% 100%; transform: rotateX(62deg); font-size: 16.5vw; line-height: .85; letter-spacing: .03em; text-indent: .03em; color: rgb(236 229 216 / .38); mask-image: linear-gradient(transparent, #000 28%); }
-  .opening-text { position: absolute; z-index: 2; left: var(--gutter); bottom: calc(24% + 28px); width: min(24rem, calc(32vw - 2 * var(--gutter))); }
-  .opening-text h1 { font-size: clamp(26px, 2.2vw, 38px); }
-  .opening-label { position: absolute; z-index: 2; right: var(--gutter); bottom: calc(24% + 28px); max-width: 18rem; }
-  .beat-frame { padding-inline: clamp(28px, 4vw, 72px); }
-  /* Capped by height too, so the longest clause still fits a pinned beat on a 720px laptop. */
-  .interlude-copy p { font-size: clamp(40px, min(4.4vw, 7.6svh), 76px); }
-  .room-link { grid-template-columns: minmax(0, 1.15fr) minmax(15rem, .72fr); align-items: end; column-gap: clamp(36px, 4vw, 80px); }
-  .room-work { justify-self: start; }
-  .room-work .art { width: min(var(--w), 40vw, calc(70svh * var(--ratio))); }
-  .room-title { font-size: clamp(52px, 4.6vw, 80px); }
-  .room-intimate .room-link { grid-template-columns: minmax(16rem, .85fr) minmax(0, .7fr); align-items: center; width: min(880px, 100%); margin-inline: auto; padding-top: 0; }
-  .room-intimate .room-work { order: 1; justify-self: end; }
-  .room-intimate .room-work .art { width: min(var(--w), 24vw, calc(54svh * var(--ratio))); }
-  .room-intimate .room-title { font-size: clamp(40px, 3.2vw, 56px); }
-  .room-low .beat-frame { align-items: stretch; }
-  .room-low .room-link { grid-template-columns: minmax(14rem, .5fr) minmax(0, 1fr); align-items: end; height: 100%; }
-  .room-low .room-copy { order: 0; align-self: start; padding-top: 2svh; }
-  .room-low .room-work { justify-self: end; align-self: end; }
-  .room-low .room-work .art { width: min(var(--w), 32vw, calc(52svh * var(--ratio))); }
-  .room-low .room-title { font-size: clamp(46px, 4vw, 72px); }
-  .room-wide .room-link { grid-template-columns: minmax(13rem, .34fr) minmax(0, 1.7fr); align-items: center; width: 100%; }
-  .room-wide .room-copy { order: -1; }
-  .room-wide .room-work { justify-self: stretch; }
-  .room-wide .room-work .art { width: min(var(--w), 100%, calc(54svh * var(--ratio))); }
-  .room-wide .room-title { font-size: clamp(40px, 3.4vw, 60px); }
-  .room-tower .room-link { grid-template-columns: 1fr; justify-items: center; align-items: center; position: relative; min-height: 68svh; }
-  .room-tower .room-work { justify-self: center; }
-  .room-tower .room-work .art { width: min(var(--w), 28vw, calc(68svh * var(--ratio))); }
-  .room-tower .room-copy { position: absolute; right: 0; bottom: 7svh; max-width: 16rem; text-align: left; }
-  .room-tower .room-title { font-size: clamp(32px, 2.5vw, 46px); }
-  .room-aside .room-link { grid-template-columns: minmax(18rem, .9fr) minmax(0, .75fr); align-items: center; }
-  .room-aside .room-copy { order: 0; }
-  .room-aside .room-work { order: 1; justify-self: end; }
-  .room-aside .room-work .art { width: min(var(--w), 26vw, calc(60svh * var(--ratio))); }
-  .room-aside .room-title { font-size: clamp(56px, 5vw, 92px); }
+  .walk-track { --gap: clamp(48px, 6vw, 112px); --cm: calc((100cqi - 2 * var(--gap)) / 210); }
+  /* The index of the wall: every title, the current one lit. It jumps. */
+  .is-walking .walk-index { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 14px; display: flex; flex-wrap: wrap; gap: 0 24px; font-size: 15px; }
+  .walk-index a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ash); text-decoration: none; transition: color .3s; }
+  .walk-index a:hover, .walk-index a[aria-current] { color: var(--bone); }
+  .walk-index a[aria-current] { text-decoration: underline; text-underline-offset: 6px; }
   .works-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 96px clamp(28px, 3vw, 56px); }
   .work { grid-template-columns: 7fr 4fr; align-items: end; gap: clamp(40px, 5vw, 96px); min-height: calc(100svh - 100px); padding-bottom: 5svh; }
   .enquire, .about { grid-template-columns: 5fr 6fr; align-items: start; gap: clamp(48px, 6vw, 120px); }
@@ -267,31 +233,21 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
   .footer-base nav { justify-content: center; }
 }
 
-/* Motion. Everything above is the still page: reduced motion, a very tall viewport, and browsers without
-   scroll timelines all get it, fully usable. Scroll translations use px or % — never vh — so a tall
-   viewport cannot throw a layer off the page. A painting is never scaled. The hero image is never
-   opacity-animated; the veil on .opening-work::after is. */
-.room-work { --d: -24px; }
-.room-copy { --d: 32px; }
-.opening-work { --d: -10px; }
-.opening-label { --d: -6px; }
-.opening-text { --d: 20px; }
-.floor { --d: -16px; }
+/* Motion. Everything above is the still page; reduced motion gets it, fully usable. A painting is never scaled. */
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
   :root { --ease: cubic-bezier(.2, .7, .1, 1); }
   .work-card .art { transition: transform .6s var(--ease); }
   .work-card:hover .art { transform: translateY(-6px); }
 
-  /* Entrance: lights come up on the opening painting. The image itself stays opaque. */
-  .opening-work::after { content: ''; position: absolute; inset: 0; background: var(--ink); opacity: 0; pointer-events: none; animation: veil 2.2s var(--ease) both; }
-  .opening-work::before, .stage::before { animation: lights 2.8s var(--ease) both; }
-  .floor::before, .floor span { animation: lights 2.8s .6s var(--ease) both; }
-  :is(.opening-label, .work-label)::before { transform-origin: 0 0; animation: draw 1.4s .2s var(--ease) both; }
-  :is(.opening-text, .opening-label, .work-label) > * { animation: rise 1.5s var(--ease) both; }
-  .opening-text > * { animation-delay: .4s; }
-  .opening-text > :last-child, .work-label > :nth-child(2) { animation-delay: .6s; }
-  .opening-label > * { animation-delay: .55s; }
+  /* Entrance: the name and its line rise; on a painting page the lights come up. Paintings stay opaque. */
+  .walk-vinyl > * { animation: rise 1.6s var(--ease) both; }
+  .walk-vinyl > :nth-child(2) { animation-delay: .2s; }
+  .walk-vinyl > :nth-child(3) { animation-delay: .4s; }
+  .stage::before { animation: lights 2.8s var(--ease) both; }
+  .work-label::before { transform-origin: 0 0; animation: draw 1.4s .2s var(--ease) both; }
+  .work-label > * { animation: rise 1.5s var(--ease) both; }
+  .work-label > :nth-child(2) { animation-delay: .6s; }
   .stage .art { animation: settle 1.8s var(--ease) both; }
   .work-label > :first-child { animation-delay: .3s; }
   .work-label > :nth-child(n + 3) { animation-delay: .8s; }
@@ -301,84 +257,13 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
     .stage { --lag: 4%; animation: drift-down linear both; animation-timeline: --work; animation-range: exit; }
     .work-card { animation: text-in var(--ease) both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
   }
-
-  /* No scroll timelines: reveal each beat as it enters, and drift image / title / label apart. */
-  .fx-js :is(.room-work, .room-copy) { translate: 0 calc(var(--fx, 0) * var(--d) * -1); }
-  .fx-js .beat-frame { transition: opacity 1.1s var(--ease); }
-  .fx-js .beat:not(.is-in) .beat-frame { opacity: 0; }
-  .beat:has(:focus-visible) .beat-frame, .room-link:focus-visible, .room-link:focus-visible :is(.room-work, .room-copy) { opacity: 1 !important; }
-  /* While a beat holds keyboard focus, the others stand down, so tabbing never shows two paintings at once.
-     :focus-visible, not :focus-within: a mouse click (or Ctrl+click to a new tab) leaves focus on the link. */
-  .show:has(.beat :focus-visible) .beat:not(:has(:focus-visible)) .beat-frame { opacity: 0 !important; pointer-events: none; }
-}
-/* Rooms, phone and desktop: each beat is exactly one viewport tall, so the next beat's cover
-   progress is this beat's cover minus 50%. own fades out over 66–76% while the next fades in
-   over 24–34%: a short centered dissolve, not two paintings stacked in one viewport.
-   hold cancels the scroll so the painting stays centered while that happens.
-   Turned off above 1800px height so a full-page capture still shows every beat in place. */
-@media (prefers-reduced-motion: no-preference) and (max-height: 1800px) and (min-height: 640px) {
-  @supports (animation-timeline: view()) {
-    .beat { height: 100svh; view-timeline: --beat; }
-    .beat.close { height: 76svh; }
-    .beat-frame { height: 100%; }
-    .beat-frame { animation: hold linear both, own linear both; animation-timeline: --beat, --beat; animation-range: cover, cover; }
-    /* No hold on the close: hold only cancels the scroll for a 100svh beat, and nothing follows the close. */
-    .beat:last-child .beat-frame { animation: own-last linear both; animation-timeline: --beat; animation-range: cover; }
-    /* Linear, and only while the beat is actually on screen, so the rates stay visible
-   instead of finishing during the fade-in. Entrances still use --ease. */
-    .room-work, .room-copy { animation: drift linear both; animation-timeline: --beat; animation-range: cover 28% cover 74%; }
-    /* Focus keeps hold (dropping it would jump the frame up to a viewport away), only forces it visible. */
-    .beat:has(:focus-visible) .beat-frame { animation: hold linear both; animation-timeline: --beat; animation-range: cover; opacity: 1; pointer-events: auto; }
-    .beat:last-child:has(:focus-visible) .beat-frame { animation: none; }
-  }
-}
-/* Phone: the opening is taller than the screen, so as it leaves, fade the type and let the painting scroll
-   away. The next beat then owns the screen. */
-@media (prefers-reduced-motion: no-preference) and (max-width: 999px) and (min-height: 640px) and (max-height: 1800px) {
-  @supports (animation-timeline: view()) {
-    .opening { view-timeline: --open; }
-    .opening-work { animation: drift var(--ease) both; animation-timeline: --open; animation-range: cover; }
-    :is(.opening-text, .opening-label, .floor) { animation: drift var(--ease) both, fade-out linear forwards; animation-timeline: --open, --open; animation-range: cover, exit 0% exit 48%; }
-  }
-}
-/* Desktop opening: pin the room and translate the three depths. The painting does not scale. */
-@media (prefers-reduced-motion: no-preference) and (min-width: 1000px) and (min-height: 640px) and (max-height: 1800px) {
-  @supports (animation-timeline: view()) {
-    body:has(.hero-pin) .site-header { position: absolute; inset: 0 0 auto; z-index: 2; }
-    /* A short pin: the three depths drift apart, then the room scrolls away whole. Veiling the painting on
-       exit left a dark slab on the grained wall, so the painting leaves through the top edge instead. */
-    .hero-pin { height: 130svh; view-timeline: --hero; }
-    .opening { position: sticky; top: 0; height: 100svh; }
-    .opening-work { animation: drift var(--ease) forwards; animation-timeline: --hero; animation-range: contain 0% contain 100%; }
-    :is(.opening-text, .opening-label, .floor) { animation: drift var(--ease) forwards, fade-out linear forwards; animation-timeline: --hero, --hero; animation-range: contain 0% contain 100%, exit 8% exit 44%; }
-    .beat-frame { padding-top: 96px; }
-  }
 }
 @media (prefers-reduced-motion: no-preference) and (min-width: 1000px) {
   .stage { --lag: 16%; }
-  .room-work { --d: -56px; }
-  .room-copy { --d: 48px; }
-  .opening-work { --d: -16px; }
-  .opening-label { --d: -52px; }
-  .opening-text { --d: -88px; }
-  .floor { --d: 0px; }
 }
-@keyframes veil { from { opacity: .94; } }
 @keyframes lights { from { opacity: 0; } }
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } }
 @keyframes draw { from { scale: 1 0; } }
 @keyframes settle { from { transform: translateY(18px) scale(.985); } }
 @keyframes text-in { from { opacity: 0; transform: translateY(56px); } }
-@keyframes fade-out { to { opacity: 0; } }
-@keyframes drift { to { translate: 0 var(--d); } }
 @keyframes drift-down { to { translate: 0 var(--lag); } }
-@keyframes hold { from { translate: 0 -100%; } to { translate: 0 100%; } }
-@keyframes own {
-  0%, 24% { opacity: 0; pointer-events: none; }
-  34%, 66% { opacity: 1; pointer-events: auto; }
-  76%, 100% { opacity: 0; pointer-events: none; }
-}
-@keyframes own-last {
-  0%, 24% { opacity: 0; pointer-events: none; }
-  34%, 100% { opacity: 1; pointer-events: auto; }
-}
