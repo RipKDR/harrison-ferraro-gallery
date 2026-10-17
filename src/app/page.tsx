@@ -29,10 +29,11 @@ function Room({ work, hang }: { work: Artwork; hang: Hang }) {
         </div>
         <div className="room-copy">
           <h3 className="room-title">{work.title}</h3>
+          {/* A wall label: one fact per line. Year and medium are shared by every work, so the opening states them once. */}
           <div className="label room-meta">
-            <p>{work.year} · {work.medium}</p>
-            <p>{artworkSize(work)} · {work.available ? artworkPrice(work) : 'Sold'}</p>
-            <span className="room-cue">View the painting <ArrowRight size={18} /></span>
+            <p>{artworkSize(work)}</p>
+            <p>{work.available ? artworkPrice(work) : 'Sold'}</p>
+            <span className="room-cue">View the painting</span>
           </div>
         </div>
       </Link>
@@ -58,13 +59,15 @@ export default function Page() {
         </Link>
         <div className="floor" aria-hidden="true"><div className="floor-plane"><span>Ferraro</span></div></div>
         <div className="label opening-label">
-          <p className="label-title">{lead.title}</p>
-          <p>{lead.year} · {lead.medium}</p>
-          <p>{artworkSize(lead)} · {lead.available ? artworkPrice(lead) : 'Sold'}</p>
+          <p className="label-title">{lead.title}, <span>{lead.year}</span></p>
+          <p>{lead.medium}</p>
+          <p>{artworkSize(lead)}</p>
+          <p>{lead.available ? artworkPrice(lead) : 'Sold'}</p>
         </div>
         <div className="opening-text">
-          <h1 id="opening-title"><span className="kicker">Harrison Ferraro · Painter, Melbourne</span> I paint people in the moments they don’t perform: <em>an exhale, a turned shoulder, smoke hanging in the air.</em></h1>
-          <Link className="text-link" href="/works">See the works <ArrowRight size={18} /></Link>
+          {/* Harry's words first, then the artist's name as the attribution, the way a quotation hangs on a gallery wall. */}
+          <h1 id="opening-title">I paint people in the moments they don’t perform: an exhale, a turned shoulder, smoke hanging in the air. <span className="attribution">Harrison Ferraro, painter, Melbourne</span></h1>
+          <Link className="text-link" href="/works">See the works</Link>
         </div>
       </section>
     </div>
@@ -72,7 +75,7 @@ export default function Page() {
       <section className="beat interlude" data-fx aria-labelledby="hang-title">
         <div className="beat-frame">
           <div className="interlude-copy">
-            <h2 id="hang-title" className="kicker">The paintings</h2>
+            <h2 id="hang-title" className="visually-hidden">The paintings</h2>
             <p>I work in acrylic, charcoal and pastel on canvas, building the surface up and tearing it back until what’s left feels honest.</p>
           </div>
         </div>
@@ -82,7 +85,7 @@ export default function Page() {
         <div className="beat-frame">
           <div className="interlude-copy">
             <p>The palette stays dark, with <span className="red">red</span> used only where it hurts.</p>
-            <Link className="text-link" href="/about">About Harrison <ArrowRight size={18} /></Link>
+            <Link className="text-link" href="/about">About Harrison</Link>
           </div>
         </div>
       </section>
@@ -92,7 +95,7 @@ export default function Page() {
           <p>Every piece is an original, made in Melbourne.</p>
           <div className="close-actions">
             <Link className="button" href="/contact">Enquire about a painting <ArrowRight size={20} /></Link>
-            <Link className="text-link" href="/works">See all {artworks.length} paintings <ArrowRight size={18} /></Link>
+            <Link className="text-link" href="/works">See all {artworks.length} paintings</Link>
           </div>
         </div>
       </section>

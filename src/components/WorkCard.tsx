@@ -8,8 +8,8 @@ export function WorkCard({ work, sizes, eager = false }: { work: Artwork; sizes:
   return <Link className="work-card" href={artworkPath(work)}>
     <ArtworkImage work={work} sizes={sizes} eager={eager} />
     <span className="label">
-      <span className="label-title">{work.title}</span>
-      <span>{work.year} · {artworkSize(work)}</span>
+      <span className="label-title">{work.title}, <span>{work.year}</span></span>
+      <span>{artworkSize(work)}</span>
       <span>{price}</span>
     </span>
   </Link>;

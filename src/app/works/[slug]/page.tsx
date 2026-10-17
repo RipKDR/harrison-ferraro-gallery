@@ -54,7 +54,7 @@ export default async function WorkPage({ params }: Props) {
       </div>
       <div className="label work-label">
         <h1>{work.title}</h1>
-        <p className="price">{work.available ? `${artworkPrice(work)} · Available` : 'Sold'}</p>
+        <p className="price">{work.available ? <>{artworkPrice(work)}<span>Available</span></> : 'Sold'}</p>
         <a className="button" href="#enquire">Enquire about this painting <ArrowRight size={20} /></a>
         <dl>
           <div><dt>Year</dt><dd>{work.year}</dd></div>
