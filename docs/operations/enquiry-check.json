@@ -1,0 +1,26 @@
+{
+  "run": "OPS-20261017T171243Z",
+  "method": "native-server-rendered-form-over-HTTPS; not hydrated-browser verification",
+  "delivery_verified": false,
+  "checks": [
+    {
+      "artwork": "figure-with-skull",
+      "interest": "Original artwork",
+      "http_status": 200,
+      "form_accepted": null,
+      "delivery_verified": false,
+      "ui_confirmation": false,
+      "note": "HTTP 200; original response body not retained; action acceptance and delivery unverified; do not blindly resend."
+    },
+    {
+      "artwork": "abstract-blue-loops",
+      "interest": "Signed print",
+      "http_status": 200,
+      "form_accepted": true,
+      "delivery_verified": false,
+      "ui_confirmation": false,
+      "action_status": "success",
+      "note": "Actual React action state contains success and matching print/artwork values. Resend accepted; provider delivery/inbox not verified."
+    }
+  ]
+}
