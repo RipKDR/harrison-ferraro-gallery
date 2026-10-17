@@ -306,9 +306,10 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
   .fx-js :is(.room-work, .room-copy) { translate: 0 calc(var(--fx, 0) * var(--d) * -1); }
   .fx-js .beat-frame { transition: opacity 1.1s var(--ease); }
   .fx-js .beat:not(.is-in) .beat-frame { opacity: 0; }
-  .beat:focus-within .beat-frame, .room-link:focus-visible, .room-link:focus-visible :is(.room-work, .room-copy) { opacity: 1 !important; }
-  /* While a beat holds keyboard focus, the others stand down, so tabbing never shows two paintings at once. */
-  .show:has(.beat:focus-within) .beat:not(:focus-within) .beat-frame { opacity: 0 !important; pointer-events: none; }
+  .beat:has(:focus-visible) .beat-frame, .room-link:focus-visible, .room-link:focus-visible :is(.room-work, .room-copy) { opacity: 1 !important; }
+  /* While a beat holds keyboard focus, the others stand down, so tabbing never shows two paintings at once.
+     :focus-visible, not :focus-within: a mouse click (or Ctrl+click to a new tab) leaves focus on the link. */
+  .show:has(.beat :focus-visible) .beat:not(:has(:focus-visible)) .beat-frame { opacity: 0 !important; pointer-events: none; }
 }
 /* Rooms, phone and desktop: each beat is exactly one viewport tall, so the next beat's cover
    progress is this beat's cover minus 50%. own fades out over 66–76% while the next fades in
@@ -327,8 +328,8 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
    instead of finishing during the fade-in. Entrances still use --ease. */
     .room-work, .room-copy { animation: drift linear both; animation-timeline: --beat; animation-range: cover 28% cover 74%; }
     /* Focus keeps hold (dropping it would jump the frame up to a viewport away), only forces it visible. */
-    .beat:focus-within .beat-frame { animation: hold linear both; animation-timeline: --beat; animation-range: cover; opacity: 1; pointer-events: auto; }
-    .beat:last-child:focus-within .beat-frame { animation: none; }
+    .beat:has(:focus-visible) .beat-frame { animation: hold linear both; animation-timeline: --beat; animation-range: cover; opacity: 1; pointer-events: auto; }
+    .beat:last-child:has(:focus-visible) .beat-frame { animation: none; }
   }
 }
 /* Phone: the opening is taller than the screen, so as it leaves, fade the type and let the painting scroll
