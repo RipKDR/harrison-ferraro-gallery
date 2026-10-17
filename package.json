@@ -9,6 +9,7 @@
     "preview": "next start",
     "seo:check": "node scripts/seo-check.mjs",
     "seo:check:selftest": "node scripts/seo-check-selftest.mjs",
+    "check:production": "node scripts/check-production.mjs",
     "test:sites": "node --test tests/sites-worker.test.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ."
@@ -24,12 +25,14 @@
     "react-dom": "19.2.9",
     "resend": "^6.28.1",
     "server-only": "^0.0.1",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "three": "^0.180.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@types/three": "^0.180.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.4.2",
     "typescript": "^5.9.3"

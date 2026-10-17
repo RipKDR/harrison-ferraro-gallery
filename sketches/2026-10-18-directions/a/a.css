@@ -1,0 +1,162 @@
+:root {
+  --void: #0f0e0d;                 /* also the hall's fog colour, so canvas and page meet without a seam */
+  --bone: #ece6dc;
+  --ash: #aaa399;
+  --rule: rgb(236 230 220 / 0.16);
+  --red: #a8291f;
+  --red-deep: #8e2119;
+  --red-word: #e15b50;
+  --sans: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --m: max(1.25rem, env(safe-area-inset-left), env(safe-area-inset-right));
+  --proto: 1.875rem;               /* review bar height; 0 inside the comparison frames */
+  /* Painting box: long side L, never wider than availW, never above native pixels. */
+  --L: 46svh;
+  --availW: calc(100vw - 2 * var(--m));
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100svh; background: var(--void); color: var(--bone); font: 400 1rem/1.45 var(--sans); overflow-x: clip; }
+h1, h2, p, ul { margin: 0; padding: 0; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--bone); outline-offset: 3px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.link {
+  display: inline-flex; align-items: center; min-height: 44px;
+  background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.3em;
+  text-decoration-color: rgb(236 230 220 / 0.45);
+}
+.link:hover { text-decoration-thickness: 2px; text-decoration-color: var(--bone); }
+
+.proto { position: fixed; top: 0; left: 0; right: 0; z-index: 3; height: var(--proto); display: flex; align-items: center; gap: 0.5em; padding: 0 var(--m); font: 400 0.9375rem/1 system-ui, sans-serif; color: #c9c5bf; background: #2c2b29; }
+.proto a { color: #fff; }
+.proto[hidden] { display: none; }
+
+.art { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+@media print { .art { visibility: hidden; } }
+
+/* The hall: fixed behind everything, faded in once it has drawn. */
+.room { position: fixed; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; opacity: 0; transition: opacity 0.6s ease; }
+.spatial .room { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .room { transition: none; } }
+
+.top {
+  position: absolute; z-index: 2; top: var(--proto); left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  padding: max(0.25rem, env(safe-area-inset-top)) var(--m) 0.25rem;
+  background: var(--void);
+}
+.top h1 { font-size: 1.0625rem; font-weight: 500; letter-spacing: 0.005em; }
+.top nav { display: flex; gap: 1.25rem; }
+
+/* Phone first: painting, then its label; the walk is a bar at the foot. */
+.stage {
+  position: relative; z-index: 1; min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+  padding: calc(var(--proto) + 4.5rem) var(--m) calc(5rem + env(safe-area-inset-bottom));
+}
+.work { display: grid; grid-template-columns: min-content; row-gap: 1rem; }
+.hang { margin: 0; }
+.hang .art { display: block; width: auto; height: min(var(--L), var(--nh), calc(var(--availW) * var(--r))); cursor: zoom-in; }
+.hang .art.land { height: calc(var(--r) * min(var(--L), var(--nw), var(--availW))); }
+
+.label { display: flex; flex-direction: column; min-width: 15rem; }
+.label h2 { font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 0.375rem; text-wrap: balance; }
+.label .price { color: var(--bone); font-variant-numeric: tabular-nums; }
+.label .kind { color: var(--ash); }
+.label .details { align-self: flex-start; }
+
+.walk {
+  position: fixed; z-index: 2; left: 0; right: 0; bottom: 0;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  padding: 0.25rem var(--m) env(safe-area-inset-bottom);
+  background: rgb(15 14 13 / 0.92); border-top: 1px solid var(--rule);
+}
+.step {
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  min-height: 60px; padding: 0.25rem 0; background: none; border: 0; text-align: left; cursor: pointer;
+}
+.step[data-step="1"] { align-items: flex-end; text-align: right; }
+.step .dir { color: var(--ash); }
+.step .to { color: var(--bone); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.3em; text-decoration-color: rgb(236 230 220 / 0.35); }
+.step:hover .to { text-decoration-thickness: 2px; text-decoration-color: var(--bone); }
+
+/* Wide and landscape: the label hangs to the painting's right, title at its top edge,
+   walk at its bottom edge. The next easels recede to the left, away from the text. */
+@media (min-width: 760px) and (orientation: landscape) {
+  :root {
+    --m: max(clamp(1.5rem, 4vw, 4rem), env(safe-area-inset-left), env(safe-area-inset-right));
+    --labelW: 17rem;
+    --gap: clamp(2rem, 4vw, 4rem);
+    --L: min(62svh, 860px);
+    --availW: calc(100vw - 2 * var(--m) - var(--labelW) - var(--gap));
+  }
+  .top { background: none; padding-top: max(1rem, env(safe-area-inset-top)); }
+  .stage { padding: calc(var(--proto) + 4.5rem) var(--m) 9svh; }
+  .work { grid-template-columns: auto var(--labelW); column-gap: var(--gap); align-items: end; }
+  .hang { align-self: end; }
+  .label { align-self: stretch; min-width: 0; }
+  .label h2 { font-size: clamp(1.5rem, 1.1rem + 0.8vw, 2rem); }
+  .walk { position: static; margin-top: auto; padding: 1.5rem 0 0; background: none; border: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+  .step, .step[data-step="1"] { align-items: flex-start; text-align: left; min-height: 56px; }
+}
+
+/* Keep the museum label legible over the glass easel and its concrete base. */
+@media (max-width: 759px), (orientation: portrait) {
+  .label { background: var(--void); box-shadow: 0 0 0 0.75rem var(--void); }
+}
+
+/* Dialogs */
+dialog { color: var(--bone); background: #141312; border: 0; padding: 0; }
+dialog::backdrop { background: rgb(8 8 7 / 0.72); }
+
+.panel { margin: 0 0 0 auto; height: 100%; max-height: none; width: min(28rem, 100%); }
+.panel-in { padding: max(1.25rem, env(safe-area-inset-top)) var(--m) max(2rem, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 1rem; }
+.panel h2 { font-size: 1.5rem; font-weight: 500; }
+.panel ul { list-style: none; }
+.panel li button {
+  width: 100%; min-height: 52px; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  background: none; border: 0; border-top: 1px solid var(--rule); padding: 0 0 0 0.875rem; text-align: left; cursor: pointer; font-size: 1.125rem;
+  box-shadow: inset 2px 0 0 transparent;
+}
+.panel li:last-child button { border-bottom: 1px solid var(--rule); }
+.panel li button:hover span:first-child { text-decoration: underline; text-underline-offset: 0.3em; }
+.panel li button[aria-current] { box-shadow: inset 2px 0 0 var(--bone); }
+.panel .price { color: var(--ash); font-size: 1rem; font-variant-numeric: tabular-nums; }
+.panel .link { align-self: flex-start; }
+.panel .attribution { color: var(--ash); margin-top: -0.75rem; }
+.panel .statement { font-size: 1.125rem; line-height: 1.6; max-width: 34em; }
+.panel .red { color: var(--red-word); }
+
+.sheet { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; overflow-y: auto; overscroll-behavior: contain; background: var(--void); }
+.sheet-in { min-height: 100%; }
+.sheet-art { container-type: size; height: 64svh; display: flex; align-items: center; justify-content: center; padding: 3.75rem var(--m) 1rem; }
+.sheet-art .art { display: block; width: auto; height: min(100cqh, var(--nh), calc(100cqw * var(--r))); }
+.sheet-art.actual { display: block; overflow: auto; padding: 3.75rem 0 0; }
+.sheet-art.actual .art { width: var(--nw); height: auto; max-width: none; margin: 0 auto; }
+.sheet-info { padding: 1rem var(--m) max(2rem, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 1rem; max-width: 32rem; }
+.sheet .close { position: fixed; z-index: 1; top: max(0.5rem, env(safe-area-inset-top)); right: var(--m); padding: 0 0.75rem; background: var(--void); }
+.sheet h2 { font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem); font-weight: 500; line-height: 1.1; letter-spacing: -0.015em; }
+.sheet .facts { color: var(--ash); }
+.choice { border: 0; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.choice legend { padding: 0; margin-bottom: 0.5rem; color: var(--ash); }
+.choice label { display: flex; align-items: center; gap: 0.75rem; min-height: 52px; padding: 0.5rem 0.875rem; border: 1px solid var(--rule); border-radius: 2px; cursor: pointer; }
+.choice label:has(input:checked) { border-color: var(--bone); }
+.choice input { accent-color: var(--bone); width: 1.125rem; height: 1.125rem; margin: 0; }
+.choice .cost { margin-left: auto; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.enquire { align-self: flex-start; min-height: 48px; padding: 0.75rem 1.25rem; border: 0; border-radius: 2px; background: var(--red); color: var(--bone); font-weight: 500; cursor: pointer; }
+.enquire:hover { background: var(--red-deep); }
+.status { min-height: 1.45em; color: var(--ash); }
+.sheet [data-zoom] { align-self: flex-start; }
+.note { color: var(--ash); }
+
+@media (min-width: 60rem) {
+  .sheet-in { display: grid; grid-template-columns: 1fr minmax(22rem, 28rem); height: 100%; }
+  .sheet-art { height: 100svh; padding: 2.5rem; }
+  .sheet-art.actual { padding: 0; }
+  .sheet-info { overflow-y: auto; padding: 4.5rem 2.5rem 2.5rem 0; justify-content: flex-end; }
+  .sheet .close { right: 2.5rem; top: 1.25rem; }
+}

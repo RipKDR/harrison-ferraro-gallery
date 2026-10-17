@@ -1,0 +1,245 @@
+{
+  "checkedAt": "2026-10-17T17:18:47.373Z",
+  "base": "https://www.ferraro.studio",
+  "ok": true,
+  "checks": [
+    {
+      "path": "/",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 219
+    },
+    {
+      "path": "/works",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 31
+    },
+    {
+      "path": "/about",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 32
+    },
+    {
+      "path": "/contact",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 21
+    },
+    {
+      "path": "/privacy",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 21
+    },
+    {
+      "path": "/works/figure-with-skull",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 35
+    },
+    {
+      "path": "/works/over-the-shoulder",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 28
+    },
+    {
+      "path": "/works/portrait-with-rose",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 35
+    },
+    {
+      "path": "/works/new-painting-2026",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 34
+    },
+    {
+      "path": "/works/abstract-blue-loops",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 29
+    },
+    {
+      "path": "/works/figure-exhaling-red",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 29
+    },
+    {
+      "path": "/works/woman-cigarette",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 33
+    },
+    {
+      "path": "/works/purple-splatter",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 34
+    },
+    {
+      "path": "/works/black-splatter",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 22
+    },
+    {
+      "path": "/works/woman-cigarette-easel",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 37
+    },
+    {
+      "path": "/art/figure-with-skull-web.jpg",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 34
+    },
+    {
+      "path": "/art/over-the-shoulder-web.jpg",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 52
+    },
+    {
+      "path": "/art/portrait-with-rose-web.jpg",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 67
+    },
+    {
+      "path": "/art/new-painting-2026-web.jpg",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 60
+    },
+    {
+      "path": "/art/abstract-blue-loops-web.jpg",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 134
+    },
+    {
+      "path": "/art/figure-exhaling-red-web.jpg",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 56
+    },
+    {
+      "path": "/art/woman-cigarette-web.jpg",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 66
+    },
+    {
+      "path": "/art/purple-splatter-web.jpg",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 55
+    },
+    {
+      "path": "/art/black-splatter-web.jpg",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 57
+    },
+    {
+      "path": "/art/woman-cigarette-easel-web.jpg",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 60
+    },
+    {
+      "path": "/sitemap.xml",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 60
+    },
+    {
+      "path": "/robots.txt",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 57
+    },
+    {
+      "path": "/llms.txt",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "durationMs": 56
+    },
+    {
+      "path": "/_vercel/insights/script.js",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 31
+    },
+    {
+      "path": "/_vercel/speed-insights/script.js",
+      "method": "HEAD",
+      "ok": true,
+      "status": 200,
+      "durationMs": 33
+    },
+    {
+      "path": "/.env",
+      "method": "GET",
+      "ok": true,
+      "status": 404,
+      "durationMs": 51
+    },
+    {
+      "path": "/.env.local",
+      "method": "GET",
+      "ok": true,
+      "status": 404,
+      "durationMs": 60
+    },
+    {
+      "path": "/src/artworks.ts",
+      "method": "GET",
+      "ok": true,
+      "status": 404,
+      "durationMs": 27
+    },
+    {
+      "path": "https://ferraro.studio/",
+      "method": "GET",
+      "ok": true,
+      "status": 308,
+      "durationMs": 69
+    }
+  ]
+}

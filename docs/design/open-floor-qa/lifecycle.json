@@ -1,0 +1,48 @@
+[
+  {
+    "test": "idle has no render loop",
+    "passed": true,
+    "draws": 1560
+  },
+  {
+    "test": "simulated hidden-tab rendering suspended",
+    "passed": true
+  },
+  {
+    "test": "visibility restoration redraws",
+    "passed": true
+  },
+  {
+    "test": "offscreen rendering suspended",
+    "passed": true
+  },
+  {
+    "test": "onscreen restoration redraws",
+    "passed": true
+  },
+  {
+    "test": "client route exit disposes GPU resources",
+    "passed": true,
+    "deletes": 171
+  },
+  {
+    "test": "original enquiry preserves work and choice",
+    "passed": true,
+    "interest": "Original artwork",
+    "artwork": "figure-with-skull",
+    "message": "Hello Harrison, I'm interested in this painting.",
+    "privacy": true
+  },
+  {
+    "test": "print enquiry preserves work and choice",
+    "passed": true,
+    "interest": "Signed print",
+    "artwork": "figure-with-skull",
+    "message": "Hello Harrison, I'm interested in a signed print of this painting.",
+    "privacy": true
+  },
+  {
+    "test": "scene chunk loading failure keeps flat painting",
+    "passed": true
+  }
+]

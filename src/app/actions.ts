@@ -1,6 +1,6 @@
 'use server';
 import { headers } from 'next/headers';
-import { artworkBySlug, artworkPath, artworkPrice } from '../artworks';
+import { artworkBySlug, artworkPath, artworkPrice, printPrice, PRINT_EDITION } from '../artworks';
 import { emailConfig, headerSafe } from '../lib/email';
 import { EMAIL_PATTERN, type EnquiryValues, type FormState, GENERAL, ELAPSED, HONEYPOT, INTERESTS, type StudioListValues } from '../lib/forms';
 import { rateLimit } from '../lib/rate-limit';
@@ -57,7 +57,7 @@ export async function submitEnquiry(_previous: FormState<EnquiryValues>, data: F
   }
 
   const work = artworkBySlug(values.artwork);
-  const workLine = work ? `${work.title}, ${artworkPrice(work)}\n${absoluteUrl(artworkPath(work))}` : 'General enquiry';
+  const workLine = work ? `${work.title}, ${values.interest === 'Signed print' ? `signed print, edition of ${PRINT_EDITION}, ${printPrice(work)} (final rounding provisional)` : artworkPrice(work)}\n${absoluteUrl(artworkPath(work))}` : 'General enquiry';
   const destination = [values.country, values.postcode].filter(Boolean).join(', ') || 'Not supplied';
   const { error } = await config.resend.emails.send({
     from: config.from,

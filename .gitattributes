@@ -1,0 +1,8 @@
+# Preserve the exact approved baseline bytes across Windows checkouts.
+sketches/2026-10-18-directions/a/a.css text eol=lf
+sketches/2026-10-18-directions/a/a.js text eol=lf
+sketches/2026-10-18-directions/a/index.html text eol=lf
+sketches/2026-10-18-directions/a/room.js text eol=lf
+sketches/2026-10-18-directions/shared.js text eol=lf
+sketches/2026-10-18-directions/qa/a-desktop-final.png binary
+sketches/2026-10-18-directions/qa/a-phone-final.png binary

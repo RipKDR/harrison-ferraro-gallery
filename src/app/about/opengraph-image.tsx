@@ -6,5 +6,5 @@ export const size = OG_SIZE;
 export const contentType = 'image/png';
 
 export default function Image() {
-  return renderArtworkCard(artworks[0], 'About the artist', 'Painter · Melbourne');
+  return renderArtworkCard(artworks[0], 'About the artist', 'Painter, Melbourne');
 }

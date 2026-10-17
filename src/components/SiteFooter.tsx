@@ -7,7 +7,7 @@ export function SiteFooter({ emailEnabled }: { emailEnabled: boolean }) {
   return <footer className="site-footer">
     <StudioListForm emailEnabled={emailEnabled} />
     <div className="footer-base">
-      <p>Harrison Ferraro · Melbourne, Australia</p>
+      <p>Harrison Ferraro, painter, Melbourne</p>
       <nav aria-label="Footer">
         <Link href="/works">Works</Link>
         <Link href="/about">About</Link>
