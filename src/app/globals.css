@@ -71,59 +71,44 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .text-button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0; border: 0; background: none; color: var(--ash); text-decoration: underline; text-underline-offset: 5px; cursor: pointer; }
 .text-button:hover { color: var(--bone); }
 
-/* Home: one gallery wall. The smoke canvas is fixed under the grain, so it hangs in the room and never over a
-   painting. --cm is one centimetre of canvas: each painting is its width in cm, so the landscape one hangs half again
-   as wide as a portrait, and every frame shares one centre line. Labels hang below the frame, outside the box being
-   centred, so they never push a painting off the line. This is the still hang (reduced motion, no script): the wall
-   wraps down the page. .is-walking below pins it and walks along it. */
-.smoke { position: fixed; inset: 0; z-index: -2; width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity 3s; }
-.smoke.is-on { opacity: 1; }
-.walk { padding: 0 var(--gutter); container-type: inline-size; }
-.walk-track { --gap: 32px; --cm: calc(100cqi / 72); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 150px var(--gap); margin: 0; padding: clamp(8px, 3vw, 24px) 0 110px; list-style: none; }
-.walk-track > li { position: relative; }
-.walk-vinyl, .walk-plate { flex: 1 1 100%; }
-.walk-vinyl h1 { margin: 0 0 22px; font-size: clamp(60px, 15vw, 168px); line-height: .86; letter-spacing: -.015em; }
-.walk-vinyl p { max-width: 24em; margin: 0 0 6px; color: var(--ash); }
-.walk-work { width: min(100%, calc(var(--wcm) * var(--cm))); }
-.walk-work .work-card { display: block; animation: none; }
-.walk-work .art { margin-inline: auto; }
-.walk-work .label { position: absolute; top: calc(100% + 16px); left: 0; right: 0; }
-/* The close is a wall label too: the ask reads as part of the hang. */
-.walk-plate { display: grid; justify-items: start; gap: 18px; max-width: 26rem; }
-.walk-plate .label-title { margin: 0; font-size: clamp(26px, 3vw, 34px); }
-/* Bone like every other link: ash measured 3.99:1 where the smoke settles behind the plate. */
-.walk-plate .text-link { color: var(--bone); }
-.walk-index { display: none; }
-@media (min-width: 600px) {
-  .walk-track { --gap: clamp(32px, 6vw, 64px); --cm: calc((100cqi - var(--gap)) / 136); }
+/* Home: the hall. Still, it is a viewing room: one painting per screen, swiped or scrolled sideways, snapping to each.
+   With .is-3d the Blender-built room (Gallery3D) lies over it and the still room hides. The header lies over both. */
+body:has(.hall) .site-header { position: absolute; inset: 0 0 auto; z-index: 3; }
+.hall { position: relative; height: 100svh; min-height: 520px; }
+.hall-rooms { display: flex; height: 100%; margin: 0; padding: 0; list-style: none; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.hall-rooms::-webkit-scrollbar { display: none; }
+.hall-room { flex: 0 0 100%; display: grid; grid-template-rows: 1fr auto; justify-items: center; align-items: end; gap: 22px; padding: 92px var(--gutter) 40px; scroll-snap-align: center; }
+.hall-art { display: block; }
+.hall-art .art { width: min(100%, var(--w), calc((100svh - 300px) * var(--ratio))); }
+.hall-label { justify-self: stretch; max-width: 26rem; }
+.hall-label a { text-decoration: none; }
+.hall-label .text-link { margin-top: 6px; color: var(--bone); text-decoration: underline; }
+.hall-3d { position: absolute; inset: 0; z-index: 1; opacity: 0; pointer-events: none; transition: opacity 1.4s; }
+.hall-3d > canvas { position: absolute; inset: 0; width: 100%; height: 100%; box-shadow: none; touch-action: pan-y; cursor: grab; }
+.hall.is-3d .hall-3d { opacity: 1; pointer-events: auto; }
+.hall.is-3d .hall-rooms { visibility: hidden; }
+.hall-ui { position: absolute; inset: auto var(--gutter) 20px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 16px; pointer-events: none; }
+.hall-ui > * { pointer-events: auto; }
+.hall-nav { display: flex; align-items: center; gap: 10px; color: var(--ash); font-size: 15px; font-variant-numeric: oldstyle-nums; }
+.hall-nav button { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 1px solid var(--hair); background: rgb(11 10 9 / .5); color: var(--bone); cursor: pointer; transition: border-color .2s; }
+.hall-nav button:hover { border-color: var(--ash); }
+.hall-nav button:disabled { opacity: .3; cursor: default; }
+.hall-close { display: grid; justify-items: start; gap: 22px; max-width: calc(34rem + 2 * var(--gutter)); padding: var(--section) var(--gutter) 0; }
+.hall-close p { margin: 0; color: var(--ash); font-size: clamp(20px, 2vw, 24px); font-family: var(--display); line-height: 1.35; }
+@media (min-width: 700px) {
+  /* painting and label centred as a pair, the label hung at the painting's foot. No % width: in a shrink-wrapped box
+     it would resolve against the photo's full width. */
+  .hall-room { display: flex; justify-content: center; align-items: flex-end; gap: clamp(24px, 3vw, 48px); padding: 110px var(--gutter) 64px; }
+  .hall-art { align-self: center; }
+  .hall-art .art { width: min(var(--w), calc((100svh - 220px) * var(--ratio)), 56vw); }
+  .hall-room .hall-label { flex: 0 1 16rem; }
+  .hall-ui { inset: auto var(--gutter) 32px; }
+  .hall-nav { gap: 20px; }
 }
-/* The walk. The stage pins for the section's height (set by WalkMotion) and the track slides left under it. Here --cm
-   comes from the screen's height, so a portrait canvas fills 60% of it, with a gallery's 40 cm between frames and 80 cm
-   of quiet wall before the peak. The header lies over the wall instead of pushing it below the fold. */
-body:has(.walk.is-walking) .site-header { position: absolute; inset: 0 0 auto; z-index: 2; }
-/* On the home wall the name is already lettered as the h1; the wordmark would only repeat it as a link to this page.
-   Hidden rather than removed, so the nav keeps its place. */
-body:has(.walk) .wordmark { visibility: hidden; }
-.walk.is-walking { padding: 0; }
-.is-walking .walk-stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
-.is-walking .walk-track { --cm: min(.66svh, (100vw - 2 * var(--gutter)) / 62); --gap: calc(40 * var(--cm)); flex-wrap: nowrap; justify-content: flex-start; width: max-content; height: 100%; padding: 0 var(--gutter) 9svh; will-change: transform; }
-.is-walking .walk-track > li { flex: none; }
-/* No 100% cap here: inside a max-content track a percentage width falls back to the photo's native width. */
-.is-walking .walk-work { width: calc(var(--wcm) * var(--cm)); }
-.is-walking .walk-vinyl { width: min(calc(72 * var(--cm)), calc(100vw - 2 * var(--gutter))); }
-.is-walking .walk-vinyl h1 { font-size: min(calc(15 * var(--cm)), 16vw); }
-.is-walking .walk-peak { margin-left: calc(40 * var(--cm)); }
-.is-walking .walk-plate { width: min(calc(64 * var(--cm)), calc(100vw - 2 * var(--gutter))); margin-right: calc(30 * var(--cm)); }
-/* A phone is too narrow for the name and a canvas side by side, so the name hangs above the wall (still on the track,
-   so it slides away with the first step) and the canvases shrink to fit beneath it. */
-@media (max-width: 699px) {
-  .is-walking .walk-track { --cm: min((100svh - 400px) / 90, (100vw - 2 * var(--gutter)) / 62); padding: 270px var(--gutter) 120px; }
-  .is-walking .walk-vinyl { position: absolute; top: 88px; left: var(--gutter); }
-  .is-walking .walk-vinyl h1 { margin-bottom: 14px; font-size: 44px; }
-  .is-walking .walk-vinyl p { margin: 0; font-size: 15px; line-height: 1.5; }
-  /* 80 cm of wall is wider than a phone, which left a screen of bare smoke; 55 cm keeps both frames' edges in view. */
-  .is-walking .walk-peak { margin-left: calc(15 * var(--cm)); }
-}
+
+/* Paintings are shown, not handed out: no drag-out, no long-press save, no printing. A screenshot can't be blocked. */
+.art { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
+@media print { .art { visibility: hidden; } }
 
 /* Works index: labels line up at one eye-line however tall each painting is. */
 .page-head { max-width: calc(48rem + 2 * var(--gutter)); padding: clamp(32px, 7vw, 112px) var(--gutter) clamp(48px, 6vw, 88px); }
@@ -218,12 +203,6 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
 }
 
 @media (min-width: 1000px) {
-  .walk-track { --gap: clamp(48px, 6vw, 112px); --cm: calc((100cqi - 2 * var(--gap)) / 210); }
-  /* The index of the wall: every title, the current one lit. It jumps. */
-  .is-walking .walk-index { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 14px; display: flex; flex-wrap: wrap; gap: 0 24px; font-size: 15px; }
-  .walk-index a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ash); text-decoration: none; transition: color .3s; }
-  .walk-index a:hover, .walk-index a[aria-current] { color: var(--bone); }
-  .walk-index a[aria-current] { text-decoration: underline; text-underline-offset: 6px; }
   .works-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 96px clamp(28px, 3vw, 56px); }
   .work { grid-template-columns: 7fr 4fr; align-items: end; gap: clamp(40px, 5vw, 96px); min-height: calc(100svh - 100px); padding-bottom: 5svh; }
   .enquire, .about { grid-template-columns: 5fr 6fr; align-items: start; gap: clamp(48px, 6vw, 120px); }
@@ -240,10 +219,7 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
   .work-card .art { transition: transform .6s var(--ease); }
   .work-card:hover .art { transform: translateY(-6px); }
 
-  /* Entrance: the name and its line rise; on a painting page the lights come up. Paintings stay opaque. */
-  .walk-vinyl > * { animation: rise 1.6s var(--ease) both; }
-  .walk-vinyl > :nth-child(2) { animation-delay: .2s; }
-  .walk-vinyl > :nth-child(3) { animation-delay: .4s; }
+  /* Entrance: on a painting page the lights come up. Paintings stay opaque. */
   .stage::before { animation: lights 2.8s var(--ease) both; }
   .work-label::before { transform-origin: 0 0; animation: draw 1.4s .2s var(--ease) both; }
   .work-label > * { animation: rise 1.5s var(--ease) both; }

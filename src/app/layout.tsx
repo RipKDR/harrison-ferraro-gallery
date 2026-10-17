@@ -4,6 +4,7 @@ import Script from 'next/script';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { ProtectArt } from '../components/ProtectArt';
 import { SiteFooter } from '../components/SiteFooter';
 import { SiteHeader } from '../components/SiteHeader';
 import { isEmailConfigured } from '../lib/email-status';
@@ -49,6 +50,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SiteHeader />
     <main id="main">{children}</main>
     <SiteFooter emailEnabled={isEmailConfigured()} />
+    <ProtectArt />
     {vercelAnalytics && <><Analytics /><SpeedInsights /></>}
     {/* Session replay and heatmaps, disclosed on /privacy. Loads after the page so it never delays the paintings. */}
     <Script id="microsoft-clarity" strategy="lazyOnload">{`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "ypc3nxsht5");`}</Script>
