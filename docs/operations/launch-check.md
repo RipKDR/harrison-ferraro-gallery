@@ -103,7 +103,16 @@ production, and a false canonical alarm was corrected with a regression check:
   concurrency cancellation, and no external monitoring credentials.
 
 The schedule does not become active until the workflow reaches the default
-branch. Feature-branch push runs can verify it before merge. GitHub scheduled jobs
+branch AND the GitHub account billing block is resolved. The authenticated run
+page for [the first push run](https://github.com/RipKDR/harrison-ferraro-gallery/actions/runs/39053636993)
+shows: "The job was not started because recent account payments have failed or
+your spending limit needs to be increased. Please check the 'Billing & plans'
+section in your settings." It failed before jobs started; no hosted gate or
+scheduled monitor has passed. Local actionlint 1.7.12 validated the workflow with
+exit 0; its downloaded archive was checked against the published SHA-256
+manifest. Do not increase a spending limit or alter payment details automatically.
+Feature-branch push runs can verify the workflow after billing is resolved and
+before merge. GitHub scheduled jobs
 can be delayed; this is not a continuous uptime service or an SLA. GitHub Actions
 usage is subject to the account's existing allowance. Failure email delivery also
 depends on Harry's GitHub Actions notification preferences; no alert destination
@@ -153,8 +162,9 @@ not need another destructive fault-injection run.
 
 - Confirm receipt and Reply-To for the labeled email tests in the studio inbox
   or Resend. Do not infer delivery from the acceptance state.
-- Approve the feature PR before hourly monitoring and Dependabot can activate;
-  confirm the preferred failure-notification channel.
+- Resolve the GitHub billing warning without automatically raising spending
+  limits, rerun the hosted gates, then approve the feature PR before hourly
+  monitoring can activate. Confirm the preferred failure-notification channel.
 - Verify Google Search Console ownership/indexing and Bing Webmaster access in
   their dashboards. A Google verification tag exists, but no account check was
   performed; an absent Bing environment key does not prove the property is absent.
