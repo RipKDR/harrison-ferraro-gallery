@@ -183,6 +183,8 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
 .about { display: grid; gap: 40px; padding: clamp(16px, 5vw, 80px) var(--gutter) 0; }
 .portrait { width: min(100%, 460px); }
 .about-text h1 { font-size: clamp(52px, 8.6vw, 124px); line-height: .92; }
+/* The place line follows the name as an attribution: part of the h1, set like a wall-label line, not a second headline. */
+.about-text h1 .attribution { display: block; margin-top: 20px; color: var(--ash); font-size: clamp(18px, 1.6vw, 22px); line-height: 1.35; }
 .statement { max-width: 32em; font-family: var(--display); font-size: clamp(22px, 2.3vw, 29px); line-height: 1.38; }
 .about-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 36px; }
 .prose { max-width: calc(40rem + 2 * var(--gutter)); padding: clamp(32px, 7vw, 112px) var(--gutter) 0; }
