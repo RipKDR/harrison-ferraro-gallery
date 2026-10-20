@@ -87,25 +87,30 @@ export function OpenFloor() {
         void go(current.current + (event.key === 'ArrowRight' ? 1 : -1));
       }
     };
-    const boot = requestAnimationFrame(() => {
-      if (!('WebGL2RenderingContext' in window)) return;
+    // Reduced motion is the still stage: the room never loads while it is on.
+    let starting = false;
+    const start = () => {
+      if (starting || room.current || reduced.matches || !('WebGL2RenderingContext' in window)) return;
+      starting = true;
       import('./open-floor-scene').then(({ createRoom }) => {
-        if (gone) return;
+        if (gone || reduced.matches) return;
         return createRoom(canvas.current!, artworks, { onLost: flat });
       }).then(scene => {
         if (!scene) return;
-        if (gone) { scene.dispose(); return; }
+        if (gone || reduced.matches) { scene.dispose(); return; }
         room.current = scene;
         scene.place(current.current, image.current!.getBoundingClientRect());
         scene.suspend(document.hidden || offscreen);
         setSpatial(true);
-      }).catch(() => flat());
-    });
+      }).catch(() => flat()).finally(() => { starting = false; });
+    };
+    const boot = requestAnimationFrame(start);
     addEventListener('resize', follow);
     addEventListener('scroll', follow, { passive: true });
     document.addEventListener('keydown', key);
     document.addEventListener('visibilitychange', suspend);
-    const motionChange = () => { room.current?.suspend(true); suspend(); };
+    // Turning reduced motion on mid-visit drops the room for the still stage; turning it off brings the room back.
+    const motionChange = () => { if (reduced.matches) flat(); else start(); };
     reduced.addEventListener('change', motionChange);
     document.fonts.ready.then(() => { if (!gone) follow(); });
     return () => {
