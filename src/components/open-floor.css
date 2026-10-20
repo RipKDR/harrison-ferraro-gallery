@@ -173,6 +173,8 @@ body:has(.open-floor) .site-footer { display: none; }
 .open-floor .work { min-height: 0; padding: 0; gap: 1rem 0; view-timeline: none; }
 @media (min-width: 760px) and (orientation: landscape) { .open-floor .work { column-gap: var(--gap); } }
 .open-floor .label { position: static; padding: 0; color: var(--bone); font-size: 1rem; line-height: 1.45; font-variant-numeric: normal; }
+/* Schibsted Grotesk's tabular comma and full stop are a full digit wide, so "$1,400" read as "$1 , 400". */
+.open-floor :is(.label .price, .panel .price, .choice .cost) { font-variant-numeric: normal; }
 .open-floor .label::before { content: none; }
 .open-floor .label h2 { margin-bottom: 0.375rem; }
 .open-floor .top h1 { margin: 0; }

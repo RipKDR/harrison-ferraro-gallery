@@ -22,7 +22,7 @@ export async function renderArtworkCard(work: Artwork, heading: string, subheadi
   const scale = Math.min(640 / work.width, 550 / work.height);
   return new ImageResponse(
     (
-      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', background: '#0b0a09', color: '#ece5d8', padding: 40 }}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', background: '#0f0e0d', color: '#ece6dc', padding: 40 }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', paddingRight: 40 }}>
           <div style={{ display: 'flex', flexDirection: 'column', fontSize: 30, letterSpacing: '0.22em', lineHeight: 1.05 }}>
             <span>HARRISON</span>
@@ -30,7 +30,7 @@ export async function renderArtworkCard(work: Artwork, heading: string, subheadi
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <span style={{ fontFamily: 'Bodoni Moda', fontSize: heading.length > 16 ? 58 : 72, lineHeight: 1.05 }}>{heading}</span>
-            <span style={{ marginTop: 20, fontSize: 24, color: '#a1988c', letterSpacing: '0.06em' }}>{subheading}</span>
+            <span style={{ marginTop: 20, fontSize: 24, color: '#aaa399', letterSpacing: '0.06em' }}>{subheading}</span>
           </div>
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element -- rendered by Satori, not the browser */}

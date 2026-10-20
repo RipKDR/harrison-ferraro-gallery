@@ -8,7 +8,7 @@ const font = readFile(join(process.cwd(), 'node_modules/@fontsource/bodoni-moda/
 export async function renderMonogram(size: number) {
   return new ImageResponse(
     (
-      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0b0a09', color: '#ece5d8', fontFamily: 'Bodoni Moda', fontSize: size * 0.5, letterSpacing: '0.04em', paddingTop: size * 0.03 }}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f0e0d', color: '#ece6dc', fontFamily: 'Bodoni Moda', fontSize: size * 0.5, letterSpacing: '0.04em', paddingTop: size * 0.03 }}>
         HF
       </div>
     ),
