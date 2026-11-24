@@ -1,0 +1,187 @@
+.open-floor {
+  --void: #0f0e0d;                 /* also the hall's fog colour, so canvas and page meet without a seam */
+  --bone: #ece6dc;
+  --ash: #aaa399;
+  --rule: rgb(236 230 220 / 0.16);
+  --red: #a8291f;
+  --red-deep: #8e2119;
+  --red-word: #e15b50;
+  --sans: var(--font-sans), 'Helvetica Neue', Arial, sans-serif;
+  --m: max(1.25rem, env(safe-area-inset-left), env(safe-area-inset-right));
+  --proto: 0px;               /* review bar height; 0 inside the comparison frames */
+  /* Painting box: long side L, never wider than availW, never above native pixels. */
+  --L: 46svh;
+  --availW: calc(100vw - 2 * var(--m));
+  color-scheme: dark;
+}
+
+.open-floor * { box-sizing: border-box; }
+.open-floor { -webkit-text-size-adjust: 100%; }
+.open-floor { margin: 0; min-height: 100svh; background: var(--void); color: var(--bone); font: 400 1rem/1.45 var(--sans); overflow-x: clip; }
+.open-floor h1, .open-floor h2, .open-floor p, .open-floor ul { margin: 0; padding: 0; }
+.open-floor button { font: inherit; color: inherit; }
+.open-floor :focus-visible { outline: 2px solid var(--bone); outline-offset: 3px; }
+.open-floor .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.open-floor .link {
+  display: inline-flex; align-items: center; min-height: 44px;
+  background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.3em;
+  text-decoration-color: rgb(236 230 220 / 0.45);
+}
+.open-floor .link:hover { text-decoration-thickness: 2px; text-decoration-color: var(--bone); }
+
+.open-floor .proto { position: fixed; top: 0; left: 0; right: 0; z-index: 3; height: var(--proto); display: flex; align-items: center; gap: 0.5em; padding: 0 var(--m); font: 400 0.9375rem/1 system-ui, sans-serif; color: #c9c5bf; background: #2c2b29; }
+.open-floor .proto a { color: #fff; }
+.open-floor .proto[hidden] { display: none; }
+
+.open-floor .art { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+@media print { .open-floor .art { visibility: hidden; } }
+
+/* The hall: fixed behind everything, faded in once it has drawn. */
+.open-floor .room { position: fixed; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; opacity: 0; transition: opacity 0.6s ease; }
+.open-floor.spatial .room { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .open-floor .room { transition: none; } }
+
+.open-floor .top {
+  position: absolute; z-index: 2; top: var(--proto); left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  padding: max(0.25rem, env(safe-area-inset-top)) var(--m) 0.25rem;
+  background: var(--void);
+}
+.open-floor .top h1 { font-size: 1.0625rem; font-weight: 500; letter-spacing: 0.005em; }
+.open-floor .top nav { display: flex; gap: 1.25rem; }
+
+/* Phone first: painting, then its label; the walk is a bar at the foot. */
+.open-floor .stage {
+  position: relative; z-index: 1; min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+  padding: calc(var(--proto) + 4.5rem) var(--m) calc(5rem + env(safe-area-inset-bottom));
+}
+.open-floor .work { display: grid; grid-template-columns: min-content; row-gap: 1rem; }
+.open-floor .hang { margin: 0; }
+.open-floor .hang .art { display: block; width: auto; height: min(var(--L), var(--nh), calc(var(--availW) * var(--r))); cursor: zoom-in; }
+.open-floor .hang .art.land { height: calc(var(--r) * min(var(--L), var(--nw), var(--availW))); }
+
+.open-floor .label { display: flex; flex-direction: column; min-width: 15rem; }
+.open-floor .label h2 { font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 0.375rem; text-wrap: balance; }
+.open-floor .label .price { color: var(--bone); font-variant-numeric: tabular-nums; }
+.open-floor .label .kind { color: var(--ash); }
+.open-floor .label .details { align-self: flex-start; }
+
+.open-floor .walk {
+  position: fixed; z-index: 2; left: 0; right: 0; bottom: 0;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  padding: 0.25rem var(--m) env(safe-area-inset-bottom);
+  background: rgb(15 14 13 / 0.92); border-top: 1px solid var(--rule);
+}
+.open-floor .step {
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  min-height: 60px; padding: 0.25rem 0; background: none; border: 0; text-align: left; cursor: pointer;
+}
+.open-floor .step[data-step="1"] { align-items: flex-end; text-align: right; }
+.open-floor .step .dir { color: var(--ash); }
+.open-floor .step .to { color: var(--bone); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.3em; text-decoration-color: rgb(236 230 220 / 0.35); }
+.open-floor .step:hover .to { text-decoration-thickness: 2px; text-decoration-color: var(--bone); }
+
+/* Wide and landscape: the label hangs to the painting's right, title at its top edge,
+   walk at its bottom edge. The next easels recede to the left, away from the text. */
+@media (min-width: 760px) and (orientation: landscape) {
+  .open-floor {
+    --m: max(clamp(1.5rem, 4vw, 4rem), env(safe-area-inset-left), env(safe-area-inset-right));
+    --labelW: 17rem;
+    --gap: clamp(2rem, 4vw, 4rem);
+    --L: min(62svh, 860px);
+    --availW: calc(100vw - 2 * var(--m) - var(--labelW) - var(--gap));
+  }
+  .open-floor .top { background: none; padding-top: max(1rem, env(safe-area-inset-top)); }
+  .open-floor .stage { padding: calc(var(--proto) + 4.5rem) var(--m) 9svh; }
+  .open-floor .work { grid-template-columns: auto var(--labelW); column-gap: var(--gap); align-items: end; }
+  .open-floor .hang { align-self: end; }
+  .open-floor .label { align-self: stretch; min-width: 0; }
+  .open-floor .label h2 { font-size: clamp(1.5rem, 1.1rem + 0.8vw, 2rem); }
+  .open-floor .walk { position: static; margin-top: auto; padding: 1.5rem 0 0; background: none; border: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+  .open-floor .step, .open-floor .step[data-step="1"] { align-items: flex-start; text-align: left; min-height: 56px; }
+}
+
+/* Keep the museum label legible over the glass easel and its concrete base. */
+@media (max-width: 759px), (orientation: portrait) {
+  .open-floor .label { background: var(--void); box-shadow: 0 0 0 0.75rem var(--void); }
+}
+
+/* Dialogs */
+.open-floor dialog { color: var(--bone); background: #141312; border: 0; padding: 0; }
+.open-floor dialog::backdrop { background: rgb(8 8 7 / 0.72); }
+
+.open-floor .panel { margin: 0 0 0 auto; height: 100%; max-height: none; width: min(28rem, 100%); }
+.open-floor .panel-in { padding: max(1.25rem, env(safe-area-inset-top)) var(--m) max(2rem, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 1rem; }
+.open-floor .panel h2 { font-size: 1.5rem; font-weight: 500; }
+.open-floor .panel ul { list-style: none; }
+.open-floor .panel li button {
+  width: 100%; min-height: 52px; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  background: none; border: 0; border-top: 1px solid var(--rule); padding: 0 0 0 0.875rem; text-align: left; cursor: pointer; font-size: 1.125rem;
+  box-shadow: inset 2px 0 0 transparent;
+}
+.open-floor .panel li:last-child button { border-bottom: 1px solid var(--rule); }
+.open-floor .panel li button:hover span:first-child { text-decoration: underline; text-underline-offset: 0.3em; }
+.open-floor .panel li button[aria-current] { box-shadow: inset 2px 0 0 var(--bone); }
+.open-floor .panel .price { color: var(--ash); font-size: 1rem; font-variant-numeric: tabular-nums; }
+.open-floor .panel .link { align-self: flex-start; }
+.open-floor .panel .attribution { color: var(--ash); margin-top: -0.75rem; }
+.open-floor .panel .statement { font-size: 1.125rem; line-height: 1.6; max-width: 34em; }
+.open-floor .panel .red { color: var(--red-word); }
+
+.open-floor .sheet { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; overflow-y: auto; overscroll-behavior: contain; background: var(--void); }
+.open-floor .sheet-in { min-height: 100%; }
+.open-floor .sheet-art { container-type: size; height: 64svh; display: flex; align-items: center; justify-content: center; padding: 3.75rem var(--m) 1rem; }
+.open-floor .sheet-art .art { display: block; width: auto; height: min(100cqh, var(--nh), calc(100cqw * var(--r))); }
+.open-floor .sheet-art.actual { display: block; overflow: auto; padding: 3.75rem 0 0; }
+.open-floor .sheet-art.actual .art { width: var(--nw); height: auto; max-width: none; margin: 0 auto; }
+.open-floor .sheet-info { padding: 1rem var(--m) max(2rem, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 1rem; max-width: 32rem; }
+.open-floor .sheet .close { position: fixed; z-index: 1; top: max(0.5rem, env(safe-area-inset-top)); right: var(--m); padding: 0 0.75rem; background: var(--void); }
+.open-floor .sheet h2 { font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem); font-weight: 500; line-height: 1.1; letter-spacing: -0.015em; }
+.open-floor .sheet .facts { color: var(--ash); }
+.open-floor .choice { border: 0; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.open-floor .choice legend { padding: 0; margin-bottom: 0.5rem; color: var(--ash); }
+.open-floor .choice label { display: flex; align-items: center; gap: 0.75rem; min-height: 52px; padding: 0.5rem 0.875rem; border: 1px solid var(--rule); border-radius: 2px; cursor: pointer; }
+.open-floor .choice label:has(input:checked) { border-color: var(--bone); }
+.open-floor .choice input { accent-color: var(--bone); width: 1.125rem; height: 1.125rem; margin: 0; }
+.open-floor .choice .cost { margin-left: auto; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.open-floor .enquire { align-self: flex-start; min-height: 48px; padding: 0.75rem 1.25rem; border: 0; border-radius: 2px; background: var(--red); color: var(--bone); font-weight: 500; cursor: pointer; }
+.open-floor .enquire:hover { background: var(--red-deep); }
+.open-floor .status { min-height: 1.45em; color: var(--ash); }
+.open-floor .sheet [data-zoom] { align-self: flex-start; }
+.open-floor .note { color: var(--ash); }
+
+@media (min-width: 60rem) {
+  .open-floor .sheet-in { display: grid; grid-template-columns: 1fr minmax(22rem, 28rem); height: 100%; }
+  .open-floor .sheet-art { height: 100svh; padding: 2.5rem; }
+  .open-floor .sheet-art.actual { padding: 0; }
+  .open-floor .sheet-info { overflow-y: auto; padding: 4.5rem 2.5rem 2.5rem 0; justify-content: flex-end; }
+  .open-floor .sheet .close { right: 2.5rem; top: 1.25rem; }
+}
+
+/* Production scope: neutralise the former hall's shared display/label/motion rules. */
+body:has(.open-floor) .site-footer { display: none; }
+.open-floor { font-synthesis: none; -webkit-font-smoothing: auto; }
+.open-floor :is(h1, h2, p, ul) { padding: 0; margin: 0; }
+.open-floor :is(h1, h2) { font-family: var(--sans); }
+.open-floor p { text-wrap: wrap; }
+.open-floor .art { max-width: none; box-shadow: none; animation: none; }
+.open-floor .stage { animation: none; translate: none; }
+.open-floor .stage::before { content: none; }
+.open-floor .work { min-height: 0; padding: 0; gap: 1rem 0; view-timeline: none; }
+@media (min-width: 760px) and (orientation: landscape) { .open-floor .work { column-gap: var(--gap); } }
+.open-floor .label { position: static; padding: 0; color: var(--bone); font-size: 1rem; line-height: 1.45; font-variant-numeric: normal; }
+.open-floor .label::before { content: none; }
+.open-floor .label h2 { margin-bottom: 0.375rem; }
+.open-floor .top h1 { margin: 0; }
+.open-floor .panel h2 { margin: 0; }
+.open-floor .panel .attribution { margin-top: -0.75rem; }
+.open-floor .panel .statement { font-family: var(--sans); }
+.open-floor .enquire { display: inline-flex; gap: 0.3em; text-decoration: none; }
+.open-floor .choice input { padding: 0; min-height: 0; border: initial; }
+.open-floor .choice label { font-size: 1rem; }
+.open-floor .sheet-info .summary { padding: 0; text-decoration: none; }
+.open-floor .image-button { display: block; padding: 0; border: 0; background: none; }
+.open-floor .image-failure { max-width: 20rem; color: var(--ash); }

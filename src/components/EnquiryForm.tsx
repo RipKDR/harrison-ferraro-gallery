@@ -11,6 +11,7 @@ const initialState: FormState<EnquiryValues> = { status: 'idle' };
 
 const defaultMessage = (interest: Interest) =>
   interest === 'General enquiry' ? "Hello Harrison, I'd like to get in touch about your work."
+    : interest === 'Signed print' ? "Hello Harrison, I'm interested in a signed print of this painting."
     : "Hello Harrison, I'm interested in this painting.";
 
 // Funnel: enquiry_view -> enquiry_submit -> enquiry_success | enquiry_error. The mailto path ends at submit
@@ -49,8 +50,8 @@ export function EnquiryForm({ interest = 'Original artwork', artworkId = GENERAL
     if (submitted) setSelection({ interest: submitted, artwork: artworkBySlug(values.artwork ?? '')?.slug ?? GENERAL });
   }
   const fieldError = (key: keyof EnquiryValues) => errors[key] ? { 'aria-invalid': true, 'aria-describedby': `enquiry-${key}-error` } : {};
-  const specificArtwork = interest === 'Original artwork' && Boolean(artworkBySlug(artworkId));
-  const selectedWork = selection.interest === 'Original artwork' ? artworkBySlug(selection.artwork) : undefined;
+  const specificArtwork = interest !== 'General enquiry' && Boolean(artworkBySlug(artworkId));
+  const selectedWork = selection.interest !== 'General enquiry' ? artworkBySlug(selection.artwork) : undefined;
 
   useEffect(() => { (state.status === 'success' || mailto ? thanks : status).current?.focus(); }, [state, mailto]);
   // Bot submissions get a quiet success without values: not counted.

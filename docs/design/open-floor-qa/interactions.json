@@ -1,0 +1,46 @@
+[
+  {
+    "test": "keyboard Enter opens detail",
+    "passed": true
+  },
+  {
+    "test": "Escape restores details focus",
+    "passed": true
+  },
+  {
+    "test": "1.4 second walk settles",
+    "passed": true
+  },
+  {
+    "test": "reduced-motion still navigation",
+    "passed": true
+  },
+  {
+    "test": "scoped casual-save controls",
+    "passed": true
+  },
+  {
+    "test": "art hidden in print",
+    "passed": true
+  },
+  {
+    "test": "context-loss fallback navigation",
+    "passed": true
+  },
+  {
+    "test": "no captured app runtime errors",
+    "passed": true
+  },
+  {
+    "test": "WebGL unavailable fallback",
+    "passed": true
+  },
+  {
+    "test": "image loading failure reported",
+    "passed": true
+  },
+  {
+    "test": "image retry recovers",
+    "passed": true
+  }
+]

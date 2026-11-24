@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
+import { Suspense } from 'react';
+import { ContactEnquiry } from '../../components/ContactEnquiry';
 import { EnquiryForm } from '../../components/EnquiryForm';
 import { InstagramLink } from '../../components/InstagramLink';
 import { isEmailConfigured } from '../../lib/email-status';
@@ -24,6 +26,6 @@ export default function ContactPage() {
       <p>Ask about a painting, a delivery quote, or anything else. Choose a painting below, or leave it as a general enquiry.</p>
       <p><InstagramLink className="text-link" placement="enquiry">Or find Harrison on Instagram <ArrowUpRight size={18} /></InstagramLink></p>
     </div>
-    <EnquiryForm interest="General enquiry" emailEnabled={isEmailConfigured()} />
+    <Suspense fallback={<EnquiryForm interest="General enquiry" emailEnabled={isEmailConfigured()} />}><ContactEnquiry emailEnabled={isEmailConfigured()} /></Suspense>
   </section>;
 }

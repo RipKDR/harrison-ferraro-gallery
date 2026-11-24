@@ -1,0 +1,9 @@
+{
+  "viewportPairs": 6,
+  "catalogueRecords": 120,
+  "originalPrintSelections": 80,
+  "interactionAndLifecycleChecks": 20,
+  "screenshotPairs": 29,
+  "nativeSizeCeiling": "636x800",
+  "physicalDeviceVerification": false
+}

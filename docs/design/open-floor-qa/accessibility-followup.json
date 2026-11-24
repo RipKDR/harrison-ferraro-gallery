@@ -1,0 +1,20 @@
+[
+  {
+    "test": "native keyboard index reaches and selects all ten works",
+    "passed": true
+  },
+  {
+    "test": "native modal blocks background focus; Tab does not reach background controls",
+    "passed": true,
+    "note": "Native Chrome may report body while Tab crosses browser chrome; not a background control escape."
+  },
+  {
+    "test": "Escape restores invoking control after Tab cycle",
+    "passed": true
+  },
+  {
+    "test": "720x450 CSS layout at DPR2 has no page-width overflow",
+    "passed": true,
+    "note": "Enlarged-layout proxy for1440x900; not a real browser-toolbar zoom test."
+  }
+]

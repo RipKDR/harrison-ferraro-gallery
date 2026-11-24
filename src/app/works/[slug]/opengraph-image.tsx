@@ -13,5 +13,5 @@ export function generateStaticParams() {
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const work = artworkBySlug((await params).slug);
   if (!work) return new Response('Not found', { status: 404 });
-  return renderArtworkCard(work, work.title, `Original painting · ${work.year}`);
+  return renderArtworkCard(work, work.title, `Original painting, ${work.year}`);
 }

@@ -6,6 +6,7 @@ const links = [['/works', 'Works'], ['/about', 'About'], ['/contact', 'Enquire']
 
 export function SiteHeader() {
   const path = usePathname();
+  if (path === '/') return null;
   return <header className="site-header">
     <Link className="wordmark" href="/">Harrison <span>Ferraro</span></Link>
     <nav aria-label="Main">
