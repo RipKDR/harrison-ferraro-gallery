@@ -3,14 +3,16 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { flushSync } from 'react-dom';
 import Link from 'next/link';
-import { artworkAlt, artworkPath, artworkPrice, artworks, artworkSize, printPrice, PRINT_EDITION, type Artwork } from '../artworks';
+import { artworkAlt, artworkPath, artworkPrice, artworks, artworkSize, printCheckoutPrice, printPrice, PRINT_EDITION, type Artwork } from '../artworks';
+import { BuyForm } from './BuyForm';
 import type { FloorRoom } from './open-floor-scene';
 import './open-floor.css';
 
 const at = (i: number) => (i + artworks.length) % artworks.length;
 const imageStyle = (work: Artwork) => ({ '--nw': `${work.width}px`, '--nh': `${work.height}px`, '--r': work.height / work.width, aspectRatio: `${work.width} / ${work.height}` }) as CSSProperties;
 
-export function OpenFloor() {
+/** `checkout`: Stripe is configured on the server, so the sheet's red action buys instead of enquiring. */
+export function OpenFloor({ checkout = false }: { checkout?: boolean }) {
   const host = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const image = useRef<HTMLImageElement>(null);
@@ -189,7 +191,12 @@ export function OpenFloor() {
             <label><input type="radio" name="kind" value="print" checked={kind === 'print'} onChange={() => setKind('print')} /><span className="what">Signed print, edition of {PRINT_EDITION}</span><span className="cost" data-f="print">{printPrice(work)}</span></label>
           </fieldset>
           <p className="summary" data-summary aria-live="polite">{kind === 'original' ? `The original painting, ${artworkSize(work)}, ${work.medium.toLowerCase()}, ${work.year}. ${artworkPrice(work)}.` : `A signed print from a limited edition of ${PRINT_EDITION}, at a third of the original’s ${artworkPrice(work)}: ${printPrice(work)}. Print size, paper and framing are not confirmed yet.`}</p>
-          <Link className="enquire" data-enquire href={`/contact?artwork=${work.slug}&kind=${kind}`}>Enquire about {kind === 'print' ? 'a print' : 'the original'} <span aria-hidden="true">→</span></Link>
+          {checkout && (kind === 'print' ? printCheckoutPrice(work) : work.available)
+            ? <>
+              <BuyForm key={`${work.slug}-${kind}`} slug={work.slug} kind={kind === 'print' ? 'print' : 'original'} className="enquire">Buy {kind === 'print' ? 'a signed print' : 'the original'}, {kind === 'print' ? printPrice(work) : artworkPrice(work)} <span aria-hidden="true">→</span></BuyForm>
+              <Link className="link ask" href={`/contact?artwork=${work.slug}&kind=${kind}`}>Ask a question first</Link>
+            </>
+            : <Link className="enquire" data-enquire href={`/contact?artwork=${work.slug}&kind=${kind}`}>Enquire about {kind === 'print' ? 'a print' : 'the original'} <span aria-hidden="true">→</span></Link>}
           <p className="status" data-status role="status" />
           <button type="button" className="link" data-zoom aria-pressed={actual} onClick={() => setActual(!actual)}>{actual ? 'Fit to screen' : 'Actual pixels'}</button>
           <p className="note">Print prices are a third of the original, shown to the cent; final rounding is to be confirmed.</p>

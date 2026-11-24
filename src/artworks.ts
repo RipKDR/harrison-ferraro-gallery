@@ -52,8 +52,19 @@ export const artworkSize = (work: Artwork) => `${work.widthCm} × ${work.heightC
 export const artworkPrice = (work: Artwork) => `$${work.price.toLocaleString('en-AU')} AUD`;
 
 export const PRINT_EDITION = 10;
-/** One third, not a retail price: repeating-cent rounding remains provisional. */
-export function printPrice(work: Pick<Artwork, 'price'>) {
+
+/**
+ * Whole-dollar print prices Harry has confirmed for online sale, by slug.
+ * TODO(harry): empty until confirmed. While a work has no entry, its print stays enquiry-only
+ * and checkout refuses it; the provisional one-third figure below is never charged.
+ */
+const PRINT_PRICES_AUD: Partial<Record<string, number>> = {};
+export const printCheckoutPrice = (work: Pick<Artwork, 'slug'>) => PRINT_PRICES_AUD[work.slug] ?? null;
+
+/** Confirmed whole-dollar price when set; otherwise one third, where repeating-cent rounding remains provisional. */
+export function printPrice(work: Pick<Artwork, 'price'> & Partial<Pick<Artwork, 'slug'>>) {
+  const confirmed = work.slug ? printCheckoutPrice({ slug: work.slug }) : null;
+  if (confirmed) return `$${confirmed.toLocaleString('en-AU')} AUD`;
   const third = work.price / 3;
   const exact = Number.isInteger(third);
   const amount = third.toLocaleString('en-AU', exact ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 });

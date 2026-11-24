@@ -242,3 +242,11 @@ summary { padding: 10px 0; cursor: pointer; text-decoration: underline; text-und
 @keyframes settle { from { transform: translateY(18px) scale(.985); } }
 @keyframes text-in { from { opacity: 0; transform: translateY(56px); } }
 @keyframes drift-down { to { translate: 0 var(--lag); } }
+
+/* Stripe checkout (November 2026): the buy form wraps the one red action; status shows only when set. */
+.buy-form { display: grid; gap: 8px; justify-items: start; }
+.buy-form button.text-link { padding: 0; border: 0; background: none; color: var(--bone); cursor: pointer; }
+.buy-form button[disabled] { opacity: .7; cursor: progress; }
+.buy-status { margin: 0; color: var(--bone); font-size: 15px; }
+.buy-status:empty { display: none; }
+.work-label .ask { margin-top: 4px; }

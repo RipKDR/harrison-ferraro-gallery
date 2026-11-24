@@ -185,3 +185,7 @@ body:has(.open-floor) .site-footer { display: none; }
 .open-floor .sheet-info .summary { padding: 0; text-decoration: none; }
 .open-floor .image-button { display: block; padding: 0; border: 0; background: none; }
 .open-floor .image-failure { max-width: 20rem; color: var(--ash); }
+
+/* Stripe checkout: the buy form sits where the enquire link was; keep the sheet column rhythm. */
+.open-floor .sheet-info .buy-form { gap: .5rem; }
+.open-floor .ask { align-self: flex-start; }
