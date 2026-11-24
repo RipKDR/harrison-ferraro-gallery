@@ -2,14 +2,16 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react/dist/ssr';
-import { artworkBySlug, artworkPath, artworkPrice, artworks, artworkSize, printPrice, PRINT_EDITION } from '../../../artworks';
+import { artworkBySlug, artworkPath, artworkPrice, artworks, artworkSize, printCheckoutPrice, printPrice, PRINT_EDITION } from '../../../artworks';
 import { ArtworkImage } from '../../../ArtworkImage';
+import { BuyForm } from '../../../components/BuyForm';
 import { EnquiryForm } from '../../../components/EnquiryForm';
 import { ShareArtwork } from '../../../components/ShareArtwork';
 import { TrackArtworkView } from '../../../components/TrackArtworkView';
 import { WorkCard } from '../../../components/WorkCard';
 import { WorkKeyboardNav } from '../../../components/WorkKeyboardNav';
 import { isEmailConfigured } from '../../../lib/email-status';
+import { isCheckoutEnabled } from '../../../lib/stripe';
 import { breadcrumbJsonLd, JsonLd, visualArtworkJsonLd } from '../../../lib/jsonld';
 import { SITE_NAME } from '../../../lib/site';
 
@@ -43,6 +45,7 @@ export default async function WorkPage({ params }: Props) {
   const previous = artworks[(index - 1 + artworks.length) % artworks.length];
   const next = artworks[(index + 1) % artworks.length];
   const related = [1, 2, 3].map(offset => artworks[(index + offset) % artworks.length]);
+  const checkout = isCheckoutEnabled();
   return <>
     <JsonLd data={visualArtworkJsonLd(work)} />
     <JsonLd data={breadcrumbJsonLd(work)} />
@@ -56,7 +59,13 @@ export default async function WorkPage({ params }: Props) {
         <h1>{work.title}</h1>
         <p className="price">{work.available ? <>{artworkPrice(work)}<span>Available</span></> : 'Sold'}</p>
         <p className="small-note">Signed print, edition of {PRINT_EDITION}: {printPrice(work)}. One third of the original; final rounding is provisional.</p>
-        <a className="button" href="#enquire">Enquire about this painting <ArrowRight size={20} /></a>
+        {checkout && work.available
+          ? <>
+            <BuyForm slug={work.slug} kind="original" className="button">Buy the original, {artworkPrice(work)} <ArrowRight size={20} /></BuyForm>
+            <a className="text-link ask" href="#enquire">Ask about this painting</a>
+          </>
+          : <a className="button" href="#enquire">Enquire about this painting <ArrowRight size={20} /></a>}
+        {checkout && printCheckoutPrice(work) && <BuyForm slug={work.slug} kind="print" className="text-link">Buy a signed print, {printPrice(work)}</BuyForm>}
         <dl>
           <div><dt>Year</dt><dd>{work.year}</dd></div>
           <div><dt>Medium</dt><dd>{work.medium}</dd></div>
