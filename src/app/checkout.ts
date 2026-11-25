@@ -59,6 +59,7 @@ export async function startCheckout(_previous: CheckoutState, data: FormData): P
       // Delivery is free and built into the price; Australia only until Harry adds countries.
       shipping_address_collection: { allowed_countries: ['AU'] },
       phone_number_collection: { enabled: true },
+      custom_text: { submit: { message: `Free delivery within Australia. 14-day change-of-mind returns. [Terms of sale](${absoluteUrl('/terms')})` } },
       metadata,
       payment_intent_data: { metadata },
       expires_at: Math.floor(Date.now() / 1000) + HOLD_SECONDS,

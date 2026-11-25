@@ -13,6 +13,7 @@ export function SiteFooter({ emailEnabled }: { emailEnabled: boolean }) {
         <Link href="/about">About</Link>
         <Link href="/contact">Enquire</Link>
         <InstagramLink placement="footer">Instagram <ArrowUpRight size={16} /></InstagramLink>
+        <Link href="/terms">Terms of sale</Link>
         <Link href="/privacy">Privacy</Link>
       </nav>
       <p>© {new Date().getFullYear()} Harrison Ferraro</p>
