@@ -173,6 +173,7 @@ export function OpenFloor({ checkout = false }: { checkout?: boolean }) {
         <p className="attribution">Painter, Melbourne, Australia</p>
         <p className="statement" data-statement>I paint people in the moments they don’t perform: an exhale, a turned shoulder, smoke hanging in the air. I work in acrylic, charcoal and pastel on canvas, building the surface up and tearing it back until what’s left feels honest. The palette stays dark, with <span className="red">red</span> used only where it hurts. Every piece is an original, made in Melbourne.</p>
         <Link className="link" href="/about">About Harrison</Link>
+        <Link className="link" href="/terms">Terms of sale</Link>
         <Link className="link" href="/privacy">Privacy</Link>
         <button type="button" className="link" data-close onClick={() => aboutDialog.current?.close()}>Close</button>
       </div>

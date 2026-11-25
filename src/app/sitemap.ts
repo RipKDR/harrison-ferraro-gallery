@@ -15,5 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     { url: absoluteUrl('/about'), lastModified, changeFrequency: 'yearly', priority: 0.6, images: [absoluteUrl('/art/harry-portrait-web.jpg')] },
     { url: absoluteUrl('/contact'), lastModified, changeFrequency: 'yearly', priority: 0.5 },
+    { url: absoluteUrl('/terms'), lastModified, changeFrequency: 'yearly', priority: 0.3 },
   ];
 }
