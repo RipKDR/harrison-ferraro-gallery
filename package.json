@@ -9,6 +9,7 @@
     "preview": "next start",
     "seo:check": "node scripts/seo-check.mjs",
     "seo:check:selftest": "node scripts/seo-check-selftest.mjs",
+    "check:production": "node scripts/check-production.mjs",
     "test:sites": "node --test tests/sites-worker.test.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ."
